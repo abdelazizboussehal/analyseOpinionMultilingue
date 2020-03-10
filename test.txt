@@ -1,0 +1,2 @@
+Python is an easy to learn, powerful programming language.
+The Python interpreter is easily extended with new functions and data types implemented in C or C++ (or other languages callable from C).
