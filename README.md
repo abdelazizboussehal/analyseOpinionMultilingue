@@ -1,6 +1,5 @@
 ## First use
 
-
 1. Create a virtual env
 
 ```shell
