@@ -1,0 +1,3 @@
+Python is an easy to learn, powerfol programming language.
+The Python interpreter is easily extended with new functions and data types implemented in C or C++ (or other languages callable from C).
+GitLab is a web-based DevOps lifecycle tool that provides a Git-repository manager providing wiki, issue-tracking and CI/CD pipeline features, using an open-source license, developed by GitLab Inc. The software was created by Ukrainians Dmitriy Zaporozhets and Valery Sizov, and is used by several large tech companies including Cisco, IBM, Sony, Jülich Research Center, NASA, Alibaba, Oracle, Invincea, O'Reilly Media, Leibniz-Rechenzentrum (LRZ), CERN, European XFEL, GNOME Foundation, Boeing, Autodata, NVIDIA, and SpaceX.

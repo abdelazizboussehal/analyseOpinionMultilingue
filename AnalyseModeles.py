@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pickle
 from textblob import TextBlob
 from os import path as os_path
@@ -14,16 +15,15 @@ class AnalyseModeles:
     """ lire les modeles depuis le fichier modeles.pkl"""
 
     def lectureModee(self):
-        with open(os_path.abspath(os_path.split(__file__)[0])+'/modeles.pkl', 'rb') as input:
+        with open(os_path.abspath(os_path.split(__file__)[0]) + '/modeles.pkl', 'rb') as input:
             self.modeles = pickle.load(input)
-            print(self.modeles)
 
     """ garder sauf les modeles lie a notre sujet"""
 
     def filtrage(self):
         self.modelesFiltrer = []
         for modele in self.modeles:
-            if modele.split()[0] == "Python":
+            if modele.split()[0] == self.sujet:
                 self.modelesFiltrer.append(modele)
 
     """Analyse des modeles 
@@ -33,7 +33,9 @@ class AnalyseModeles:
     """
 
     def analyse(self):
+
         """ 1 """
+
         opinion = []
         for modele in self.modelesFiltrer:
             modele = modele.split()
@@ -48,6 +50,7 @@ class AnalyseModeles:
                     bool += 1
 
         """ 2 """
+
         scors = []
         for op in opinion:
             wikiop = TextBlob(op)

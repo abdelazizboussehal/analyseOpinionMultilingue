@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from textblob import TextBlob
 import pickle
 from os import path as os_path
@@ -16,8 +17,8 @@ class CreationModele:
 
     """ Lire text depuis un fichier """
 
-    def lecture(self):
-        self.text = open(os_path.abspath(os_path.split(__file__)[0])+"/test.txt", "r").read()
+    def lecture(self,fichier):
+        self.text = open(os_path.abspath(os_path.split(__file__)[0]) + "/"+fichier, "r").read()
         print(self.text)
 
     """ phase de pre traitement 
@@ -70,8 +71,10 @@ class CreationModele:
                 modele = modele + opinion[i] + " && "
             modele = modele + opinion[len(opinion) - 1] + " )"
             self.modeles.append(modele)
+        print("les modeles avant le filtrage")
         print(self.modeles)
+        print("les modeles avant le filtrage ******")
         """ 5 """
         """ sauvgarder les modeles dans le fichier modeles.pkl"""
-        with open(os_path.abspath(os_path.split(__file__)[0])+'/modeles.pkl', 'wb') as output:
+        with open(os_path.abspath(os_path.split(__file__)[0]) + '/modeles.pkl', 'wb') as output:
             pickle.dump(self.modeles, output, pickle.HIGHEST_PROTOCOL)
