@@ -5,8 +5,6 @@
 	@date: 2019-2020
 """
 
-from library import generation_models as g
-
 from CreationModele import CreationModele
 from CreationModele_fr import CreationModele_fr
 from CreationModele_fr import CreationModele_fr
