@@ -12,8 +12,8 @@ class Tools():
 
 
 	@staticmethod
-	def write(content, name="models", extension="txt"):
-		f = open(name + "." + extension,"w")
+	def write(content, name="models", extension="txt", folder="generated"):
+		f = open(folder + "/" + name + "." + extension,"w")
 		for line in content:
 			f.write(line)
 		f.close()
