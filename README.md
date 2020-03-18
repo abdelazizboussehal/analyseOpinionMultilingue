@@ -19,3 +19,6 @@ pip install -r requirements.txt
 ```shell
 python main.py
 ```
+
+## Versions
+* Python: 3.7.0 64bits
