@@ -12,8 +12,7 @@ class GenerationModels():
 
 
 	def build_model(self, tags):
-		"""
-			Prendre les POS-tags comme paramètre et trouver le modèle correspondant puis le générer
+		""" Prendre les POS-tags comme paramètre et trouver le modèle correspondant puis le générer.
 		"""
 		code_tags = list(map(itemgetter(1), tags)) # Gader les tags seulement
 		code_model = self.get_model(code_tags) # quel modèle on va choisir
@@ -32,7 +31,12 @@ class GenerationModels():
 
 
 	def get_model(self, tags):
-		""" Trouver le modèle correspondant à partir des POS-tag disponible """
+		""" Trouver le modèle correspondant à partir des POS-tag disponible.
+		Args:
+			tags: array
+		Returns:
+			int, number id of the model
+		"""
 		if 'NN' in tags and 'JJ' in tags:
 			return 1
 		else:
@@ -40,7 +44,7 @@ class GenerationModels():
 
 
 	def models_parts(self):
-		""" Les éléments nécessaires pour chaque modèle """
+		""" Les éléments nécessaires pour chaque modèle. """
 		models = {
 			"1": ["NN", "JJ"],
 			"2": [],
@@ -64,11 +68,24 @@ class GenerationModels():
 
 
 	def build_model_one(self, subject, opinion):
-		""" Construction du premier modèle """
+		""" Construction du premier modèle.
+		Args:
+			subject: String, the subject
+			opinion: String, the opinion
+		Returns:
+			String of model
+		"""
 		return subject + " <- "  + opinion
 
 
 	def build_model_two(self, subject, opinion, aspect):
-		""" Construction du deuxième modèle """
+		""" Construction du deuxième modèle.
+		Args:
+			subject: String, the subject
+			opinion: String, the opinion
+			aspect: String, the aspect
+		Returns:
+			String of model
+		"""
 		return subject + " <- "  + opinion + "(" + aspect + ")"
 
