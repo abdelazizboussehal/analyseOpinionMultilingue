@@ -10,35 +10,64 @@ class GenerationModels:
         """ Le processus du traitement """
         blob = nlp(content)
         tags = []
-        for token in blob:
-            tags.append((token.text, token.pos_))
-        print(tags)
+        for word in blob:
+
+            if (not word.is_stop or word.dep_ == "dobj" or word.pos_ == "PRON") and word.is_alpha:
+                text = word.text
+                type_pos = word.pos_
+                type_dep = word.dep_
+                label = "none"
+                if word.pos_ == "PROPN":
+                    doc2 = nlp(str(word.text))
+                    for ent in doc2.ents:
+                        label = ent.label_
+                    element = (type_pos, type_dep, text, label)
+                else:
+                    element = (type_pos, type_dep, text, label)
+                tags.append(element)
+
         model = self.build_model(tags)
         return model
 
     def build_model(self, tags):
         """
-            Prendre les POS-tags comme paramètre et trouver le modèle correspondant puis le générer
+            Prendre les POS-tags-deps-lebels comme paramètre et trouver le modèle correspondant puis le générer
         """
-        code_tags = list(map(itemgetter(1), tags))  # Gader les tags seulement
-        code_model = self.get_model(code_tags)  # quel modèle on va choisir
-        subject = ''
-        opinion = ''
 
+        code_model = self.get_model(tags)  # quel modèle on va choisir
+        subject = ''
+        adjectif = ''
+        root = ''
+        model = "none"
         if 1 == code_model:
             for tag in tags:
-                if tag[1] == 'NOUN':
-                    subject = tag[0]
-                elif tag[1] == 'ADJ':
-                    opinion = tag[0]
+                if tag[1] == 'ROOT':
+                    root = tag[2]
+                elif tag[1] == 'nsubj':
+                    subject = tag[2]
+                elif tag[0] == "ADJ":
+                    adjectif = tag[2]
 
-            model = self.build_model_one(subject, opinion)
-            return model
+            model = self.build_model_one(subject, root, adjectif)
+        elif 2 == code_model:
+            for tag in tags:
+                if tag[1] == 'nsubj':
+                    subject = tag[2]
+                elif tag[0] == "ADJ":
+                    adjectif = tag[2]
+            model = self.build_model_two(subject, adjectif)
+
+        return model
 
     def get_model(self, tags):
         """ Trouver le modèle correspondant à partir des POS-tag disponible """
-        if 'NOUN' in tags and 'ADJ' in tags:
+        code_dep = list(map(itemgetter(1), tags))
+        code_pos = list(map(itemgetter(0), tags))
+
+        if "ROOT" in code_dep and "nsubj" in code_dep and "ADJ" in code_pos:
             return 1
+        elif "nsubj" in code_dep and "ADJ" in code_pos:
+            return 2
         else:
             return -1  # unknown
 
@@ -64,10 +93,10 @@ class GenerationModels:
         }
         return models
 
-    def build_model_one(self, subject, opinion):
+    def build_model_one(self, subject, root, adjectif):
         """ Construction du premier modèle """
-        return subject + " <- " + opinion
+        return subject + " <- " + root + " ( " + adjectif + " )"
 
-    def build_model_two(self, subject, opinion, aspect):
+    def build_model_two(self, subject, adjectif):
         """ Construction du deuxième modèle """
-        return subject + " <- " + opinion + "(" + aspect + ")"
+        return subject + " ( " + adjectif + " ) "
