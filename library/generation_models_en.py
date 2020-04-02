@@ -36,37 +36,172 @@ class GenerationModels:
 
         code_model = self.get_model(tags)  # quel modèle on va choisir
         subject = ''
-        opinion = ''
+        opinion = []
         model = "none"
+        verb = []
+        holder = ''
+        propn = []
+        time = []
+
         if 1 == code_model:
             for tag in tags:
-                if tag[1] == 'ROOT':
-                    root = tag[2]
+                if "we" == str.lower(tag[2]) or "i" == str.lower(tag[2]):
+                    subject = tag[2]
+                    holder = tag[2]
                 elif tag[1] == 'nsubj':
                     subject = tag[2]
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                    subject = tag[2]
                 elif tag[0] == "ADJ":
-                    adjectif = tag[2]
+                    opinion.append(tag[2])
+                if "LOC" in tag[3] or "ORG" in tag[3] or "GPE" in tag[3] or "PERSON" in tag[3] or "PRODUCT" in tag[3]:
+                    propn.append(tag[2] + " : " + tag[3])
+                if "DATE" in tag[3]:
+                    time.append(tag[2])
 
-            model = self.build_model_one(subject, root, adjectif)
+            model = self.build_model_one(subject, opinion, holder, propn,time)
         elif 2 == code_model:
             for tag in tags:
                 if tag[1] == 'nsubj':
                     subject = tag[2]
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                    subject = tag[2]
+                elif tag[1] == 'ROOT':
+                    verb.append(tag[2] + " * ")
+                elif tag[0] == "VERB":
+                    verb.append(tag[2])
                 elif tag[0] == "ADJ":
-                    adjectif = tag[2]
-            model = self.build_model_two(subject, adjectif)
+                    opinion.append(tag[2])
+                if "LOC" in tag[3] or "ORG" in tag[3] or "GPE" in tag[3] or "PERSON" in tag[3] or "PRODUCT" in tag[3]:
+                    propn.append(tag[2] + " : " + tag[3])
 
-        return model
+            model = self.build_model_two(subject, verb, opinion, propn,time)
+        elif 3 == code_model:
+            for tag in tags:
+                if "we" == str.lower(tag[2]) or "i" == str.lower(tag[2]):
+                    subject = tag[2]
+                    holder = tag[2]
+                elif tag[1] == 'nsubj':
+                    subject = tag[2]
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                    subject = tag[2]
+                elif tag[1] == 'ROOT':
+                    verb.append(tag[2] + " * ")
+                elif tag[0] == "VERB":
+                    verb.append(tag[2])
+                elif tag[0] == "ADJ":
+                    opinion.append(tag[2])
+                if "LOC" in tag[3] or "ORG" in tag[3] or "GPE" in tag[3] or "PERSON" in tag[3] or "PRODUCT" in tag[3]:
+                    propn.append(tag[2] + " : " + tag[3])
+                if "DATE" == tag[3]:
+                    time.append(tag[2])
+            model = self.build_model_three(subject, verb, opinion, holder, propn,time)
+        elif 4 == code_model:
+            for tag in tags:
+                if tag[1] == 'nsubj':
+                    subject = tag[2]
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                    subject = tag[2]
+                elif tag[1] == 'ROOT':
+                    verb.append(tag[2] + " * ")
+                elif tag[0] == "VERB":
+                    verb.append(tag[2])
+                elif tag[0] == "ADJ":
+                    opinion.append(tag[2])
+                if "LOC" in tag[3] or "ORG" in tag[3] or "GPE" in tag[3] or "PERSON" in tag[3] or "PRODUCT" in tag[3]:
+                    propn.append(tag[2] + " : " + tag[3])
+                if "DATE" in tag[3]:
+                    time.append(tag[2])
+            model = self.build_model_four(subject, verb, opinion, propn,time)
+        elif 5 == code_model:
+            for tag in tags:
+                if tag[1] == 'nsubj':
+                    subject = tag[2]
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                    subject = tag[2]
+                elif tag[0] == "ADJ":
+                    opinion.append(tag[2])
+                if "LOC" in tag[3] or "ORG" in tag[3] or "GPE" in tag[3] or "PERSON" in tag[3] or "PRODUCT" in tag[3]:
+                    propn.append(tag[2] + " : " + tag[3])
+                if "DATE" in tag[3]:
+                    time.append(tag[2])
+            model = self.build_model_five(subject, opinion, propn,time)
+        elif 7 == code_model:
+            for tag in tags:
+                if tag[1] == 'nsubj':
+                    subject = tag[2]
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                    subject = tag[2]
+                elif tag[1] == 'ROOT':
+                    verb.append(tag[2] + " * ")
+                elif tag[0] == "VERB":
+                    verb.append(tag[2])
+                if "LOC" in tag[3] or "ORG" in tag[3] or "GPE" in tag[3] or "PERSON" in tag[3] or "PRODUCT" in tag[3]:
+                    propn.append(tag[2] + " : " + tag[3])
+                if "DATE" in tag[3]:
+                    time.append(tag[2])
+            model = self.build_model_seven(subject, verb, propn,time)
+        elif 6 == code_model:
+            for tag in tags:
+                if "we" == str.lower(tag[2]) or "i" == str.lower(tag[2]):
+                    subject = tag[2]
+                    holder = tag[2]
+                elif tag[1] == 'nsubj':
+                    subject = tag[2]
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                    subject = tag[2]
+                elif tag[1] == 'ROOT':
+                    verb.append(tag[2] + " * ")
+                elif tag[0] == "VERB":
+                    verb.append(tag[2])
+                if "LOC" in tag[3] or "ORG" in tag[3] or "GPE" in tag[3] or "PERSON" in tag[3] or "PRODUCT" in tag[3]:
+                    propn.append(tag[2] + " : " + tag[3])
+                if "DATE" in tag[3]:
+                    time.append(tag[2])
+            model = self.build_model_six(subject, verb, holder, propn,time)
+
+        return model, code_model
 
     def get_model(self, tags):
         """ Trouver le modèle correspondant à partir des POS-tag disponible """
         code_dep = list(map(itemgetter(1), tags))
         code_pos = list(map(itemgetter(0), tags))
+        code_leb = list(map(itemgetter(3), tags))
+        text = list(map(itemgetter(2), tags))
 
-        if "ROOT" in code_dep and "nsubj" in code_dep and "ADJ" in code_pos:
+        sujet = 0
+        verb = 0
+        opinion = 0
+        time = 0
+        propn = 0
+        holder = 0
+        for t in text:
+            if "i" == str.lower(str(t)) or "we" == str.lower(str(t)):
+                holder = 1
+
+        if "dobj" in code_dep or "pobj" in code_dep or "iobj" in code_dep or "obj" in code_dep:
+            sujet = 1
+        elif "nsubj" in code_dep:
+            sujet = 1
+
+        if "VERB" in code_pos:
+            verb = 1
+
+        if "ADJ" in code_pos:
+            opinion = 1
+
+        if sujet == 1 and opinion == 1 and verb == 1 and holder == 1:
+            return 3
+        elif sujet == 1 and opinion == 1 and verb == 1:
+            return 4
+        elif sujet == 1 and opinion == 1:
+            return 5
+        elif sujet == 1 and opinion == 1 and holder == 1:
             return 1
-        elif "nsubj" in code_dep and "ADJ" in code_pos:
-            return 2
+        elif sujet == 1 and verb == 1 and holder == 1:
+            return 6
+        elif sujet == 1 and verb == 1:
+            return 7
         else:
             return -1  # unknown
 
@@ -84,18 +219,157 @@ class GenerationModels:
     def list_models(self):
         """ Les modèles disponibles pour but d'affichage (Utilser une BDD pour les stocker par la suite) """
         models = {
-            "1": "Subject <- opinion",
-            "2": "Subject <- opinion(aspect)",
-            "3": "Subject <- opinion(aspect)@time",
-            "4": "Subject <- opinion(aspect)@time?holder",
-            "n": "..."
+            1: "Subject <- (opinion&&opinion)@holder ",
+            3: "Subject <- // root*&&verb // (opinion&&opinion) @ holder",
+            4: "Subject <- // root*&&verb // (opinion&&opinion) ",
+            5: "Subject <- (opinion&&opinion) ",
+            6: "Subject <- // root*&&verb //  @ holder",
+            7: "Subject <- // root*&&verb //",
+
+            -1: "..."
         }
         return models
 
-    def build_model_one(self, subject, root, adjectif):
+    def build_model_one(self, subject, opinion, holder, propn, time):
         """ Construction du premier modèle """
-        return subject + " <- " + root + " ( " + adjectif + " )"
+        model = ""
+        model = model + subject + " <- " + " ( "
 
-    def build_model_two(self, subject, adjectif):
+        for i in range(0, len(opinion) - 1):
+            model = model + opinion[i] + " && "
+        model = model + opinion[len(opinion) - 1] + " ) @ " + holder
+        if len(time) > 0:
+            model = model + " ? "
+            for i in range(len(time) - 1):
+                model = model + time[i] + " && "
+            model = model + time[len(time) - 1]
+
+        if len(propn) > 0:
+            model = model + " [ "
+            for i in range(len(propn) - 1):
+                model = model + propn[i] + " && "
+            model = model + propn[len(propn) - 1] + " ] "
+
+        return model
+
+    def build_model_two(self, subject, verb, opinion, propn):
         """ Construction du deuxième modèle """
-        return subject + " ( " + adjectif + " ) "
+        model = ""
+        model = model + subject + " <- " + " // "
+        for i in range(len(verb) - 1):
+            model = model + verb[i] + " && "
+        model = model + verb[len(verb) - 1] + " // ("
+        for i in range(0, len(opinion) - 1):
+            model = model + opinion[i] + " && "
+        model = model + opinion[len(opinion) - 1] + " ) " + " [ "
+        for i in range(len(propn) - 1):
+            model = model + propn[i] + " && "
+        model = model + propn[len(propn) - 1] + " ] "
+
+        return model
+
+    def build_model_three(self, subject, verb, opinion, holder, propn, time):
+        """ Construction du premier modèle """
+        model = ""
+        model = model + subject + " <- " + " // "
+        for i in range(len(verb) - 1):
+            model = model + verb[i] + " && "
+        model = model + verb[len(verb) - 1] + " // ("
+        for i in range(0, len(opinion) - 1):
+            model = model + opinion[i] + " && "
+        model = model + opinion[len(opinion) - 1] + " ) @ " + holder
+        if len(time) > 0:
+            model = model + " ? "
+            for i in range(len(time) - 1):
+                model = model + time[i] + " && "
+            model = model + time[len(time) - 1]
+
+        if len(propn) > 0:
+            model = model + " [ "
+            for i in range(len(propn) - 1):
+                model = model + propn[i] + " && "
+            model = model + propn[len(propn) - 1] + " ] "
+        return model
+
+    def build_model_four(self, subject, verb, opinion, propn, time):
+        """ Construction du premier modèle """
+        model = ""
+        model = model + subject + " <- " + " // "
+        for i in range(len(verb) - 1):
+            model = model + verb[i] + " && "
+        model = model + verb[len(verb) - 1] + " // ("
+        for i in range(0, len(opinion) - 1):
+            model = model + opinion[i] + " && "
+        model = model + opinion[len(opinion) - 1] + " ) "
+        if len(time) > 0:
+            model = model + " ? "
+            for i in range(len(time) - 1):
+                model = model + time[i] + " && "
+            model = model + time[len(time) - 1]
+
+        if len(propn) > 0:
+            model = model + " [ "
+            for i in range(len(propn) - 1):
+                model = model + propn[i] + " && "
+            model = model + propn[len(propn) - 1] + " ] "
+        return model
+
+    def build_model_five(self, subject, opinion, propn, time):
+        """ Construction du premier modèle """
+        model = ""
+        model = model + subject + " <- ("
+        for i in range(0, len(opinion) - 1):
+            model = model + opinion[i] + " && "
+        model = model + opinion[len(opinion) - 1] + " ) "
+        if len(time) > 0:
+            model = model + " ? "
+            for i in range(len(time) - 1):
+                model = model + time[i] + " && "
+            model = model + time[len(time) - 1]
+
+        if len(propn) > 0:
+            model = model + " [ "
+            for i in range(len(propn) - 1):
+                model = model + propn[i] + " && "
+            model = model + propn[len(propn) - 1] + " ] "
+        return model
+
+    def build_model_six(self, subject, verb, holder, propn, time):
+        """ Construction du premier modèle """
+        model = ""
+        model = model + subject + " <- " + " // "
+        for i in range(len(verb) - 1):
+            model = model + verb[i] + " && "
+        model = model + verb[len(verb) - 1] + " // @ " + holder
+        if len(time) > 0:
+            model = model + " ? "
+            for i in range(len(time) - 1):
+                model = model + time[i] + " && "
+            model = model + time[len(time) - 1]
+
+        if len(propn) > 0:
+            model = model + " [ "
+            for i in range(len(propn) - 1):
+                model = model + propn[i] + " && "
+            model = model + propn[len(propn) - 1] + " ] "
+        return model
+
+    def build_model_seven(self, subject, verb, propn, time):
+        """ Construction du premier modèle """
+        model = ""
+        model = model + subject + " <- " + " // "
+        for i in range(len(verb) - 1):
+            model = model + verb[i] + " && "
+        model = model + verb[len(verb) - 1] + " //"
+        if len(time) > 0:
+            model = model + " ? "
+            for i in range(len(time) - 1):
+                model = model + time[i] + " && "
+            model = model + time[len(time) - 1]
+
+        if len(propn) > 0:
+            model = model + " [ "
+            for i in range(len(propn) - 1):
+                model = model + propn[i] + " && "
+            model = model + propn[len(propn) - 1] + " ] "
+        return model
