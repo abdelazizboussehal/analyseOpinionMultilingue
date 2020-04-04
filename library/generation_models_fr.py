@@ -51,7 +51,7 @@ class GenerationModels:
                     holder = tag[2]
                 elif 'nsubj' in tag[1]:
                     subject = tag[2]
-                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "ob" in tag[1]:
                     subject = tag[2]
                 elif tag[0] == "ADJ":
                     opinion.append(tag[2])
@@ -65,7 +65,7 @@ class GenerationModels:
             for tag in tags:
                 if 'nsubj' in tag[1]:
                     subject = tag[2]
-                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "ob" in tag[1]:
                     subject = tag[2]
                 elif tag[1] == 'ROOT':
                     verb.append(tag[2] + " * ")
@@ -84,7 +84,7 @@ class GenerationModels:
                     holder = tag[2]
                 elif 'nsubj' in tag[1]:
                     subject = tag[2]
-                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "ob" in tag[1]:
                     subject = tag[2]
                 elif tag[1] == 'ROOT':
                     verb.append(tag[2] + " * ")
@@ -101,7 +101,7 @@ class GenerationModels:
             for tag in tags:
                 if 'nsubj' in tag[1]:
                     subject = tag[2]
-                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "ob" in tag[1]:
                     subject = tag[2]
                 elif tag[1] == 'ROOT':
                     verb.append(tag[2] + " * ")
@@ -118,7 +118,7 @@ class GenerationModels:
             for tag in tags:
                 if "nsubj" in tag[1]:
                     subject = tag[2]
-                elif "obj" in tag[1]:
+                elif "ob" in tag[1]:
                     subject = tag[2]
                 elif tag[0] == "ADJ":
                     opinion.append(tag[2])
@@ -131,7 +131,7 @@ class GenerationModels:
             for tag in tags:
                 if "nsubj" in tag[1]:
                     subject = tag[2]
-                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "ob" in tag[1]:
                     subject = tag[2]
                 elif tag[1] == 'ROOT':
                     verb.append(tag[2] + " * ")
@@ -149,7 +149,7 @@ class GenerationModels:
                     holder = tag[2]
                 elif "nsubj" in tag[1]:
                     subject = tag[2]
-                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "obj" in tag[1]:
+                elif "dobj" in tag[1] or "pobj" in tag[1] or "iobj" in tag[1] or "ob" in tag[1]:
                     subject = tag[2]
                 elif tag[1] == 'ROOT':
                     verb.append(tag[2] + " * ")
@@ -180,7 +180,7 @@ class GenerationModels:
             if "je" == str.lower(str(t)) or "nous" == str.lower(str(t)) or "j'" == str.lower(str(t)):
                 holder = 1
 
-        if "dobj" in code_dep or "pobj" in code_dep or "iobj" in code_dep or "obj" in code_dep:
+        if "dobj" in code_dep or "pobj" in code_dep or "iobj" in code_dep or "obj" in code_dep or "obl" in code_dep:
             sujet = 1
         else:
             for s in code_dep:
