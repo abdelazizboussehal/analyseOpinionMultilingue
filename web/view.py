@@ -43,9 +43,11 @@ def modeles():
         generator = fr.GenerationModels()
         # Lancer le processuss de traitement
         for ph in phrase:
-            m = generator.process(str(ph))
+            num = generator.process(str(ph))[1]
+            m = generator.process(str(ph))[0]
+            types.append(generator.list_models().get(num))
+            print(types)
             model.append(m)
-
     elif dt == "en":
         generator = en.GenerationModels()
         # Lancer le processuss de traitement
