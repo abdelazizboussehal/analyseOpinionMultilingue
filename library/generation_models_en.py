@@ -219,7 +219,7 @@ class GenerationModels:
     def list_models(self):
         """ Les modèles disponibles pour but d'affichage (Utilser une BDD pour les stocker par la suite) """
         models = {
-            1: "Subject <- (opinion&&opinion)@holder ",
+            1: "Subject <- ( opinion && opinion ) @ holder ",
             3: "Subject <- // root*&&verb // (opinion&&opinion) @ holder",
             4: "Subject <- // root*&&verb // (opinion&&opinion) ",
             5: "Subject <- (opinion&&opinion) ",

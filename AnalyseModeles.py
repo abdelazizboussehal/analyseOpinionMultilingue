@@ -32,35 +32,60 @@ class AnalyseModeles:
     
     """
 
-    def analyse(self):
+    def analyse(self, modeles, num_modele):
 
         """ 1 """
-
+        bool = 0
+        sujet = ""
         opinion = []
-        for modele in self.modelesFiltrer:
-            modele = modele.split()
-            print(modele)
-            bool = 0
-            for i in range(0, len(modele) - 1):
-                if modele[i] == "(":
-                    bool = 1
-                if bool > 1 and modele[i] != "&&":
-                    opinion.append(modele[i])
-                if bool == 1:
-                    bool += 1
+        verbe = []
+        holder = ""
+        modeles = modeles.split()
+        num_element = 1
+        for terme in modeles:
+            if num_modele == 1:
+                if num_element == 1:
+                    sujet = terme
+                    num_element += 1
+                elif num_element == 2:
+                    if terme != "(" and terme != "&&" and terme != ")" and terme != "<-":
+                        opinion.append(terme)
+                    if terme == ")":
+                        num_element += 1
+                elif num_element == 3:
+                    if terme != "@":
+                        holder = terme
+        print(sujet)
+        print(opinion)
+        print(holder)
+        if num_modele == 1:
+            wikiop = TextBlob(sujet)
+            scorp_sujet = wikiop.sentiment.subjectivity
+            print(type(scorp_sujet))
+            scorp_opinion = 0
+            for op in opinion:
+                wikiop = TextBlob(op)
+                x = wikiop.sentiment.subjectivity
+                scorp_opinion = scorp_opinion + int(x)
+            scorp_opinion = scorp_opinion / len(opinion)
+            print(scorp_opinion)
 
-        """ 2 """
+            wikiop = TextBlob(holder)
+            scorp_holder = wikiop.sentiment.subjectivity
+            resultat = (scorp_sujet * 2 + scorp_opinion * 3 + scorp_holder) / 6
+            print(resultat)
 
-        scors = []
-        for op in opinion:
-            wikiop = TextBlob(op)
-            scors.append(wikiop.sentiment)
-        moy = 0
-        for scor in scors:
-            moy = moy + scor[0]
-        if (moy > 0):
-            print("senetiement positif")
-            return 1
-        else:
-            print("senetiement negatif")
-            return 0
+    """
+    for op in opinion:
+        wikiop = TextBlob(op)
+        scors.append(wikiop.sentiment)
+    moy = 0
+    for scor in scors:
+        moy = moy + scor[0]
+    if (moy > 0):
+        print("senetiement positif")
+        return 1
+    else:
+        print("senetiement negatif")
+        return 0
+    """
