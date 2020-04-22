@@ -22,3 +22,13 @@ python main.py
 
 ## Versions
 * Python: 3.7.0 64bits
+
+## Download spaCy models
+* en
+```shell
+python -m spacy download en_core_web_sm  
+```
+* fr
+```shell
+python -m spacy download fr_core_news_sm 
+```
