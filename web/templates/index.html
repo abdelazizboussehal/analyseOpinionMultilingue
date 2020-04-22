@@ -5,10 +5,15 @@
     <title>hello</title>
 </head>
 <body>
-<form action="/modeles" method="post">
-  <label for="input">input</label>
-  <input type="text" id="input" name="input"><br><br>
-  <input type="submit" value="Submit">
+
+<form action="/preTraitement" method="post" id="usrform">
+    <label for="input">input</label>
+    </br>
+    <textarea rows="5" cols="50" id="input" name="input" form="usrform">
+        Enter text here...</textarea>
+    </br>
+     <input type="submit" value="pre-traitemnt">
 </form>
+
 </body>
 </html>

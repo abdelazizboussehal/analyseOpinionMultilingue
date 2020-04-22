@@ -5,6 +5,7 @@ import enchant
 from textblob import TextBlob as textblob_en
 from textblob import Blobber
 from textblob_fr import PatternTagger, PatternAnalyzer
+from textblob_ar import TextBlob as nlpAr
 
 tb = Blobber(pos_tagger=PatternTagger(), analyzer=PatternAnalyzer())
 from textblob_ar import TextBlob as textblob_fr
@@ -35,7 +36,7 @@ class Tools():
         return b.detect_language()
 
     @staticmethod
-    #correction orthographe
+    # correction orthographe
     def correction(content, langue):
         erreur = []
         if langue == "en":
@@ -63,6 +64,11 @@ class Tools():
             phrase = nlpFr(content).sents
         elif language == "en":
             phrase = nlpEn(content).sents
+        elif language == "ar":
+            blob = nlpAr(content)
+            phrase =[]
+            for sentence in blob.sentences:
+                phrase.append(str(sentence))
         return phrase
 
     @staticmethod

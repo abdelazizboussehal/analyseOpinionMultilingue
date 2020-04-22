@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hello</title>
+</head>
+<body>
+<h1>la langues est : {{language}}</h1>
+<form action="/filtrageSubjectivity" method="post" id="usrform">
+    <label>Phrase</label>
+    </br>
+    {% for n in range(phrases| length) %}
+    <textarea rows="1" cols="50" id="input" name="input{{n}}" form="usrform"> {{phrases[n]}}</textarea>
+    </br>
+    <label> {{erreurs[n]}}</label>
+    </br>
+    {% endfor %}
+     <input type="submit" value="subjectivity">
+</form>
+
+</body>
+</html>

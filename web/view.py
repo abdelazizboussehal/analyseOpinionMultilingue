@@ -5,6 +5,7 @@ from library import generation_models_fr as fr
 from flask import request
 
 app = Flask(__name__)
+l = ""
 
 
 @app.route('/')
@@ -65,5 +66,65 @@ def modeles():
     return render_template('resultat.html', language=langue, modeles=model, phrases=phrase, types=types)
 
 
+@app.route('/preTraitement', methods=['POST'])
+def pretraitment():
+    content = request.form['input']
+    language = t.Tools.languageDetection(content)
+    phrase = t.Tools.segmentationParPhrase(content, language)
+    erreur = []
+    phrases = []
+    global l
+    l = language
+    if language == "en":
+        lang = "anglais"
+    elif language == "fr":
+        lang = "français"
+    elif language == "ar":
+        lang = "arabe"
+
+    for ph in phrase:
+        phrases.append(ph)
+        erreur.append("" + str(t.Tools.correction(str(ph), language)))
+
+    return render_template('correction.html', language=lang, phrases=phrases, erreurs=erreur)
+
+
+@app.route('/filtrageSubjectivity', methods=['POST'])
+def subjectivity():
+    phrase = []
+    global l
+    for x in request.form:
+        phrase.append(request.form[x])
+    phrase=t.Tools.filtrageSubjectivity(phrase, l)
+
+    # Instanciation du module Génération des modèles
+    model = []
+    types = []
+    if l == "fr":
+        generator = fr.GenerationModels()
+        # Lancer le processuss de traitement
+        for ph in phrase:
+            num = generator.process(str(ph))[1]
+            m = generator.process(str(ph))[0]
+            types.append(generator.list_models().get(num))
+            print(types)
+            model.append(m)
+    elif l == "en":
+        generator = en.GenerationModels()
+        # Lancer le processuss de traitement
+        for ph in phrase:
+            num = generator.process(str(ph))[1]
+            m = generator.process(str(ph))[0]
+            types.append(generator.list_models().get(num))
+            print(types)
+            model.append(m)
+    elif l == "ar":
+        model = "arabic"
+    else:
+        model = "langues non definite"
+
+    return render_template('resultat.html', language=l, modeles=model, phrases=phrase, types=types)
+
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
