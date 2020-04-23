@@ -1,14 +1,12 @@
-from textblob import TextBlob
 import spacy
 from enchant.checker import SpellChecker
-import enchant
-from textblob import TextBlob as textblob_en
+from textblob import TextBlob as textblobEnglish
+from textblob_ar import TextBlob as textblobFrench
 from textblob import Blobber
 from textblob_fr import PatternTagger, PatternAnalyzer
 from textblob_ar import TextBlob as nlpAr
 
-tb = Blobber(pos_tagger=PatternTagger(), analyzer=PatternAnalyzer())
-from textblob_ar import TextBlob as textblob_fr
+textblob_arabic = Blobber(pos_tagger=PatternTagger(), analyzer=PatternAnalyzer())
 
 nlpEn = spacy.load("en_core_web_sm")
 nlpFr = spacy.load("fr_core_news_sm")
@@ -31,63 +29,68 @@ class Tools():
         f.close()
 
     @staticmethod
-    def languageDetection(content):
-        b = TextBlob(content)
-        return b.detect_language()
+    def language_detection(content):
+        blob = textblobEnglish(content)
+        return blob.detect_language()
 
     @staticmethod
-    # correction orthographe
-    def correction(content, langue):
-        erreur = []
-        if langue == "en":
-            chkr = SpellChecker("en_US")
-            chkr.set_text(content)
-            for err in chkr:
-                erreur.append("ERROR:" + err.word + " sugestion :" + str(err.suggest()))
-            return erreur
-        elif langue == "fr":
-            chkr = SpellChecker("fr")
-            chkr.set_text(content)
-            for err in chkr:
-                erreur.append("ERROR:" + err.word + " sugestion :" + str(err.suggest()))
-            return erreur
-        elif langue == "ar":
-            chkr = SpellChecker("ar")
-            chkr.set_text(content)
-            for err in chkr:
-                erreur.append("ERROR:" + err.word + " sugestion :" + str(err.suggest()))
-            return erreur
+    def correction_orthographe(content, language):
+        """"""
+        list_error = []
+        if language == "en":
+            checker = SpellChecker("en_US")
+        elif language == "fr":
+            checker = SpellChecker("fr")
+        elif language == "ar":
+            checker = SpellChecker("ar")
+
+        checker.set_text(content)
+        for err in checker:
+            list_error.append("ERROR:" + err.word + " sugestion :" + str(err.suggest()))
+        return list_error
 
     @staticmethod
-    def segmentationParPhrase(content, language):
+    def sentence_segmentation(content, language):
         if language == "fr":
             phrase = nlpFr(content).sents
         elif language == "en":
             phrase = nlpEn(content).sents
         elif language == "ar":
             blob = nlpAr(content)
-            phrase =[]
+            phrase = []
             for sentence in blob.sentences:
                 phrase.append(str(sentence))
         return phrase
 
     @staticmethod
-    def filtrageSubjectivity(content, language):
-        resultat = []
+    def subjectivity_filtering(content, language):
+        """enter une liste des phrases et la langue  retourner seul qui sont subjective"""
+        subjective_sentence = []
+        subjective_stat = []
         if language == "en":
             for phrase in content:
-                testimonial = textblob_en(phrase)
-                if testimonial.sentiment.subjectivity > 0:
-                    resultat.append(phrase)
+                test_subjective = textblobEnglish(phrase)
+                if test_subjective.sentiment.subjectivity > 0:
+                    subjective_sentence.append(phrase)
+                    subjective_stat.append(True)
+                else:
+                    subjective_stat.append(False)
         elif language == "fr":
             for phrase in content:
-                blob1 = tb(u"" + phrase)
-                if blob1.sentiment[1] > 0:
-                    resultat.append(phrase)
+                test_subjective = textblob_arabic(u"" + phrase)
+                if test_subjective.sentiment[1] > 0:
+                    subjective_sentence.append(phrase)
+                    subjective_stat.append(True)
+                else:
+                    subjective_stat.append(False)
 
         elif language == "ar":
             for phrase in content:
-                blob = textblob_fr(phrase)
-                if blob.sentiment.subjectivity > 0:
-                    resultat.append(phrase)
-        return resultat
+                test_subjective = textblobFrench(phrase)
+                if test_subjective.sentiment.subjectivity > 0:
+                    subjective_sentence.append(phrase)
+                    subjective_stat.append(True)
+                else:
+                    subjective_stat.append(False)
+
+        return subjective_sentence , subjective_stat

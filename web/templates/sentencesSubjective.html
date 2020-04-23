@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/creationModeles" method="post" id="usrform">
+    <label>Phrase</label>
+    </br>
+    <table>
+
+   <tr>
+       <td>phrase </td>
+   </tr>
+
+    {% for n in range(sentences| length) %}
+    <tr>
+    <td>
+        <label id="input" name="input{{n}}"  value="1"> {{sentences[n]}}</label>
+    <input type="hidden" name="r_id{{n}}" value="{{sentences[n]}}"/>
+    </td>
+        <td>
+    {% if subjective_state[n] %}
+    subjective : <input type="radio" name="imgsel{{n}}" value="true" checked="checked" />
+    objective : <input type="radio" name="imgsel{{n}}" value="false"  />
+    {% else %}
+    subjective : <input type="radio" name="imgsel{{n}}" value="true"  />
+    objective : <input type="radio" name="imgsel{{n}}" value="false" checked="checked" />
+    {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+    </br>
+
+     <input type="submit" value="cree les modeles">
+</form>
+
+</body>
+</html>

@@ -13,65 +13,12 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/modeles', methods=['POST'])
-def modeles():
+@app.route('/preTreatment', methods=['POST'])
+def pretreatment():
     content = request.form['input']
-    print(content)
-    dt = t.Tools.languageDetection(content)
-    if dt == "en":
-        langue = "anglais"
-        # Segmentation de text par phrase
-        phrasee = t.Tools.segmentationParPhrase(content, dt)
-        phrase = []
-        for ph in phrasee:
-            phrase.append(str(ph))
-    elif dt == "fr":
-        langue = "français"
-        # Segmentation de text par phrase
-        phrasee = t.Tools.segmentationParPhrase(content, dt)
-        phrase = []
-        for ph in phrasee:
-            phrase.append(str(ph))
-    elif dt == "ar":
-        langue = "arabic"
-    else:
-        langue = "autre langue"
-
-    # Instanciation du module Génération des modèles
-    model = []
-    types = []
-    if dt == "fr":
-        generator = fr.GenerationModels()
-        # Lancer le processuss de traitement
-        for ph in phrase:
-            num = generator.process(str(ph))[1]
-            m = generator.process(str(ph))[0]
-            types.append(generator.list_models().get(num))
-            print(types)
-            model.append(m)
-    elif dt == "en":
-        generator = en.GenerationModels()
-        # Lancer le processuss de traitement
-        for ph in phrase:
-            num = generator.process(str(ph))[1]
-            m = generator.process(str(ph))[0]
-            types.append(generator.list_models().get(num))
-            print(types)
-            model.append(m)
-    elif dt == "ar":
-        model = "arabic"
-    else:
-        model = "langues non definite"
-
-    return render_template('resultat.html', language=langue, modeles=model, phrases=phrase, types=types)
-
-
-@app.route('/preTraitement', methods=['POST'])
-def pretraitment():
-    content = request.form['input']
-    language = t.Tools.languageDetection(content)
-    phrase = t.Tools.segmentationParPhrase(content, language)
-    erreur = []
+    language = t.Tools.language_detection(content)
+    phrase = t.Tools.sentence_segmentation(content, language)
+    error = []
     phrases = []
     global l
     l = language
@@ -84,46 +31,66 @@ def pretraitment():
 
     for ph in phrase:
         phrases.append(ph)
-        erreur.append("" + str(t.Tools.correction(str(ph), language)))
+        error.append("" + str(t.Tools.correction_orthographe(str(ph), language)))
 
-    return render_template('correction.html', language=lang, phrases=phrases, erreurs=erreur)
+    return render_template('correction.html', language=lang, phrases=phrases, erreurs=error)
 
 
-@app.route('/filtrageSubjectivity', methods=['POST'])
-def subjectivity():
-    phrase = []
+@app.route('/creationModeles', methods=['POST'])
+def creation_modeles():
+    all_sentences = []
+    subjective_state = []
+    subjective_sentences = []
+    print(request.form)
     global l
     for x in request.form:
-        phrase.append(request.form[x])
-    phrase=t.Tools.filtrageSubjectivity(phrase, l)
-
+        if "r_id" in x:
+            all_sentences.append(request.form[x])
+        else:
+            subjective_state.append(request.form[x])
+    for i in range(len(all_sentences)):
+        if subjective_state[i] == "true":
+            subjective_sentences.append(all_sentences[i])
+    print(subjective_sentences)
     # Instanciation du module Génération des modèles
-    model = []
+    models = []
     types = []
     if l == "fr":
         generator = fr.GenerationModels()
         # Lancer le processuss de traitement
-        for ph in phrase:
+        for ph in subjective_sentences:
             num = generator.process(str(ph))[1]
             m = generator.process(str(ph))[0]
             types.append(generator.list_models().get(num))
             print(types)
-            model.append(m)
+            models.append(m)
     elif l == "en":
         generator = en.GenerationModels()
         # Lancer le processuss de traitement
-        for ph in phrase:
+        for ph in subjective_sentences:
             num = generator.process(str(ph))[1]
             m = generator.process(str(ph))[0]
             types.append(generator.list_models().get(num))
             print(types)
-            model.append(m)
+            models.append(m)
     elif l == "ar":
-        model = "arabic"
+        models = "arabic"
     else:
-        model = "langues non definite"
+        models = "langues non definite"
 
-    return render_template('resultat.html', language=l, modeles=model, phrases=phrase, types=types)
+    return render_template('resultat.html', language=l, modeles=models, phrases=subjective_sentences, types=types)
+
+
+@app.route('/SubjectivityFiltering', methods=['POST'])
+def subjectivity_filtering():
+    subjective_state = []
+    sentences = []
+    global l
+    for x in request.form:
+        sentences.append(request.form[x])
+    subjective_state = t.Tools.subjectivity_filtering(sentences, l)[1]
+
+    return render_template('sentencesSubjective.html', subjective_state=subjective_state, sentences=sentences)
 
 
 if __name__ == "__main__":
