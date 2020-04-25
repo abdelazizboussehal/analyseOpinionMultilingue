@@ -3,16 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>hello</title>
+    <style>
+        button {
+  display: inline-block;   /* this shouldn't be needed on a button though */
+  width: 100%;
+              margin: 5px;
+
+}
+    </style>
 </head>
 <body>
+<p style="font-size:50px">classification d'opinion &#128540;</p>
+<form  method="post" id="usrform">
+    <table>
+        <tr>
+            <td>
+            <label>pour cree notre propre texte</label>
+            </td>
+            <td>
+        <button type="submit" formaction="/EnterText" formnovalidate>entrer texte</button>
+            </td>
+            </tr>
+        <tr>
+    <br>
 
-<form action="/preTreatment" method="post" id="usrform">
-    <label for="input">input</label>
-    </br>
-    <textarea rows="5" cols="50" id="input" name="input" form="usrform">
-        Enter text here...</textarea>
-    </br>
-     <input type="submit" value="pre-traitemnt">
+            <td>
+            <label>pour recuperer des twits : </label>
+            </td>
+            <td>
+                <label>Sujet : </label>
+                <input type="text" name="subject"  required="required" pattern="[A-Za-z0-9]{1,20}">
+                <br>
+    <button type="submit" formaction="/GetTextFromTwitter">recuperer de puis twiter</button>
+            </td>
+        </tr>
+    </table>
 </form>
 
 </body>

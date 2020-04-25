@@ -93,5 +93,54 @@ def subjectivity_filtering():
     return render_template('sentencesSubjective.html', subjective_state=subjective_state, sentences=sentences)
 
 
+@app.route('/ExtractAdjVrb', methods=['POST'])
+def extract_adj_verb():
+    all_sentences = []
+    subjective_state = []
+    subjective_sentences = []
+    verbs = []
+    adjs = []
+    nouns = []
+    print(request.form)
+    global l
+    for x in request.form:
+        if "r_id" in x:
+            all_sentences.append(request.form[x])
+        else:
+            subjective_state.append(request.form[x])
+    for i in range(len(all_sentences)):
+        if subjective_state[i] == "true":
+            subjective_sentences.append(all_sentences[i])
+            if l == "en":
+                verbs.append(en.GenerationModels.extract_verb_with_modifier(all_sentences[i], ""))
+                adjs.append(en.GenerationModels.extract_adjective(all_sentences[i], ""))
+                nouns.append(en.GenerationModels.extract_noun_and_noun_complex(all_sentences[i]))
+            else:
+                verbs.append(fr.GenerationModels.extract_verb_with_modifier(all_sentences[i], ""))
+                adjs.append(fr.GenerationModels.extract_adjective(all_sentences[i], ""))
+                nouns.append(fr.GenerationModels.extract_noun_and_noun_complex(all_sentences[i]))
+    return render_template('verb_adj.html', sentences=subjective_sentences, verbs=verbs, adjs=adjs, nouns=nouns)
+
+
+@app.route('/EnterText', methods=['POST'])
+def enter_text():
+    return render_template('textinput.html')
+
+
+@app.route('/GetTextFromTwitter', methods=['POST'])
+def get_text_from_twitter():
+    print(request.form.get("subject"))
+    twitters = t.Tools.get_twit_from_twitter(request.form.get("subject"), 6)
+    sentences = []
+    errors = []
+    languages = ["ar", "en", "fr"]
+    for twit in twitters:
+        if twit[2] in languages:
+            sentences.append(twit[1])
+            errors.append("" + str(t.Tools.correction_orthographe(str(twit[1]), twit[2])))
+
+    return render_template('correction.html', language="", phrases=sentences, erreurs=errors)
+
+
 if __name__ == "__main__":
     app.run(debug=True)

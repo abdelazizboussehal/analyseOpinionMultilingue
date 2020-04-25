@@ -376,3 +376,61 @@ class GenerationModels:
                 model = model + propn[i] + " && "
             model = model + propn[len(propn) - 1] + " ] "
         return model
+
+    def extract_verb_with_modifier(sentence, language):
+        """extraire le verbe avec leur negation et ces adverbes s'ils existe"""
+
+        doc = nlp(sentence)
+        verb = []
+        for token in doc:
+            v = ""
+            neg = False
+            adv_test = False
+            adv = []
+
+            if token.pos_ == "VERB" or token.pos_ == "AUX":
+                for child in token.children:
+                    if child.pos_ == "ADV":
+                        adv_test = True
+                        adv.append(child.lemma_)
+                    if child.dep_ == "neg":
+                        print(child.text)
+                        neg = True
+                if neg:
+                    v = v + " 7 " + token.lemma_
+                else:
+                    v = v + token.text
+                if adv_test:
+                    v = str(adv) + " " + v
+
+                verb.append(v)
+        return verb
+
+    def extract_adjective(text, language):
+        """extraire les adjectives avec la negation s'il existe"""
+        doc = nlp(text)
+        adjective = []
+        for token in doc:
+
+            if token.pos_ == "ADJ":
+                nott = ""
+                adv = []
+                print(token.text, token.pos_, token.dep_, token.head)
+                for child in token.children:
+                    print(child.text)
+                    if child.pos_ == "ADV":
+                        adv.append(child.lemma_)
+                    if child.dep_ == "neg":
+                        nott = " 7 "
+                if len(adv) > 0:
+                    adjective.append(str(adv) + " " + nott + token.lemma_)
+                else:
+                    adjective.append(nott + token.lemma_)
+        return adjective
+
+    def extract_noun_and_noun_complex(text):
+        doc = nlp(text)
+        nouns = []
+        for chunk in doc.noun_chunks:
+            nouns.append(chunk.text)
+        return nouns

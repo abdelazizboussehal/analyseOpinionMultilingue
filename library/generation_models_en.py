@@ -59,7 +59,7 @@ class GenerationModels:
                 if "DATE" in tag[3]:
                     time.append(tag[2])
 
-            model = self.build_model_one(subject, opinion, holder, propn,time)
+            model = self.build_model_one(subject, opinion, holder, propn, time)
         elif 2 == code_model:
             for tag in tags:
                 if tag[1] == 'nsubj':
@@ -75,7 +75,7 @@ class GenerationModels:
                 if "LOC" in tag[3] or "ORG" in tag[3] or "GPE" in tag[3] or "PERSON" in tag[3] or "PRODUCT" in tag[3]:
                     propn.append(tag[2] + " : " + tag[3])
 
-            model = self.build_model_two(subject, verb, opinion, propn,time)
+            model = self.build_model_two(subject, verb, opinion, propn, time)
         elif 3 == code_model:
             for tag in tags:
                 if "we" == str.lower(tag[2]) or "i" == str.lower(tag[2]):
@@ -95,7 +95,7 @@ class GenerationModels:
                     propn.append(tag[2] + " : " + tag[3])
                 if "DATE" == tag[3]:
                     time.append(tag[2])
-            model = self.build_model_three(subject, verb, opinion, holder, propn,time)
+            model = self.build_model_three(subject, verb, opinion, holder, propn, time)
         elif 4 == code_model:
             for tag in tags:
                 if tag[1] == 'nsubj':
@@ -112,7 +112,7 @@ class GenerationModels:
                     propn.append(tag[2] + " : " + tag[3])
                 if "DATE" in tag[3]:
                     time.append(tag[2])
-            model = self.build_model_four(subject, verb, opinion, propn,time)
+            model = self.build_model_four(subject, verb, opinion, propn, time)
         elif 5 == code_model:
             for tag in tags:
                 if tag[1] == 'nsubj':
@@ -125,7 +125,7 @@ class GenerationModels:
                     propn.append(tag[2] + " : " + tag[3])
                 if "DATE" in tag[3]:
                     time.append(tag[2])
-            model = self.build_model_five(subject, opinion, propn,time)
+            model = self.build_model_five(subject, opinion, propn, time)
         elif 7 == code_model:
             for tag in tags:
                 if tag[1] == 'nsubj':
@@ -140,7 +140,7 @@ class GenerationModels:
                     propn.append(tag[2] + " : " + tag[3])
                 if "DATE" in tag[3]:
                     time.append(tag[2])
-            model = self.build_model_seven(subject, verb, propn,time)
+            model = self.build_model_seven(subject, verb, propn, time)
         elif 6 == code_model:
             for tag in tags:
                 if "we" == str.lower(tag[2]) or "i" == str.lower(tag[2]):
@@ -158,7 +158,7 @@ class GenerationModels:
                     propn.append(tag[2] + " : " + tag[3])
                 if "DATE" in tag[3]:
                     time.append(tag[2])
-            model = self.build_model_six(subject, verb, holder, propn,time)
+            model = self.build_model_six(subject, verb, holder, propn, time)
 
         return model, code_model
 
@@ -373,3 +373,64 @@ class GenerationModels:
                 model = model + propn[i] + " && "
             model = model + propn[len(propn) - 1] + " ] "
         return model
+
+    def extract_verb_with_modifier(sentence, language):
+        """extraire le verbe avec leur negation et ces adverbes s'ils existe"""
+
+        doc = nlp(sentence)
+        verb = []
+        for token in doc:
+            v = ""
+            neg = False
+            adv_test = False
+            adv = []
+
+            if token.pos_ == "VERB" or token.pos_ == "AUX":
+                for child in token.children:
+                    if child.pos_ == "ADV":
+                        adv_test = True
+                        adv.append(child.lemma_)
+                    if child.dep_ == "neg":
+                        print(child.text)
+                        neg = True
+                if neg:
+                    v = v + " 7 " + token.lemma_
+                else:
+                    v = v + token.text
+                if adv_test:
+                    text_adv = "( "
+                    for i in range(len(adv)):
+                        text_adv = text_adv + adv[i] + " && "
+                    text_adv = adv[len(adv)-1]
+                    v = text_adv + " ) " + v
+                verb.append(v)
+        return verb
+
+    def extract_adjective(text, language):
+        """extraire les adjectives avec la negation s'il existe"""
+        doc = nlp(text)
+        adjective = []
+        for token in doc:
+
+            if token.pos_ == "ADJ":
+                nott = ""
+                adv = []
+                print(token.text, token.pos_, token.dep_, token.head)
+                for child in token.children:
+                    print(child.text)
+                    if child.pos_ == "ADV":
+                        adv.append(child.lemma_)
+                    if child.dep_ == "neg":
+                        nott = " 7 "
+                if len(adv) > 0:
+                    adjective.append(str(adv) + " " + nott + token.lemma_)
+                else:
+                    adjective.append(nott + token.lemma_)
+        return adjective
+
+    def extract_noun_and_noun_complex(text):
+        doc = nlp(text)
+        nouns = []
+        for chunk in doc.noun_chunks:
+            nouns.append(chunk.text)
+        return nouns

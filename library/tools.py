@@ -5,6 +5,7 @@ from textblob_ar import TextBlob as textblobFrench
 from textblob import Blobber
 from textblob_fr import PatternTagger, PatternAnalyzer
 from textblob_ar import TextBlob as nlpAr
+from pattern.web import Twitter, cache
 
 textblob_arabic = Blobber(pos_tagger=PatternTagger(), analyzer=PatternAnalyzer())
 
@@ -93,4 +94,16 @@ class Tools():
                 else:
                     subjective_stat.append(False)
 
-        return subjective_sentence , subjective_stat
+        return subjective_sentence, subjective_stat
+
+    @staticmethod
+    def get_twit_from_twitter(subject, number):
+        """recuprer des twits depuis twitter avec l autor sur un sujet donne"""
+        twitter = Twitter()
+        index = None
+        sentence = []
+        for j in range(1):
+            for tweet in twitter.search(subject, start=index, count=number):
+                sentence.append((tweet.author, tweet.text, tweet.language))
+        cache.clear()
+        return sentence

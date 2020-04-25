@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>hello</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+        $('textarea').autoResize();
+    </script>
+    <style>
+
+    </style>
 </head>
 <body>
 <h1>la langues est : {{language}}</h1>
@@ -10,7 +16,7 @@
     <label>Phrase</label>
     </br>
     {% for n in range(phrases| length) %}
-    <textarea rows="1" cols="50" id="input" name="input{{n}}" form="usrform"> {{phrases[n]}}</textarea>
+    <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'rows="1" cols="50" id="input" name="input{{n}}" form="usrform"> {{phrases[n]}}</textarea>
     </br>
     <label> {{erreurs[n]}}</label>
     </br>
