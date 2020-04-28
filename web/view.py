@@ -1,7 +1,9 @@
+import numpy
 from flask import Flask, render_template
-from library import tools as t
+from library import tools as t, analyse_models
 from library import generation_models_en as en
 from library import generation_models_fr as fr
+from library import generation_modeles
 from flask import request
 
 app = Flask(__name__)
@@ -95,14 +97,20 @@ def subjectivity_filtering():
 
 @app.route('/ExtractAdjVrb', methods=['POST'])
 def extract_adj_verb():
+    global l
     all_sentences = []
     subjective_state = []
     subjective_sentences = []
     verbs = []
     adjs = []
     nouns = []
-    print(request.form)
-    global l
+    emoji_verb = []
+    array_polarity_verbe = []
+    if l == "en":
+        generation_model = generation_modeles.GenerationModels()
+    elif l == "fr":
+        generation_model = generation_modeles.GenerationFrenchModels()
+
     for x in request.form:
         if "r_id" in x:
             all_sentences.append(request.form[x])
@@ -111,15 +119,16 @@ def extract_adj_verb():
     for i in range(len(all_sentences)):
         if subjective_state[i] == "true":
             subjective_sentences.append(all_sentences[i])
-            if l == "en":
-                verbs.append(en.GenerationModels.extract_verb_with_modifier(all_sentences[i], ""))
-                adjs.append(en.GenerationModels.extract_adjective(all_sentences[i], ""))
-                nouns.append(en.GenerationModels.extract_noun_and_noun_complex(all_sentences[i]))
-            else:
-                verbs.append(fr.GenerationModels.extract_verb_with_modifier(all_sentences[i], ""))
-                adjs.append(fr.GenerationModels.extract_adjective(all_sentences[i], ""))
-                nouns.append(fr.GenerationModels.extract_noun_and_noun_complex(all_sentences[i]))
-    return render_template('verb_adj.html', sentences=subjective_sentences, verbs=verbs, adjs=adjs, nouns=nouns)
+            array_model_verb = generation_model.extract_verb_with_modifier(all_sentences[i], l)
+            verbs.append(array_model_verb)
+            polarity_verb = t.Tools.mean_array_polarity_verb(array_model_verb, l)
+            array_polarity_verbe.append(polarity_verb)
+            emoji_verb.append(t.Tools.get_emoji_from_polarity(polarity_verb))
+            adjs.append(generation_model.extract_adjective(all_sentences[i], ""))
+            nouns.append(generation_model.extract_noun_and_noun_complex(all_sentences[i]))
+
+    return render_template('verb_adj.html', sentences=subjective_sentences, verbs=verbs, adjs=adjs, nouns=nouns,
+                           emoji_verb=emoji_verb, array_polarity_verbe=array_polarity_verbe, language=l)
 
 
 @app.route('/EnterText', methods=['POST'])

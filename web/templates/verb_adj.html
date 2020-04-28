@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>resultat</title>
+    <style>
+        td /* Toutes les cellules des tableaux... */
+        {
+            border: 1px solid black; /* auront une bordure de 1px */
+        }
+
+        h1, h3, p, h2 {
+            text-align: center;
+        }
+
+        table {
+
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+
+    </style>
+</head>
+<body>
+<h2> la langue est : {{ language }}</h2>
+<table>
+    <tr>
+        <td> <strong> numero  </strong></td>
+        <td> <strong>phrases </strong></td>
+        <td> </strong>les elements extracté </strong></td>
+        <td> </strong>polarite verbe</strong></td>
+        <td> </strong>emoji</strong></td>
+    </tr>
+    {% for n in range(sentences| length) %}
+    <tr>
+        <td> {{n+1}}</td>
+        <td>{{sentences[n]}}</td>
+        <td>verbes : {{verbs[n]}}</br> adjs : {{adjs[n]}} </br> les noms : {{nouns[n]}}</td>
+        <td>{{array_polarity_verbe[n]}}</td>
+        <td> &#{{emoji_verb[n]}}</td>
+
+
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

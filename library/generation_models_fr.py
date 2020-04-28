@@ -377,7 +377,7 @@ class GenerationModels:
             model = model + propn[len(propn) - 1] + " ] "
         return model
 
-    def extract_verb_with_modifier(sentence, language):
+    def extract_verb_with_modifier(sentence, language="en"):
         """extraire le verbe avec leur negation et ces adverbes s'ils existe"""
 
         doc = nlp(sentence)
@@ -397,12 +397,15 @@ class GenerationModels:
                         print(child.text)
                         neg = True
                 if neg:
-                    v = v + " 7 " + token.lemma_
+                    v = t.Tools.sc_negation + token.lemma_
                 else:
-                    v = v + token.text
+                    v = token.text
                 if adv_test:
-                    v = str(adv) + " " + v
-
+                    text_adv = t.Tools.sc_adv_start
+                    for i in range(len(adv) - 1):
+                        text_adv = text_adv + adv[i] + t.Tools.sc_adv_cordination
+                    text_adv = text_adv + adv[len(adv) - 1] + t.Tools.sc_adv_end
+                    v = v + t.Tools.sc_verb + text_adv
                 verb.append(v)
         return verb
 
@@ -413,19 +416,23 @@ class GenerationModels:
         for token in doc:
 
             if token.pos_ == "ADJ":
-                nott = ""
+                neg = ""
                 adv = []
-                print(token.text, token.pos_, token.dep_, token.head)
+                adverb = ""
                 for child in token.children:
-                    print(child.text)
                     if child.pos_ == "ADV":
                         adv.append(child.lemma_)
                     if child.dep_ == "neg":
-                        nott = " 7 "
+                        neg = t.Tools.sc_negation
                 if len(adv) > 0:
-                    adjective.append(str(adv) + " " + nott + token.lemma_)
+                    adverb = t.Tools.sc_adv_start
+                    for i in range(len(adv) - 1):
+                        adverb = adverb + adv[i] + t.Tools.sc_adv_cordination
+                    adverb = adverb + adv[len(adv) - 1] + t.Tools.sc_adv_end
+
+                    adjective.append(neg + token.lemma_ + t.Tools.sc_adjective + adverb)
                 else:
-                    adjective.append(nott + token.lemma_)
+                    adjective.append(neg + token.lemma_)
         return adjective
 
     def extract_noun_and_noun_complex(text):
