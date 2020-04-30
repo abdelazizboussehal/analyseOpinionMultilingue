@@ -1,8 +1,6 @@
-import nltk
 from nltk.corpus import wordnet as wn
 from nltk.corpus import sentiwordnet as swn
 from library import tools as t
-from nltk.stem import WordNetLemmatizer
 
 
 class SentiWordNet:
@@ -19,7 +17,7 @@ class SentiWordNet:
 
         synsets = wn.synsets(word, pos=tag)
         if not synsets:
-            return -2000
+            return -1000
 
         # Take the first sense, the most common
         synset = synsets[0]

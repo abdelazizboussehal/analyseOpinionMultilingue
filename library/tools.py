@@ -145,7 +145,18 @@ class Tools:
         analyse_model = analyse_models.AnalyseModels(language)
         array_polarity_verb = []
         for amv in array_model_verb:
-            polarity = analyse_model.get_polarity_verb(amv)
+            polarity = analyse_model.calculation_polarity_verb(amv)
             if polarity != -1000:
                 array_polarity_verb.append(polarity)
         return numpy.array(array_polarity_verb).mean()
+
+    @staticmethod
+    def mean_array_polarity_adjective(array_model_adjective, language):
+        """ entrer array des model return la moyenne polarite """
+        analyse_model = analyse_models.AnalyseModels(language)
+        array_polarity_adjective = []
+        for ama in array_model_adjective:
+            polarity = analyse_model.calculation_polarity_adjective(ama)
+            if polarity != -1000:
+                array_polarity_adjective.append(polarity)
+        return numpy.array(array_polarity_adjective).mean()

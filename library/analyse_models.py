@@ -85,7 +85,7 @@ class AnalyseModels:
             polarity_adj = SentiWordNet.get_sentiment(adj, self.language, "a")
         return AnalyseModels.get_polarity_adverb_neg(polarity_adj, adverb, neg, self.language)
 
-    def get_polarity_verb(self, model_verb):
+    def calculation_polarity_verb(self, model_verb):
         elements_verb = AnalyseModels.get_elements_verb(model_verb)
         elements_verb_polarity = self.get_elements_polarity_verb(elements_verb[0], elements_verb[1], elements_verb[2])
         polarity_verb = elements_verb_polarity[0]
@@ -99,6 +99,23 @@ class AnalyseModels:
             return polarity_verb + (1 - polarity_verb) * mean_adv
         else:
             return polarity_verb - (1 - polarity_verb) * mean_adv
+
+    def calculation_polarity_adjective(self, model_adjective):
+        """entrer model d'adjective return polarite"""
+        elements_adjective = AnalyseModels.get_elements_adjective(model_adjective)
+        elements_adjective_polarity = self.get_elements_polarity_adjective(elements_adjective[0],
+                                                                           elements_adjective[1], elements_adjective[2])
+        polarity_adjective = elements_adjective_polarity[0]
+        if polarity_adjective == -1000:
+            return -1000
+        if len(elements_adjective_polarity[1]) > 0:  # calcul moyenne polarite adverbe
+            mean_adv = np.array(elements_adjective_polarity[1]).mean()
+        else:
+            mean_adv = 0
+        if polarity_adjective > 0:
+            return polarity_adjective + (1 - polarity_adjective) * mean_adv
+        else:
+            return polarity_adjective - (1 - polarity_adjective) * mean_adv
 
 
 """
