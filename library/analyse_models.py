@@ -58,6 +58,30 @@ class AnalyseModels:
         return adjective, adverb, neg
 
     @staticmethod
+    def get_elements_model_noun(model):
+        array_model = model.split()
+        nouns = []
+        for i in range(len(array_model)):
+            if array_model[i] == t.Tools.sc_noun_start.replace(" ", "") or array_model[i] == t.Tools.sc_noun_addition. \
+                    replace(" ", ""):
+                nouns.append(array_model[i + 1])
+        return nouns
+
+    @staticmethod
+    def get_polarity_adverb_neg(polarity_element, adverb, neg, language):
+        """recuprer polarite de liste des adverbes et negation"""
+        polarity_adv_total = []
+        if polarity_element != 0 and polarity_element != []:
+            if neg:
+                polarity_element = -1 * polarity_element
+            if len(adverb) != 0:
+                for adv in adverb:
+                    polarity_adv = SentiWordNet.get_sentiment(adv, language, "r")
+                    if polarity_adv != -2000:
+                        polarity_adv_total.append(polarity_adv)
+        return polarity_element, polarity_adv_total
+
+    @staticmethod
     def get_polarity_adverb_neg(polarity_element, adverb, neg, language):
         """recuprer polarite de liste des adverbes et negation"""
         polarity_adv_total = []
@@ -91,10 +115,13 @@ class AnalyseModels:
         polarity_verb = elements_verb_polarity[0]
         if isinstance(polarity_verb, list):
             return -1000
+        while -1000 in elements_verb_polarity[1]:
+            elements_verb_polarity[1].remove(-1000)
         if len(elements_verb_polarity[1]) > 0:
             mean_adv = np.array(elements_verb_polarity[1]).mean()
         else:
             mean_adv = 0
+
         if polarity_verb > 0:
             return polarity_verb + (1 - polarity_verb) * mean_adv
         else:
@@ -108,6 +135,8 @@ class AnalyseModels:
         polarity_adjective = elements_adjective_polarity[0]
         if polarity_adjective == -1000:
             return -1000
+        while -1000 in elements_adjective_polarity[1]:
+            elements_adjective_polarity[1].remove(-1000)
         if len(elements_adjective_polarity[1]) > 0:  # calcul moyenne polarite adverbe
             mean_adv = np.array(elements_adjective_polarity[1]).mean()
         else:

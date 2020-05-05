@@ -1,8 +1,6 @@
 import numpy
 from flask import Flask, render_template
 from library import tools as t, analyse_models
-from library import generation_models_en as en
-from library import generation_models_fr as fr
 from library import generation_modeles
 from flask import request
 
@@ -116,10 +114,10 @@ def extract_adj_verb():
         generation_model = generation_modeles.GenerationFrenchModels()
 
     for x in request.form:
-        if "r_id" in x:
+        if "r_id" in x:  # pour recuperer sentence
             all_sentences.append(request.form[x])
         else:
-            subjective_state.append(request.form[x])
+            subjective_state.append(request.form[x])  # pour recuperer valeur de radio
     for i in range(len(all_sentences)):
         if subjective_state[i] == "true":
             subjective_sentences.append(all_sentences[i])
@@ -161,6 +159,25 @@ def get_text_from_twitter():
             errors.append("" + str(t.Tools.correction_orthographe(str(twit[1]), twit[2])))
 
     return render_template('correction.html', language="", phrases=sentences, erreurs=errors)
+
+
+@app.route('/ConnectorSegmentation', methods=['POST'])
+def connector_segmentation():
+    global l
+    all_sentences = []
+    subjective_state = []
+    for x in request.form:
+        if "r_id" in x:  # pour recuperer sentence
+            all_sentences.append(request.form[x])
+        else:
+            subjective_state.append(request.form[x])  # pour recuperer valeur de radio
+    sub_sentence = []
+    for i in range(len(all_sentences)):
+        if subjective_state[i] == "true":
+            sub_sentence.extend(t.Tools.segmentation_with_connectors(all_sentences[i]))
+    sub_sentence_subjectivity = t.Tools.subjectivity_filtering(sub_sentence, l)[1]
+    return render_template('sub_sentence_subjectivity.html', sentences=sub_sentence,
+                           subjective_state=sub_sentence_subjectivity, language=l)
 
 
 if __name__ == "__main__":

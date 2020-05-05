@@ -1,6 +1,7 @@
 import numpy
 import spacy
 from enchant.checker import SpellChecker
+from spacy.matcher.phrasematcher import PhraseMatcher
 from textblob import TextBlob as textblobEnglish, TextBlob
 from textblob_ar import TextBlob as textblobArabic
 from textblob import Blobber
@@ -12,17 +13,36 @@ from library import analyse_models
 
 textblob_arabic = Blobber(pos_tagger=PatternTagger(), analyzer=PatternAnalyzer())
 
-nlpEn = spacy.load("en_core_web_sm")
-nlpFr = spacy.load("fr_core_news_sm")
-
 
 class Tools:
+    # adverb
     sc_adv_start = "( "
     sc_adv_end = " ) "
     sc_adv_cordination = " && "
+
+    # verb
     sc_negation = " 7 "
     sc_verb = " <= "
+
+    # adjective
     sc_adjective = " <= "
+
+    # noun
+    sc_noun_addition = " && "
+    sc_noun_start = " ( "
+    sc_noun_end = " ) "
+
+    # connector english
+    addition = ["and", "plus", "furthermore", "moreover", "in addition", "also"]
+    contract_end = ["but", "however", "though", "nevertheless", "despite", "whereas", "while", "on the contrary",
+                    "notwithstanding"]
+    contract_start = ["although"]
+    # connector french
+    contract_end_fr = ["mais", "bien que", "quoique", "tandis que", "alors que", " même si", "cependant", "pourtant",
+                   "toutefois", "néanmoins", "en revanche", "au contraire", "malgré tout", "certes", "malgré"]
+    contract_start_fr =[]
+    addition_fr = ["et de même que", "sans compter que", "ainsi que", "ensuite", "voire", "d'ailleurs", "encore",
+                   "de plus", "quant à", "non seulement", "mais encore", "de surcroît", "en outre"]
 
     @staticmethod
     def read(path):
@@ -62,8 +82,10 @@ class Tools:
     @staticmethod
     def sentence_segmentation(content, language):
         if language == "fr":
+            nlpFr = spacy.load("fr_core_news_sm")
             phrase = nlpFr(content).sents
         elif language == "en":
+            nlpEn = spacy.load("en_core_web_sm")
             phrase = nlpEn(content).sents
         elif language == "ar":
             blob = nlpAr(content)
@@ -79,7 +101,7 @@ class Tools:
         subjective_stat = []
         if language == "en":
             for phrase in content:
-                test_subjective = textblobEnglish(phrase)
+                test_subjective = textblobEnglish(str(phrase))
                 if test_subjective.sentiment.subjectivity > 0:
                     subjective_sentence.append(phrase)
                     subjective_stat.append(True)
@@ -120,7 +142,11 @@ class Tools:
     @staticmethod
     def translate_word_to_other_language(language_source, language_destination, word):
         blob = TextBlob(word)
-        blob = blob.translate(from_lang=language_source, to=language_destination)
+        try:
+            blob = blob.translate(from_lang=language_source, to=language_destination)
+        except:
+            return ""
+
         return str(blob)
 
     @staticmethod
@@ -160,3 +186,66 @@ class Tools:
             if polarity != -1000:
                 array_polarity_adjective.append(polarity)
         return numpy.array(array_polarity_adjective).mean()
+
+    @staticmethod
+    def segmentation_with_connectors(text):
+        """entrer un texte et resulation des phrases segemente par connecteur """
+        nlp = spacy.load("en_core_web_sm")
+
+        def set_custom_boundaries(doc):
+            matcher = PhraseMatcher(nlp.vocab)
+            # Only run nlp.make_doc to speed things up
+            patterns_contract_end = [nlp.make_doc(text) for text in Tools.contract_end]
+            patterns_contract_start = [nlp.make_doc(text) for text in Tools.contract_start]
+            patterns_addition = [nlp.make_doc(text) for text in Tools.addition]
+            matcher.add("ContractListEnd", None, *patterns_contract_end)
+            matcher.add("ContractListStart", None, *patterns_contract_start)
+            matcher.add("AdditionList", None, *patterns_addition)
+            matches = matcher(doc)
+            for match_id, start, end in matches:
+                string_id = nlp.vocab.strings[match_id]
+                print(string_id)
+                doc[end].is_sent_start = True
+            return doc
+
+        phrases = []
+        nlp.add_pipe(set_custom_boundaries, before="parser")
+        doc = nlp(text)
+        for sc in doc.sents:
+            phrases.append(str(sc))
+        return phrases
+
+    @staticmethod
+    def segmentation_with_connectors_french(text):
+        """entrer un texte et resulation des phrases segemente par connecteur """
+        """entrer un texte et resulation des phrases segemente par connecteur """
+        nlp = spacy.load("fr_core_news_sm")
+
+        def set_custom_boundaries(doc):
+            matcher = PhraseMatcher(nlp.vocab)
+            # Only run nlp.make_doc to speed things up
+            patterns_contract_end = [nlp.make_doc(text) for text in Tools.contract_end_fr]
+            patterns_contract_start = [nlp.make_doc(text) for text in Tools.contract_start_fr]
+            patterns_addition = [nlp.make_doc(text) for text in Tools.addition_fr]
+            matcher.add("ContractListEnd", None, *patterns_contract_end)
+            matcher.add("ContractListStart", None, *patterns_contract_start)
+            matcher.add("AdditionList", None, *patterns_addition)
+            matches = matcher(doc)
+            for match_id, start, end in matches:
+                string_id = nlp.vocab.strings[match_id]
+                print(string_id)
+                doc[end].is_sent_start = True
+            return doc
+
+        phrases = []
+        nlp.add_pipe(set_custom_boundaries, before="parser")
+        doc = nlp(text)
+        for sc in doc.sents:
+            phrases.append(str(sc))
+        return phrases
+
+    @staticmethod
+    def delete_string_from_end(text, suffix):
+        if suffix and text.endswith(suffix):
+            return text[:-len(suffix)]
+        return text

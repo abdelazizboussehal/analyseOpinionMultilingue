@@ -8,12 +8,11 @@
 
 <body>
 <form action="/ConnectorSegmentation" method="post" id="usrform">
-    <label>Phrase</label>
     </br>
     <table>
 
    <tr>
-       <td>phrase </td>
+       <td>sub sentence </td>
    </tr>
 
     {% for n in range(sentences| length) %}
@@ -35,7 +34,7 @@
     {% endfor %}
     </table>
     </br>
-    <button type="submit" formaction="/ConnectorSegmentation">segmentation par connecteur</button>
+    <button type="submit" formaction="/ExtractAdjVrb">extraire adjective et verb et noun et connecter </button>
 </form>
 
 </body>
