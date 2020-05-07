@@ -9,6 +9,8 @@ from textblob_fr import PatternTagger, PatternAnalyzer
 from textblob_ar import TextBlob as nlpAr
 from pattern.web import Twitter, cache
 from spacy.lang.en import English
+from spacy.lang.fr import French
+
 
 from library import analyse_models
 
@@ -83,13 +85,15 @@ class Tools:
     @staticmethod
     def sentence_segmentation(content, language):
         if language == "fr":
-            nlpFr = spacy.load("fr_core_news_sm")
-            phrase = nlpFr(content).sents
+            nlp_fr = French()  # just the language with no model
+            sentencizer = nlp_fr.create_pipe("sentencizer")
+            nlp_fr.add_pipe(sentencizer)
+            phrase = nlp_fr(content).sents
         elif language == "en":
-            nlpEn = English()  # just the language with no model
-            sentencizer = nlpEn.create_pipe("sentencizer")
-            nlpEn.add_pipe(sentencizer)
-            phrase = nlpEn(content).sents
+            nlp_en = English()  # just the language with no model
+            sentencizer = nlp_en.create_pipe("sentencizer")
+            nlp_en.add_pipe(sentencizer)
+            phrase = nlp_en(content).sents
         elif language == "ar":
             blob = nlpAr(content)
             phrase = []
@@ -198,7 +202,9 @@ class Tools:
         """entrer un texte et resulation des phrases segemente par connecteur """
         """entrer un texte et resulation des phrases segemente par connecteur """
         if language == "fr":
-            nlp = spacy.load("fr_core_news_sm")
+            nlp = French()  # just the language with no model
+            sentencizer = nlp.create_pipe("sentencizer")
+            nlp.add_pipe(sentencizer)
         elif language == "en":
             nlp = English()  # just the language with no model
             sentencizer = nlp.create_pipe("sentencizer")
