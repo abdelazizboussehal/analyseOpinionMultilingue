@@ -1,10 +1,17 @@
 from operator import itemgetter
 import spacy
+from spacy.matcher.phrasematcher import PhraseMatcher
+
 from library import tools as t
 
 
 class GenerationModels:
     neg = ["no", "not", "n't", "never", "none", "nobody", "nowhere", "nothing", "neither"]
+    # connector english
+    addition = ["and", "plus", "furthermore", "moreover", "in addition", "also"]
+    contract_end = ["but", "though", "nevertheless", "despite", "whereas", "while", "on the contrary",
+                    "notwithstanding"]
+    contract_start = ["although", "however"]
 
     def __init__(self):
         self.nlp = spacy.load("en_core_web_sm")
@@ -81,18 +88,33 @@ class GenerationModels:
         return nouns
 
     def extract_connector(self, text):
-        doc = self.nlp(str(text))
-        for token in doc:
-            if str(token.text).lower() in t.Tools.contract:
-                return "7"
-            if str(token.text).lower() in t.Tools.addition:
-                return "+"
+        doc = self.nlp(text)
+        matcher = PhraseMatcher(self.nlp.vocab)
+        patterns_contract_end = [self.nlp.make_doc(text) for text in self.contract_end]
+        patterns_contract_start = [self.nlp.make_doc(text) for text in self.contract_start]
+        patterns_addition = [self.nlp.make_doc(text) for text in self.addition]
+        matcher.add("ContractListEnd", None, *patterns_contract_end)
+        matcher.add("ContractListStart", None, *patterns_contract_start)
+        matcher.add("AdditionList", None, *patterns_addition)
+        matches = matcher(doc)
+        for match_id, start, end in matches:
+            string_id = self.nlp.vocab.strings[match_id]
+            if string_id == "ContractListEnd" or string_id == "ContractListStart":
+                return " 7 "
+            elif string_id == "AdditionList":
+                return " + "
         return "none"
 
 
 class GenerationFrenchModels(GenerationModels):
     neg = ["n'", "ne", "ni", "non", "pas", "rien", "sans", "aucun", "jamais"]
     alternative = ["t'"]
+    # connector french
+    contract_end = ["mais", "quoique", "tandis que", "alors que", " même si", "cependant", "pourtant",
+                       "toutefois", "néanmoins", "en revanche", "au contraire", "certes"]
+    contract_start = ["malgré tout", "malgré", "bien que"]
+    addition = ["et de même que", "sans compter que", "ainsi que", "ensuite", "voire", "d'ailleurs", "encore",
+                   "de plus", "quant à", "non seulement", "mais encore", "de surcroît", "en outre"]
 
     def __init__(self):
         self.nlp = spacy.load("fr_core_news_md")

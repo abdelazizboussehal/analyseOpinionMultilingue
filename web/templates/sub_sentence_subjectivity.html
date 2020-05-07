@@ -8,33 +8,28 @@
 
 <body>
 <form action="/ConnectorSegmentation" method="post" id="usrform">
-    </br>
+    <h1>Segmentation et filtrage par sous phrase</h1>
     <table>
-
-   <tr>
-       <td>sub sentence </td>
-   </tr>
-
-    {% for n in range(sentences| length) %}
-    <tr>
-    <td>
-        <label id="input" name="input{{n}}"  value="1"> {{sentences[n]}}</label>
-    <input type="hidden" name="r_id{{n}}" value="{{sentences[n]}}"/>
-    </td>
-        <td>
-    {% if subjective_state[n] %}
-    subjective : <input type="radio" name="imgsel{{n}}" value="true" checked="checked" />
-    objective : <input type="radio" name="imgsel{{n}}" value="false"  />
-    {% else %}
-    subjective : <input type="radio" name="imgsel{{n}}" value="true"  />
-    objective : <input type="radio" name="imgsel{{n}}" value="false" checked="checked" />
-    {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
+        {% for n in range(sentences| length) %}
+        <tr>
+            <td>
+                <label id="input" name="input{{n}}" value="1"> {{sentences[n]}}</label>
+                <input type="hidden" name="r_id{{n}}" value="{{sentences[n]}}"/>
+            </td>
+            <td>
+                {% if subjective_state[n] %}
+                subjective : <input type="radio" name="imgsel{{n}}" value="true" checked="checked"/>
+                objective : <input type="radio" name="imgsel{{n}}" value="false"/>
+                {% else %}
+                subjective : <input type="radio" name="imgsel{{n}}" value="true"/>
+                objective : <input type="radio" name="imgsel{{n}}" value="false" checked="checked"/>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
     </table>
     </br>
-    <button type="submit" formaction="/ExtractAdjVrb">extraire adjective et verb et noun et connecter </button>
+    <button type="submit" formaction="/ExtractAdjVrb">extraire adjective et verb et noun et connecter</button>
 </form>
 
 </body>

@@ -8,14 +8,8 @@
 
 <body>
 <form action="/ConnectorSegmentation" method="post" id="usrform">
-    <label>Phrase</label>
-    </br>
+    <h1>Filtrage par subjectivite</h1>
     <table>
-
-   <tr>
-       <td>phrase </td>
-   </tr>
-
     {% for n in range(sentences| length) %}
     <tr>
     <td>
@@ -24,11 +18,11 @@
     </td>
         <td>
     {% if subjective_state[n] %}
-    subjective : <input type="radio" name="imgsel{{n}}" value="true" checked="checked" />
-    objective : <input type="radio" name="imgsel{{n}}" value="false"  />
+    porteur d'opinion : <input type="radio" name="imgsel{{n}}" value="true" checked="checked" />
+    non porteur d'pinion : <input type="radio" name="imgsel{{n}}" value="false"  />
     {% else %}
-    subjective : <input type="radio" name="imgsel{{n}}" value="true"  />
-    objective : <input type="radio" name="imgsel{{n}}" value="false" checked="checked" />
+    porteur d'opinion : <input type="radio" name="imgsel{{n}}" value="true"  />
+    non porteur d'pinion : <input type="radio" name="imgsel{{n}}" value="false" checked="checked" />
     {% endif %}
         </td>
     </tr>

@@ -23,27 +23,28 @@
     </style>
 </head>
 <body>
-<h2> la langue est : {{ language }}</h2>
+<h1>Extraitre modeles verbe adjective et nom avec connectuer</h1>
 <table>
     <tr>
         <td> <strong> numero  </strong></td>
         <td> <strong>phrases </strong></td>
-        <td> </strong>les elements extracté </strong></td>
-        <td> </strong>polarite verbe</strong></td>
-        <td> </strong>emoji</strong></td>
+        <td> <strong>les elements extracté </strong></td>
+        <td> <strong>polarite verbe et adjective </strong></td>
+        <td> <strong>emoji</strong></td>
     </tr>
     {% for n in range(sentences| length) %}
     <tr>
         <td> {{n+1}}</td>
         <td>{{sentences[n]}}</td>
-        <td>verbes : {{verbs[n]}}</br> adjs : {{adjs[n]}} </br> les noms : {{nouns[n]}}</td>
-        <td>{{array_polarity_verbe[n]}}
+        <td>modele verbes : {{verbs[n]}}</br>modele adjs : {{adjs[n]}} </br> modele nom : {{nouns[n]}} <br> connector:{{connectors[n]}}</td>
+        <td>
+            <strong>polarite modele verbe:</strong> {{array_polarity_verbe[n]}}
         <br>
-            {{array_polarity_adjective[n]}}
+            <strong>polarite modele adjective:</strong> {{array_polarity_adjective[n]}}
         </td>
-        <td> &#{{emoji_verb[n]}}
+        <td> verbe: &#{{emoji_verb[n]}}
         <br>
-            &#{{emoji_adjective[n]}}
+            adjective: &#{{emoji_adjective[n]}}
         </td>
 
 

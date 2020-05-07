@@ -8,6 +8,7 @@ from textblob import Blobber
 from textblob_fr import PatternTagger, PatternAnalyzer
 from textblob_ar import TextBlob as nlpAr
 from pattern.web import Twitter, cache
+from spacy.lang.en import English
 
 from library import analyse_models
 
@@ -34,13 +35,13 @@ class Tools:
 
     # connector english
     addition = ["and", "plus", "furthermore", "moreover", "in addition", "also"]
-    contract_end = ["but", "however", "though", "nevertheless", "despite", "whereas", "while", "on the contrary",
-                    "notwithstanding"]
+    contract_end = ["but", "though", "nevertheless", "despite", "whereas", "while", "on the contrary",
+                    "notwithstanding", "however"]
     contract_start = ["although"]
     # connector french
-    contract_end_fr = ["mais", "bien que", "quoique", "tandis que", "alors que", " même si", "cependant", "pourtant",
-                   "toutefois", "néanmoins", "en revanche", "au contraire", "malgré tout", "certes", "malgré"]
-    contract_start_fr =[]
+    contract_end_fr = ["mais", "quoique", "tandis que", "alors que", " même si", "cependant", "pourtant",
+                       "toutefois", "néanmoins", "en revanche", "au contraire", "certes"]
+    contract_start_fr = ["malgré tout", "malgré", "bien que"]
     addition_fr = ["et de même que", "sans compter que", "ainsi que", "ensuite", "voire", "d'ailleurs", "encore",
                    "de plus", "quant à", "non seulement", "mais encore", "de surcroît", "en outre"]
 
@@ -85,7 +86,9 @@ class Tools:
             nlpFr = spacy.load("fr_core_news_sm")
             phrase = nlpFr(content).sents
         elif language == "en":
-            nlpEn = spacy.load("en_core_web_sm")
+            nlpEn = English()  # just the language with no model
+            sentencizer = nlpEn.create_pipe("sentencizer")
+            nlpEn.add_pipe(sentencizer)
             phrase = nlpEn(content).sents
         elif language == "ar":
             blob = nlpAr(content)
@@ -153,17 +156,20 @@ class Tools:
     def get_emoji_from_polarity(polarity):
         """entrer plarite et retourner emoji"""
         if polarity == -1000:
-            return 128078
-        elif polarity == 0:
-            return 128529
-        elif polarity < - 0.5:
-            return 128531;
-        elif polarity <= 0:
-            return 128530
-        elif polarity < 0.5:
-            return 128522
+            return 9940
+        elif 1 >= polarity >= -1:
+            if polarity < - 0.5:
+                return 128545
+            elif polarity < 0:
+                return 128542
+            elif polarity == 0:
+                return 128528
+            elif polarity < 0.5:
+                return 128513
+            elif polarity <= 1:
+                return 128514
         else:
-            return 128514
+            return 9940
 
     @staticmethod
     def mean_array_polarity_verb(array_model_verb, language):
@@ -188,57 +194,46 @@ class Tools:
         return numpy.array(array_polarity_adjective).mean()
 
     @staticmethod
-    def segmentation_with_connectors(text):
+    def segmentation_with_connectors(text, language):
         """entrer un texte et resulation des phrases segemente par connecteur """
-        nlp = spacy.load("en_core_web_sm")
+        """entrer un texte et resulation des phrases segemente par connecteur """
+        if language == "fr":
+            nlp = spacy.load("fr_core_news_sm")
+        elif language == "en":
+            nlp = English()  # just the language with no model
+            sentencizer = nlp.create_pipe("sentencizer")
+            nlp.add_pipe(sentencizer)
 
         def set_custom_boundaries(doc):
             matcher = PhraseMatcher(nlp.vocab)
             # Only run nlp.make_doc to speed things up
-            patterns_contract_end = [nlp.make_doc(text) for text in Tools.contract_end]
-            patterns_contract_start = [nlp.make_doc(text) for text in Tools.contract_start]
-            patterns_addition = [nlp.make_doc(text) for text in Tools.addition]
+            if language == "fr":
+                patterns_contract_end = [nlp.make_doc(text) for text in Tools.contract_end_fr]
+                patterns_contract_start = [nlp.make_doc(text) for text in Tools.contract_start_fr]
+                patterns_addition = [nlp.make_doc(text) for text in Tools.addition_fr]
+            elif language == "en":
+                patterns_contract_end = [nlp.make_doc(text) for text in Tools.contract_end]
+                patterns_contract_start = [nlp.make_doc(text) for text in Tools.contract_start]
+                patterns_addition = [nlp.make_doc(text) for text in Tools.addition]
+
             matcher.add("ContractListEnd", None, *patterns_contract_end)
             matcher.add("ContractListStart", None, *patterns_contract_start)
             matcher.add("AdditionList", None, *patterns_addition)
             matches = matcher(doc)
             for match_id, start, end in matches:
                 string_id = nlp.vocab.strings[match_id]
-                print(string_id)
-                doc[end].is_sent_start = True
+                texteturu = doc[start:end]
+                print(texteturu)
+                if string_id == "ContractListEnd":
+                    doc[end].is_sent_start = True
+                elif string_id == "ContractListStart":
+                    doc[start].is_sent_start = True
+                elif string_id == "AdditionList":
+                    doc[start].is_sent_start = True
             return doc
 
         phrases = []
-        nlp.add_pipe(set_custom_boundaries, before="parser")
-        doc = nlp(text)
-        for sc in doc.sents:
-            phrases.append(str(sc))
-        return phrases
-
-    @staticmethod
-    def segmentation_with_connectors_french(text):
-        """entrer un texte et resulation des phrases segemente par connecteur """
-        """entrer un texte et resulation des phrases segemente par connecteur """
-        nlp = spacy.load("fr_core_news_sm")
-
-        def set_custom_boundaries(doc):
-            matcher = PhraseMatcher(nlp.vocab)
-            # Only run nlp.make_doc to speed things up
-            patterns_contract_end = [nlp.make_doc(text) for text in Tools.contract_end_fr]
-            patterns_contract_start = [nlp.make_doc(text) for text in Tools.contract_start_fr]
-            patterns_addition = [nlp.make_doc(text) for text in Tools.addition_fr]
-            matcher.add("ContractListEnd", None, *patterns_contract_end)
-            matcher.add("ContractListStart", None, *patterns_contract_start)
-            matcher.add("AdditionList", None, *patterns_addition)
-            matches = matcher(doc)
-            for match_id, start, end in matches:
-                string_id = nlp.vocab.strings[match_id]
-                print(string_id)
-                doc[end].is_sent_start = True
-            return doc
-
-        phrases = []
-        nlp.add_pipe(set_custom_boundaries, before="parser")
+        nlp.add_pipe(set_custom_boundaries, after="sentencizer")
         doc = nlp(text)
         for sc in doc.sents:
             phrases.append(str(sc))
