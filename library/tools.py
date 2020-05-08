@@ -11,7 +11,6 @@ from pattern.web import Twitter, cache
 from spacy.lang.en import English
 from spacy.lang.fr import French
 
-
 from library import analyse_models
 
 textblob_arabic = Blobber(pos_tagger=PatternTagger(), analyzer=PatternAnalyzer())
@@ -21,19 +20,30 @@ class Tools:
     # adverb
     sc_adv_start = "( "
     sc_adv_end = " ) "
-    sc_adv_cordination = " && "
+    sc_adv_cordination = " &ad& "
 
     # verb
     sc_negation = " 7 "
     sc_verb = " <= "
+    sc_verb_cordination = " &v& "
+    sc_verb_start = " <<v "
+    sc_verb_end = " v>> "
 
     # adjective
     sc_adjective = " <= "
+    sc_adjective_start = " <<a "
+    sc_adjective_end = " a>> "
+    sc_adjective_cordination = " §§ "
 
     # noun
     sc_noun_addition = " && "
-    sc_noun_start = " ( "
-    sc_noun_end = " ) "
+    sc_noun_start = " <<n "
+    sc_noun_end = " n>> "
+
+    # model gobal
+    sc_model_global_start = " [ "
+    sc_model_global_end = " ] "
+    sc_model_global_connector = "cc>"
 
     # connector english
     addition = ["and", "plus", "furthermore", "moreover", "in addition", "also"]

@@ -12,14 +12,26 @@ class GenerationModels:
     contract_end = ["but", "though", "nevertheless", "despite", "whereas", "while", "on the contrary",
                     "notwithstanding"]
     contract_start = ["although", "however"]
+    # elemnt
+    element_sub_model_verb = []
+    element_sub_model_adjective = []
+    element_sub_model_noun = []
+    # modele verbe et adjective et none et connecteur
+    sentence = ""
+    model_general = ""
+    sub_model_verb = ""
+    sub_model_adjective = ""
+    sub_sub_model_noun = ""
+    connector = ""
 
-    def __init__(self):
+    def __init__(self, sentence):
         self.nlp = spacy.load("en_core_web_sm")
+        self.sentence = sentence
 
-    def extract_verb_with_modifier(self, sentence):
+    def extract_element_sub_model_verb(self):
         """extraire le verbe avec leur negation et ces adverbes s'ils existe"""
 
-        doc = self.nlp(str(sentence))
+        doc = self.nlp(str(self.sentence))
         verb = []
         for token in doc:
             v = ""
@@ -45,11 +57,20 @@ class GenerationModels:
                     text_adv = text_adv + adv[len(adv) - 1] + t.Tools.sc_adv_end
                     v = v + t.Tools.sc_verb + text_adv
                 verb.append(v)
-        return verb
+            self.element_sub_model_verb = verb
 
-    def extract_adjective(self, text):
+    def create_sub_model_verb(self):
+        """ cree sous model adjective """
+        self.extract_element_sub_model_verb()
+        sub_model_verb = t.Tools.sc_verb_start
+        for verb in self.element_sub_model_verb:
+            sub_model_verb = sub_model_verb + verb + t.Tools.sc_verb_cordination
+        sub_model_verb = t.Tools.delete_string_from_end(sub_model_verb, t.Tools.sc_verb_cordination)
+        self.sub_model_verb = sub_model_verb + t.Tools.sc_verb_end
+
+    def extract_element_sub_model_adjective(self):
         """extraire les adjectives avec la negation s'il existe"""
-        doc = self.nlp(str(text))
+        doc = self.nlp(str(self.sentence))
         adjective = []
         for token in doc:
 
@@ -76,19 +97,34 @@ class GenerationModels:
                     adjective.append(neg + token.lemma_ + t.Tools.sc_adjective + adverb)
                 else:
                     adjective.append(neg + token.lemma_)
-        return adjective
+            self.element_sub_model_adjective = adjective
 
-    def extract_noun_and_noun_complex(self, text):
-        doc = self.nlp(str(text))
-        nouns = t.Tools.sc_noun_start
+    def create_sub_model_adjective(self):
+        """cree sous modele adjective """
+        self.extract_element_sub_model_adjective()
+        sub_model_adjective = t.Tools.sc_adjective_start
+        for adjective in self.element_sub_model_adjective:
+            sub_model_adjective = sub_model_adjective + adjective + t.Tools.sc_adjective_cordination
+        sub_model_adjective = t.Tools.delete_string_from_end(sub_model_adjective, t.Tools.sc_adjective_cordination)
+        self.sub_model_adjective = sub_model_adjective + t.Tools.sc_adjective_end
+
+    def extract_element_sub_model_noun(self):
+        doc = self.nlp(str(self.sentence))
+        nouns = []
         for chunk in doc.noun_chunks:
-            nouns = nouns + chunk.root.text + t.Tools.sc_noun_addition
-        nouns = t.Tools.delete_string_from_end(nouns, t.Tools.sc_noun_addition) + t.Tools.sc_noun_end
+            nouns.append(chunk.root.text)
+        self.element_sub_model_noun = nouns
 
-        return nouns
+    def create_sub_model_noun(self):
+        self.extract_element_sub_model_noun()
+        sub_model_nouns = t.Tools.sc_noun_start
+        for noun in self.element_sub_model_noun:
+            sub_model_nouns = sub_model_nouns + noun + t.Tools.sc_noun_addition
+        self.sub_model_noun = t.Tools.delete_string_from_end(sub_model_nouns,
+                                                             t.Tools.sc_noun_addition) + t.Tools.sc_noun_end
 
-    def extract_connector(self, text):
-        doc = self.nlp(text)
+    def extract_connector(self):
+        doc = self.nlp(self.sentence)
         matcher = PhraseMatcher(self.nlp.vocab)
         patterns_contract_end = [self.nlp.make_doc(text) for text in self.contract_end]
         patterns_contract_start = [self.nlp.make_doc(text) for text in self.contract_start]
@@ -100,10 +136,29 @@ class GenerationModels:
         for match_id, start, end in matches:
             string_id = self.nlp.vocab.strings[match_id]
             if string_id == "ContractListEnd" or string_id == "ContractListStart":
-                return " 7 "
+                self.connector = " 7 "
+                break
             elif string_id == "AdditionList":
-                return " + "
-        return "none"
+                self.connector = " + "
+                break
+            else:
+                self.connector = "none"
+
+    def create_model(self):
+        self.create_sub_model_noun()
+        self.create_sub_model_adjective()
+        self.create_sub_model_verb()
+        self.extract_connector()
+        model = t.Tools.sc_model_global_start
+        if self.connector != "none":
+            model = model + t.Tools.sc_model_global_connector + self.connector
+        if len(self.element_sub_model_verb) > 0:
+            model = model + self.sub_model_verb
+        if len(self.element_sub_model_adjective) > 0:
+            model = model + self.sub_model_adjective
+        if len(self.element_sub_model_noun) > 0:
+            model = model + self.sub_model_noun
+        self.model_general = model + t.Tools.sc_model_global_end
 
 
 class GenerationFrenchModels(GenerationModels):
@@ -111,10 +166,10 @@ class GenerationFrenchModels(GenerationModels):
     alternative = ["t'"]
     # connector french
     contract_end = ["mais", "quoique", "tandis que", "alors que", " même si", "cependant", "pourtant",
-                       "toutefois", "néanmoins", "en revanche", "au contraire", "certes"]
+                    "toutefois", "néanmoins", "en revanche", "au contraire", "certes"]
     contract_start = ["malgré tout", "malgré", "bien que"]
     addition = ["et de même que", "sans compter que", "ainsi que", "ensuite", "voire", "d'ailleurs", "encore",
-                   "de plus", "quant à", "non seulement", "mais encore", "de surcroît", "en outre"]
+                "de plus", "quant à", "non seulement", "mais encore", "de surcroît", "en outre"]
 
     def __init__(self):
         self.nlp = spacy.load("fr_core_news_md")
