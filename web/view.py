@@ -64,10 +64,6 @@ def extract_adj_verb():
     emoji_adjective = []
     array_polarity_adjective = []
     connectors = []
-    if l == "en":
-        generation_model = generation_modeles.GenerationModels()
-    elif l == "fr":
-        generation_model = generation_modeles.GenerationFrenchModels()
 
     for x in request.form:
         if "r_id" in x:  # pour recuperer sentence
@@ -76,26 +72,36 @@ def extract_adj_verb():
             subjective_state.append(request.form[x])  # pour recuperer valeur de radio
     for i in range(len(all_sentences)):
         if subjective_state[i] == "true":
+            if l == "en":
+                generation_model = generation_modeles.GenerationModels(all_sentences[i])
+            elif l == "fr":
+                generation_model = generation_modeles.GenerationFrenchModels(all_sentences[i])
+            generation_model.create_model()
             subjective_sentences.append(all_sentences[i])
-            array_model_verb = generation_model.extract_verb_with_modifier(all_sentences[i])
-            verbs.append(array_model_verb)
-            array_model_adjective = generation_model.extract_adjective(all_sentences[i])
-            adjs.append(array_model_adjective)
-            nouns.append(generation_model.extract_noun_and_noun_complex(all_sentences[i]))
-            connectors.append(generation_model.extract_connector(all_sentences[i]))
+            verbs.append(generation_model.sub_model_verb)
+            adjs.append(generation_model.sub_model_adjective)
+            nouns.append(generation_model.sub_model_noun)
+            connectors.append(generation_model.connector)
+
+            if l == "en":
+                analyse_model = analyse_models.AnalyseModels(l,generation_model.model_general)
+            elif l == "fr":
+                analyse_model = analyse_models.AnalyseFrenchModels(l,generation_model.model_general)
+            analyse_model.extract_sub_models()
+            analyse_model.get_polarity_sub_model_verb()
+            analyse_model.get_polarity_sub_model_adjective()
+            analyse_model.get_polarity_sub_model_noun()
             # traitemnt verbe
-            polarity_verb = t.Tools.mean_array_polarity_verb(array_model_verb, l)
-            array_polarity_verb.append(polarity_verb)
-            emoji_verb.append(t.Tools.get_emoji_from_polarity(polarity_verb))
+            array_polarity_verb.append(analyse_model.polarity_sub_model_verb)
+            emoji_verb.append(t.Tools.get_emoji_from_polarity(analyse_model.polarity_sub_model_verb))
             # traitement adjective
-            polarity_adjective = t.Tools.mean_array_polarity_adjective(array_model_adjective, l)
-            array_polarity_adjective.append(polarity_adjective)
-            emoji_adjective.append(t.Tools.get_emoji_from_polarity(polarity_adjective))
+            array_polarity_adjective.append(analyse_model.polarity_sub_model_adjective)
+            emoji_adjective.append(t.Tools.get_emoji_from_polarity(analyse_model.polarity_sub_model_adjective))
 
     return render_template('verb_adj.html', sentences=subjective_sentences, verbs=verbs, adjs=adjs, nouns=nouns,
                            emoji_verb=emoji_verb, array_polarity_verbe=array_polarity_verb,
                            emoji_adjective=emoji_adjective, array_polarity_adjective=array_polarity_adjective,
-                           language=l,connectors=connectors)
+                           language=l, connectors=connectors)
 
 
 @app.route('/EnterText', methods=['POST'])

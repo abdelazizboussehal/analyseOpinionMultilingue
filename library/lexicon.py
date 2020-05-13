@@ -15,7 +15,8 @@ class Lexicon:
 
         for skill in expertise:
             if skill.getAttribute("pos") == pos and skill.getAttribute("form") == word:  # cherche le mot
-                return skill.getAttribute("polarity")
+                return float(skill.getAttribute("polarity"))
+
         return -1000  # n'existe pas ce mot
 
 

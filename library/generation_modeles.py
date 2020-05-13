@@ -171,13 +171,14 @@ class GenerationFrenchModels(GenerationModels):
     addition = ["et de même que", "sans compter que", "ainsi que", "ensuite", "voire", "d'ailleurs", "encore",
                 "de plus", "quant à", "non seulement", "mais encore", "de surcroît", "en outre"]
 
-    def __init__(self):
+    def __init__(self, sentence):
         self.nlp = spacy.load("fr_core_news_md")
+        self.sentence = sentence
 
-    def extract_verb_with_modifier(self, sentence):
+    def extract_element_sub_model_verb(self):
         """extraire le verbe avec leur negation et ces adverbes s'ils existe"""
 
-        doc = self.nlp(sentence)
+        doc = self.nlp(self.sentence)
         verb = []
         for token in doc:
             v = ""
@@ -208,11 +209,11 @@ class GenerationFrenchModels(GenerationModels):
                     text_adv = text_adv + adv[len(adv) - 1] + t.Tools.sc_adv_end
                     v = v + t.Tools.sc_verb + text_adv
                 verb.append(v)
-        return verb
+        self.element_sub_model_verb = verb
 
-    def extract_adjective(self, text):
+    def extract_element_sub_model_adjective(self):
         """extraire les adjectives avec la negation s'il existe"""
-        doc = self.nlp(text)
+        doc = self.nlp(self.sentence)
         adjective = []
         for token in doc:
 
@@ -235,4 +236,4 @@ class GenerationFrenchModels(GenerationModels):
                     adjective.append(neg + token.lemma_ + t.Tools.sc_adjective + adverb)
                 else:
                     adjective.append(neg + token.lemma_)
-        return adjective
+        self.element_sub_model_adjective = adjective
