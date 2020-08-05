@@ -9,9 +9,9 @@ class GenerationModels:
     neg = ["no", "not", "n't", "never", "none", "nobody", "nowhere", "nothing", "neither"]
     # connector english
     addition = ["and", "plus", "furthermore", "moreover", "in addition", "also"]
-    contract_end = ["but", "though", "nevertheless", "despite", "whereas", "while", "on the contrary",
+    contract_end = ["but", "though", "nevertheless", "whereas", "on the contrary","in contrast", "on the other hand",
                     "notwithstanding"]
-    contract_start = ["although", "however"]
+    contract_start = ["although", "however", "despite", "while", "whereas"]
     # elemnt
     element_sub_model_verb = []
     element_sub_model_adjective = []

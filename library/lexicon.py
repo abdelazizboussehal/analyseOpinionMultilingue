@@ -22,7 +22,8 @@ class Lexicon:
 
 class FrenchLexicon(Lexicon):
     def __init__(self):
-        self.doc = xml.dom.minidom.parse("ven/Lib/site-packages/pattern/text/fr/fr-sentiment.xml")
+        self.doc = xml.dom.minidom.parse(
+            "C:/Users/Aziz/PycharmProjects/pivoto/ven/Lib/site-packages/pattern/text/fr/fr-sentiment.xml")
 
 
 class ArabicLexicon(Lexicon):
