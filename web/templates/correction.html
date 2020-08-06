@@ -31,8 +31,9 @@
             <div class="col-sm-12">
                 <div class="card border-primary mb-4">
                     <div class="card-body text-primary">
-                        <h6>phrase<small class="text-info"> {{n+1}} </small></h6>
-
+                        <div class="card text-white bg-info">
+                             <h6 class="card-title">phrase {{n+1}}</h6>
+                        </div>
                         <textarea cols="50" id="input" name="input{{n}}" form="usrform"> {{phrases[n]}}</textarea>
                         </br>
                         <label class="text-danger"> {{erreurs[n]}}</label>
