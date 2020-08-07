@@ -88,9 +88,12 @@ class Tools:
             checker = SpellChecker("ar")
 
         checker.set_text(content)
+        list_word = []
+        list_suggestion = []
         for err in checker:
-            list_error.append("ERROR:" + err.word + " sugestion :" + str(err.suggest()))
-        return list_error
+            list_word.append(err.word)
+            list_suggestion.append(err.suggest())
+        return list_word, list_suggestion
 
     @staticmethod
     def sentence_segmentation(content, language):

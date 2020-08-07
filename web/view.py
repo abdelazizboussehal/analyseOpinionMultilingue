@@ -20,6 +20,8 @@ def pretreatment():
     phrase = t.Tools.sentence_segmentation(content, language)
     error = []
     phrases = []
+    list_word = []
+    list_suggestion = []
     global l
     l = language
     if language == "en":
@@ -31,9 +33,11 @@ def pretreatment():
 
     for ph in phrase:
         phrases.append(ph)
-        error.append("" + str(t.Tools.correction_orthographe(str(ph), language)))
+        list_word.append(t.Tools.correction_orthographe(str(ph), language)[0])
+        list_suggestion.append(t.Tools.correction_orthographe(str(ph), language)[1])
 
-    return render_template('correction.html', language=lang, phrases=phrases, erreurs=error)
+    return render_template('correction.html', language=lang, phrases=phrases, list_word=list_word,
+                           list_suggestion=list_suggestion)
 
 
 @app.route('/SubjectivityFiltering', methods=['POST'])
@@ -84,9 +88,9 @@ def extract_adj_verb():
             connectors.append(generation_model.connector)
 
             if l == "en":
-                analyse_model = analyse_models.AnalyseModels(l,generation_model.model_general)
+                analyse_model = analyse_models.AnalyseModels(l, generation_model.model_general)
             elif l == "fr":
-                analyse_model = analyse_models.AnalyseFrenchModels(l,generation_model.model_general)
+                analyse_model = analyse_models.AnalyseFrenchModels(l, generation_model.model_general)
             analyse_model.extract_sub_models()
             analyse_model.get_polarity_sub_model_verb()
             analyse_model.get_polarity_sub_model_adjective()
