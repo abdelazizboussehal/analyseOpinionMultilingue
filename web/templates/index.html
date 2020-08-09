@@ -1,113 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 
-    <title>hello</title>
-    <script>
-        function checkconnection() {
-            var status = navigator.onLine;
-            if (!status) {
-                alert('Internet connected !!');
-            }
-        }
-    </script>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>home</title>
+    <!-- Stylesheets  multi step-->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/reset.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <!-- Custom fonts for this template dash board-->
+    <link href="{{ url_for('static',filename='vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet"
+          type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="{{ url_for('static',filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+
 
 </head>
-<body onload="checkconnection();">
 
-<div class="container">
-    <div class="row  justify-content-md-center">
-        <div class="row">
-            <p style="font-size:60px" class="text-secondary">Classification d'opinion </p>
-            <p id="emoji" style="font-size:60px">&#128540;</p>
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">Opinion mining<sup></sup></div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Accueil -->
+        <li class="nav-item active">
+            <a class="nav-link">
+                <i class="fa fa-home" aria-hidden="true"></i>
+                <span>Accueil</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Insertion
         </div>
-    </div>
-    <div class="btn-group mb-2">
-        <button  onmouseover="addpopretext()" onclick="addpopretext()" type="button" class="btn btn-primary">Texte
-        </button>
-        <button onmouseover="addtweetr()" onclick="addtweetr()" type="button" class="btn btn-primary">Tweeter</button>
-        <button onmouseover="addfichiertext()" onclick="addfichiertext()" type="button" class="btn btn-primary">
-            Documents
-        </button>
-    </div>
-    <div class="card text-center">
-        <div id="titre1" class="card-header">Texte</div>
-        <div class="card-body">
-            <form method="post" id="usrform">
 
-                <div class="container">
-                    <div id="espace" class="container justify-content-center">
-                        <p class="card-text">cette option nous permettre des cree notre propre texte</p>
-                        <button class="btn btn-primary" type="submit" formaction="/EnterText" formnovalidate>commancer
-                        </button>
 
+        <!-- Nav Item - insert from text -->
+
+
+        <li class="nav-item active ">
+            <a href="#" onclick="addpopretext()" class="nav-link">
+                <i class="fab fa-readme"></i>
+                <span>Texte</span></a>
+        </li>
+        <!-- Nav Item - twitter -->
+        <li class="nav-item active">
+            <a href="#" onclick="addtweetr()" class="nav-link">
+                <i class="fab fa-twitter"></i>
+                <span>Twitter</span></a>
+        </li>
+        <!-- Nav Item - file -->
+        <li class="nav-item active">
+            <a href="#" onclick="addfichiertext()" class="nav-link">
+                <i class="fas fa-file-upload"></i>
+                <span>File</span></a>
+        </li>
+
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            statistique
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu segementation -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages1"
+               aria-expanded="true" aria-controls="collapsePages">
+                <i class="fas fa-align-justify"></i>
+                <span>Segmentation</span>
+            </a>
+            <div id="collapsePages1" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item">phrase</a>
+                    <a class="collapse-item">sous phrase</a>
+                </div>
+            </div>
+        </li>
+        <!-- Nav Item - Pages Collapse Menu modeles -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2"
+               aria-expanded="true" aria-controls="collapsePages">
+                <i class="fab fa-hubspot"></i>
+                <span>Modeles</span>
+            </a>
+            <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">modeles</h6>
+                    <a class="collapse-item">verbe</a>
+                    <a class="collapse-item">nom</a>
+                    <a class="collapse-item">adjective</a>
+                    <div class="collapse-divider"></div>
+                    <h6 class="collapse-header">polarite</h6>
+                    <a class="collapse-item">verbe</a>
+                    <a class="collapse-item">nom</a>
+                    <a class="collapse-item">adjective</a>>
+                </div>
+            </div>
+        </li>
+        <!-- Nav Item - Pages Collapse Menu mots -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+               aria-expanded="true" aria-controls="collapsePages">
+                <i class="fas fa-file-word"></i>
+                <span>Mots</span>
+            </a>
+            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item">nombre verbe</a>
+                    <a class="collapse-item">nombre nom</a>
+                    <a class="collapse-item">nombre adjective</a>
+                    <a class="collapse-item">nombre mots</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- piece one top -->
+        <div class="d-flex flex-column">
+            <div style="margin-top: 90px;" class="row  justify-content-md-center">
+                <div class="row">
+                    <p style="font-size:60px" class="text-secondary">Classification d'opinion </p>
+                    <p id="emoji" style="font-size:60px">&#128540;</p>
+                </div>
+            </div>
+
+            <form id="msform">
+                <!-- multi step-->
+                <ul id="progressbar">
+                    <li class="active">Account Setup</li>
+                    <li>Social Profiles</li>
+                    <li>Personal Details</li>
+                    <li>Personal Details</li>
+                    <li>Personal Details</li>
+                </ul>
+            </form>
+
+        </div>
+
+        <!-- piece two medium -->
+        <div id="maincontainer" class="d-flex flex-column">
+            <div class="card shadow mb-4 card border-left-primary shadow h-100 py-2 mx-2 my-2">
+                <div class="d-flex flex-row justify-content-center card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Texte</h6>
+                </div>
+                <div class="d-flex flex-row justify-content-center card-body">
+                    cette option nous permettre des cree notre propre texte
+                </div>
+                <div>
+                    <div class="d-flex flex-row justify-content-around">
+                        <a href="#" onclick="inputText()" class="btn btn-primary btn-icon-split">
+                <span class="icon text-white-50">
+                    <i class="fas fa-chevron-circle-right"></i>
+                </span>
+                            <span class="text">commencer</span>
+                        </a>
                     </div>
 
-
                 </div>
-            </form>
+            </div>
         </div>
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Your Website 2020</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
     </div>
 
+
 </div>
+<!-- End of Content Wrapper -->
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<script>
-    function addpopretext() {
-        var element = document.getElementById("espace");
-        var element2 = document.getElementById("titre1");
-        var element3 = document.getElementById("emoji");
-        element3.innerHTML = "&#128536;"
-        element2.innerHTML = "Texte"
-        element.innerHTML = "<p class=\"card-text\">cette option nous permettre des cree notre propre texte</p>\n" +
-            "                        <button class=\"btn btn-primary\" type=\"submit\" formaction=\"/EnterText\" formnovalidate>commancer\n" +
-            "                        </button>";
-    }
 
-    function addtweetr() {
-        var element2 = document.getElementById("titre1");
-        element2.innerHTML = "Tweeter"
-        var element = document.getElementById("espace");
-        var element3 = document.getElementById("emoji");
-        element3.innerHTML = "&#128520;"
-        element.innerHTML = "            <p class=\"card-text\">cette option nous permettre de cherche un sujet depuis tweeter. </p>\n" +
-            "                    <div class=\"row justify-content-center\">\n" +
-            "                        <input type=\"text\" class=\"form-control col-md-6\" name=\"subject\" placeholder=\"Sujet\">\n" +
-            "                    </div>\n" +
-            "                    <br>\n" +
-            "                    <button type=\"submit\" class=\"btn btn-primary\" formaction=\"/GetTextFromTwitter\">commancer\n" +
-            "                    </button>\n" +
-            "        ";
+<!-- End of Page Wrapper -->
 
-    }
+<!-- Scroll to Top Button-->
 
-    function addfichiertext() {
-        var element = document.getElementById("espace");
-        var element2 = document.getElementById("titre1");
-        var element3 = document.getElementById("emoji");
-        element3.innerHTML = "&#128514;"
-        element2.innerHTML = "Document"
-        element.innerHTML = "<p class=\"card-text\">cette option nous permettre de choisir un fichier depuis desktop</p>\n" +
-            "                    <div class=\"custom-file\">\n" +
-            "                        <div class=\"row \">\n" +
-            "                            <input id='\"file\"' type=\"file\" class=\"custom-file-input\" id=\"customFile\">\n" +
-            "                            <label class=\"custom-file-label \" for=\"customFile\">choisir fichier</label>\n" +
-            "                        </div>\n" +
-            "                    </div>";
 
-    }
+<!-- Bootstrap core JavaScript-->
+{{ url_for('static',filename='vendor/fontawesome-free/css/all.min.css') }}
+<script src="{{ url_for('static',filename='vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ url_for('static',filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-    $("#file").change(function () {
-        alert("Hello! I am an alert box!!");
-    });
+<!-- Core plugin JavaScript-->
+<script src="{{ url_for('static',filename='vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
-</script>
+<!-- Custom scripts for all pages-->
+<script src="{{ url_for('static',filename='js/sb-admin-2.min.js') }}"></script>
+
+<!-- Page level plugins -->
+<script src="{{ url_for('static',filename='vendor/chart.js/Chart.min.js') }}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{{ url_for('static',filename='js/demo/chart-area-demo.js') }}"></script>
+<script src="{{ url_for('static',filename='js/demo/chart-pie-demo.js') }}"></script>
+
+<script src="{{ url_for('static',filename='js/main.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="{{ url_for('static',filename='js/myfunction.js') }}"></script>
+<script src="{{ url_for('static',filename='js/createinterface.js') }}"></script>
+
+
 </body>
+
 </html>

@@ -1,11 +1,21 @@
 import numpy
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from library import tools as t, analyse_models
 from library import generation_modeles
 from flask import request
+from flask_cors import CORS
 
 app = Flask(__name__)
 l = ""
+
+CORS(app)
+
+
+@app.route('/json/')
+def index_two():
+    return jsonify(username="g.user.username",
+                   email="g.user.email",
+                   id="g.user.id")
 
 
 @app.route('/')
@@ -115,7 +125,7 @@ def enter_text():
 
 @app.route('/GetTextFromTwitter', methods=['POST'])
 def get_text_from_twitter():
-    print(request.form.get("subject"))
+    aziz = request.form.get("subject")
     twitters = t.Tools.get_twit_from_twitter(request.form.get("subject"), 6)
     sentences = []
     errors = []
