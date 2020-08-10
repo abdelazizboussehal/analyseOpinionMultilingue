@@ -97,21 +97,28 @@ class Tools:
 
     @staticmethod
     def sentence_segmentation(content, language):
+        phrase = []
         if language == "fr":
             nlp_fr = French()  # just the language with no model
             sentencizer = nlp_fr.create_pipe("sentencizer")
             nlp_fr.add_pipe(sentencizer)
-            phrase = nlp_fr(content).sents
+            sentence = nlp_fr(content).sents
+
+            for sent in sentence:
+                phrase.append(str(sent))
         elif language == "en":
             nlp_en = English()  # just the language with no model
             sentencizer = nlp_en.create_pipe("sentencizer")
             nlp_en.add_pipe(sentencizer)
-            phrase = nlp_en(content).sents
+            sentence = nlp_en(content).sents
+            for sent in sentence:
+                phrase.append(str(sent))
         elif language == "ar":
             blob = nlpAr(content)
-            phrase = []
             for sentence in blob.sentences:
                 phrase.append(str(sentence))
+
+
         return phrase
 
     @staticmethod

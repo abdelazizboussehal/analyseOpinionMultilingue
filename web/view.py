@@ -23,6 +23,60 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/res', methods=['POST'])
+def res():
+    global l
+    content = request.form['input']
+    language = t.Tools.language_detection(content)
+    list_word = []
+    list_suggestion = []
+    l = language
+    sub_sentence = []
+    if language == "en":
+        lang = "anglais"
+    elif language == "fr":
+        lang = "français"
+    elif language == "ar":
+        lang = "arabe"
+
+    list_word.append(t.Tools.correction_orthographe(str(content), language)[0])
+    list_suggestion.append(t.Tools.correction_orthographe(str(content), language)[1])
+
+    # segemntation phrase
+    phrase = t.Tools.sentence_segmentation(content, language)
+
+    # segmentation sous phrase
+    for ph in phrase:
+        sub_sentence.extend(t.Tools.segmentation_with_connectors(str(ph), l))
+
+    # subjectivite
+    sub_sentence_subjectivity = t.Tools.subjectivity_filtering(sub_sentence, l)[1]
+
+    # nbr phrase sub
+    nbr_sub = 0
+    nbr_obj = 0
+    for x in sub_sentence_subjectivity:
+        if x:
+            nbr_sub+=1
+        else:
+            nbr_obj+=1
+
+    return render_template('resultatfinal.html', language=lang, content=content, list_word=list_word,
+                           list_suggestion=list_suggestion,
+                           phrase=phrase, sub_sentence=sub_sentence, subjective_state=sub_sentence_subjectivity,
+                           nbr_sub=nbr_sub,nbr_obj=nbr_obj)
+
+
+@app.route('/a')
+def index1():
+    return render_template('index1.html')
+
+
+@app.route('/b')
+def index2():
+    return render_template('index3.html')
+
+
 @app.route('/preTreatment', methods=['POST'])
 def pretreatment():
     content = request.form['input']
@@ -155,6 +209,44 @@ def connector_segmentation():
     sub_sentence_subjectivity = t.Tools.subjectivity_filtering(sub_sentence, l)[1]
     return render_template('sub_sentence_subjectivity.html', sentences=sub_sentence,
                            subjective_state=sub_sentence_subjectivity, language=l)
+
+
+""" route json"""
+
+
+@app.route('/json/correction', methods=['POST'])
+def json_correction():
+    global l
+    content = request.form['input']
+    language = t.Tools.language_detection(content)
+    list_word = []
+    list_suggestion = []
+    l = language
+    if language == "en":
+        lang = "anglais"
+    elif language == "fr":
+        lang = "français"
+    elif language == "ar":
+        lang = "arabe"
+
+    list_word.append(t.Tools.correction_orthographe(str(content), language)[0])
+    list_suggestion.append(t.Tools.correction_orthographe(str(content), language)[1])
+
+    return jsonify(language=lang, content=content, list_word=list_word, list_suggestion=list_suggestion)
+
+
+@app.route('/json/Segmentation', methods=['POST'])
+def json_segmentation():
+    global l
+    content = request.form['input']
+    language = t.Tools.language_detection(content)
+    phrase = t.Tools.sentence_segmentation(content, language)
+    sub_sentence = []
+    for ph in phrase:
+        sub_sentence.extend(t.Tools.segmentation_with_connectors(str(ph), l))
+    sub_sentence_subjectivity = t.Tools.subjectivity_filtering(sub_sentence, l)[1]
+
+    return jsonify(sentences=sub_sentence, subjective_state=sub_sentence_subjectivity)
 
 
 if __name__ == "__main__":

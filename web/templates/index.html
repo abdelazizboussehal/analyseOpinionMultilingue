@@ -10,9 +10,6 @@
     <meta name="author" content="">
 
     <title>home</title>
-    <!-- Stylesheets  multi step-->
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/reset.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
     <!-- Custom fonts for this template dash board-->
     <link href="{{ url_for('static',filename='vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet"
           type="text/css">
@@ -153,51 +150,72 @@
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column ">
 
         <!-- piece one top -->
         <div class="d-flex flex-column">
-            <div style="margin-top: 90px;" class="row  justify-content-md-center">
+            <div style="margin-top: 10px;" class="row  justify-content-md-center">
                 <div class="row">
                     <p style="font-size:60px" class="text-secondary">Classification d'opinion </p>
                     <p id="emoji" style="font-size:60px">&#128540;</p>
                 </div>
             </div>
 
-            <form id="msform">
-                <!-- multi step-->
-                <ul id="progressbar">
-                    <li class="active">Account Setup</li>
-                    <li>Social Profiles</li>
-                    <li>Personal Details</li>
-                    <li>Personal Details</li>
-                    <li>Personal Details</li>
-                </ul>
-            </form>
 
         </div>
 
         <!-- piece two medium -->
-        <div id="maincontainer" class="d-flex flex-column">
-            <div class="card shadow mb-4 card border-left-primary shadow h-100 py-2 mx-2 my-2">
+        <div id="maincontainerglobal" class="d-flex flex-column">
+            <!-- button text-->
+
+            <div id="cadretexte" class="card shadow mb-4 card border-left-primary shadow h-100 py-2 mx-2 my-2">
                 <div class="d-flex flex-row justify-content-center card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Texte</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">inserer text</h6>
                 </div>
                 <div class="d-flex flex-row justify-content-center card-body">
-                    cette option nous permettre des cree notre propre texte
+                    <form action="/res" method="post" id="usrform1">
+                        <textarea id="textarea" placeholder="Entrer votre texte ici ..... EX :This car is beautiful. "
+                                  lang="en" rows="7" cols="100" id="input" name="input" form="usrform1"
+                                  spellcheck="true"></textarea>
+                        <div class="d-flex flex-row justify-content-around">
+                            <div class="input-group-append">
+                                <button disabled id="button" type="submit" class="btn btn-primary">pre-traitemnt
+                                </button>
+                                <button style="margin-left:10px" type="reset" class="btn btn-danger">supprimer</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div>
-                    <div class="d-flex flex-row justify-content-around">
-                        <a href="#" onclick="inputText()" class="btn btn-primary btn-icon-split">
-                <span class="icon text-white-50">
-                    <i class="fas fa-chevron-circle-right"></i>
-                </span>
-                            <span class="text">commencer</span>
-                        </a>
-                    </div>
 
-                </div>
             </div>
+
+
+            <!-- button twitter-->
+
+            <div id="cadretwitter" hidden class="card shadow mb-4 card border-left-primary shadow h-100 py-2 mx-2 my-2">
+                <div class="d-flex flex-row justify-content-center card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Twitter</h6>
+                </div>
+                <div class="d-flex flex-row justify-content-center card-body">
+                    cette option nous permettre de cherche un sujet depuis twitter.
+                </div>
+                <div class="d-flex flex-row justify-content-around px-2 py-2">
+                    <form method="post" id="usrform2" action="/GetTextFromTwitter">
+                        <input type="text" class="form-control" name="subject" placeholder="Sujet">
+                    </form>
+                </div>
+                <div class="d-flex flex-row justify-content-around">
+
+                    <a href="#" onclick="submitform()" class="btn btn-primary btn-icon-split">
+                <span class="icon text-white-50">
+                <i class="fas fa-chevron-circle-right"></i>
+            </span>
+                        <span class="text">next</span>
+                    </a>
+                </div>
+
+            </div>
+
         </div>
 
         <!-- Footer -->
@@ -222,7 +240,7 @@
 
 
 <!-- Bootstrap core JavaScript-->
-{{ url_for('static',filename='vendor/fontawesome-free/css/all.min.css') }}
+
 <script src="{{ url_for('static',filename='vendor/jquery/jquery.min.js') }}"></script>
 <script src="{{ url_for('static',filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
@@ -244,6 +262,20 @@
 <script src="{{ url_for('static',filename='js/myfunction.js') }}"></script>
 <script src="{{ url_for('static',filename='js/createinterface.js') }}"></script>
 
+<script>
+    $('#textarea').on('keyup', function () {
+        let empty = false;
+
+        $('#textarea').each(function () {
+            empty = $(this).val().length == 0;
+        });
+
+        if (empty)
+            $('#button').attr('disabled', 'disabled');
+        else
+            $('#button').attr('disabled', false);
+    });
+</script>
 
 </body>
 
