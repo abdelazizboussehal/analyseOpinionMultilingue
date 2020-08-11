@@ -30,7 +30,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -47,39 +47,6 @@
                 <span>Accueil</span></a>
         </li>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Insertion
-        </div>
-
-
-        <!-- Nav Item - insert from text -->
-
-
-        <li class="nav-item active ">
-            <a href="#" onclick="addpopretext()" class="nav-link">
-                <i class="fab fa-readme"></i>
-                <span>Texte</span></a>
-        </li>
-        <!-- Nav Item - twitter -->
-        <li class="nav-item active">
-            <a href="#" onclick="addtweetr()" class="nav-link">
-                <i class="fab fa-twitter"></i>
-                <span>Twitter</span></a>
-        </li>
-        <!-- Nav Item - file -->
-        <li class="nav-item active">
-            <a href="#" onclick="addfichiertext()" class="nav-link">
-                <i class="fas fa-file-upload"></i>
-                <span>File</span></a>
-        </li>
-
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
 
         <!-- Heading -->
         <div class="sidebar-heading">
@@ -177,7 +144,7 @@
                                 correction d'othographe
                             </button>
                             <a href="#" class="btn btn-danger btn-icon-split">
-                                <span class="text">{{list_word[0]|length}}</span>
+                                <span class="text">{{session['list_word'][0]|length}}</span>
                                 <span class="icon text-white-50">
                                       <i class="fas fa-times-circle"></i>
                                     </span>
@@ -194,18 +161,19 @@
                                 <div class="d-flex flex-row justify-content-center card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Texte</h6>
                                 </div>
-                                <h5 class="m-0 font-weight-bold text-primary mx-2">langue est : {{language}}</h5>
+                                <h5 class="m-0 font-weight-bold text-primary mx-2">langue est : {{session['language']}}</h5>
                                 <div class="d-flex flex-row justify-content-center card-body">
                                     <textarea class="form-control" id="exampleFormControlTextarea1"
                                               rows="3">{{content}}</textarea>
                                 </div>
-                                {% for j in range(list_word[0]| length) %}
+                                {% for j in range(session['list_word'][0]| length) %}
                                 <div class="row justify-content-star align-items-center ml-4">
-                                    <span>{{list_word[0][j]}}</span> :
-                                    {% for i in range(list_suggestion[0][j]| length) %}
-                                    <a id="aziz" onclick="correct_suggestion()" href="#" class="btn btn-danger btn-icon-split px-2 mx-2  my-2">
-                                        <span class="text">{{list_suggestion[0][j][i]}}</span>
-                                    </a>
+                                    <span>{{session['list_word'][0][j]}}</span> :
+                                    {% for i in range(session['list_suggestion'][0][j]| length) %}
+                                    <button id="aziz" onclick="correction(this)" href="#"
+                                            class="btn btn-danger btn-icon-split px-2 mx-2  my-2">
+                                        {{session['list_suggestion'][0][j][i]}}
+                                    </button>
                                     {% endfor %}
 
                                 </div>
@@ -238,7 +206,7 @@
                                             </button>
                                             <a href="#" class="btn btn-info btn-icon-split">
 
-                                                <span class="text">{{phrase|length}}</span>
+                                                <span class="text">{{session['phrase']|length}}</span>
                                                 <span class="icon text-white-50">
                       <i class="fas fa-align-justify"></i>
                     </span>
@@ -254,8 +222,8 @@
                                                 <div class="d-flex flex-row justify-content-center card-header py-3">
                                                     <h6 class="m-0 font-weight-bold text-primary">Liste des phrases</h6>
                                                 </div>
-                                                {% for n in range(phrase| length) %}
-                                                <label class="ml-3">{{phrase[n]}}</label>
+                                                {% for n in range(session['phrase']| length) %}
+                                                <label class="ml-3">{{session['phrase'][n]}}</label>
                                                 <hr class="mx-4">
                                                 {% endfor %}
                                             </div>
@@ -271,7 +239,7 @@
                                                 segmentation par sous phrase
                                             </button>
                                             <a href="#" class="btn btn-info btn-icon-split">
-                                                <span class="text">{{sub_sentence|length}}</span>
+                                                <span class="text">{{session['sub_sentence']|length}}</span>
                                                 <span class="icon text-white-50">
                       <i class="fas fa-align-justify"></i>
                     </span>
@@ -286,8 +254,8 @@
                                                 <div class="d-flex flex-row justify-content-center card-header py-3">
                                                     <h6 class="m-0 font-weight-bold text-primary">Liste des phrases</h6>
                                                 </div>
-                                                {% for n in range(sub_sentence| length) %}
-                                                <label class="ml-3">{{sub_sentence[n]}}</label>
+                                                {% for n in range(session['sub_sentence']| length) %}
+                                                <label class="ml-3">{{session['sub_sentence'][n]}}</label>
                                                 <hr class="mx-4">
                                                 {% endfor %}
                                             </div>
@@ -307,13 +275,13 @@
                                 subjectvite
                             </button>
                             <a href="#" class="btn btn-success btn-icon-split">
-                                <span class="text">subjective {{nbr_sub}}</span>
+                                <span class="text">subjective {{session['nbr_sub']}}</span>
                                 <span class="icon text-white-50">
                       <i class="fas fa-info-circle"></i>
                     </span>
                             </a>
                             <a href="#" class="btn btn-info btn-icon-split">
-                                <span class="text">objectif {{nbr_obj}}</span>
+                                <span class="text">objectif {{session['nbr_obj']}}</span>
                                 <span class="icon text-white-50">
                       <i class="fas fa-info-circle"></i>
                                       </span>
@@ -333,13 +301,13 @@
                                 </div>
 
                                 <form class="d-flex flex-column mx-4 my-4">
-                                    {% for n in range(sub_sentence| length) %}
+                                    {% for n in range(session['sub_sentence']| length) %}
                                     <div class="d-flex flex-row align-items-center">
                                         <h5 class="ml-3" id="input" name="input{{n}}" value="1">
-                                            {{sub_sentence[n]}}</h5>
-                                        <input type="hidden" name="r_id{{n}}" value="{{sub_sentence[n]}}"/>
+                                            {{session['sub_sentence'][n]}}</h5>
+                                        <input type="hidden" name="r_id{{n}}" value="{{session['sub_sentence'][n]}}"/>
                                         <div class="mx-4">
-                                            {% if subjective_state[n] %}
+                                            {% if session['subjective_state'][n] %}
                                             <div class="form-check">
                                                 <label class="form-check-label">
                                                     <input type="radio" class="form-check-input" name="optradio{{n}}"
@@ -377,17 +345,117 @@
                 </div>
                 <div class="card">
                     <div class="card-header" id="headingThree">
-                        <h5 class="mb-0">
+                        <h5 class="mb-0 d-flex flex-row justify-content-between">
                             <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree"
                                     aria-expanded="false" aria-controls="collapseThree">
                                 resultat final
                             </button>
+                            <a href="#" class="btn btn-info btn-icon-split">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <span class="text">connector</span>
+                                    <span class="text">{{session['total_connectors']|length}}</span>
+                                </div>
+                                <span class="icon d-flex flex-column justify-content-center text-white-50">
+                      <i class="fas fa-info-circle"></i>
+                    </span>
+                            </a>
+                            <a href="#" class="btn btn-info btn-icon-split">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <span class="text">negation</span>
+                                    <span class="text">{{session['total_negation']|length}}</span>
+                                </div>
+                                <span class="icon d-flex flex-column justify-content-center text-white-50">
+                      <i class="fas fa-info-circle"></i>
+                    </span>
+                            </a>
+                            <a href="#" class="btn btn-info btn-icon-split">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <span class="text">adverbe</span>
+                                    <span class="text">{{session['total_adverbe']|length}}</span>
+                                </div>
+                                <span class="icon d-flex flex-column justify-content-center text-white-50">
+                      <i class="fas fa-info-circle"></i>
+                    </span>
+                            </a>
                         </h5>
                     </div>
                     <div id="collapseThree" class="collapse show" aria-labelledby="headingThree"
                          data-parent="#accordion">
                         <div class="card-body">
-                            polarite positif
+                            <div id="resultaccordion">
+                                <div class="card">
+                                    <div class="card-header" id="resultheadingOne">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link" data-toggle="collapse"
+                                                    data-target="#resultcollapseOne" aria-expanded="true"
+                                                    aria-controls="resultcollapseOne">
+                                                resultat detaille
+                                            </button>
+                                        </h5>
+                                    </div>
+
+                                    <div id="resultcollapseOne" class="collapse" aria-labelledby="resultheadingOne"
+                                         data-parent="#resultaccordion">
+                                        <div class="card-body">
+                                            <div class="card shadow mb-4">
+                                                <div class="card-header py-3">
+                                                    <h6 class="m-0 font-weight-bold text-primary">Résultat Détaillé</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="dataTable"
+                                                               width="100%" cellspacing="0">
+                                                            <thead>
+                                                            <tr class="table-primary">
+                                                                <th style="width: 38%">Phrase</th>
+                                                                <th>Modèle générale</th>
+                                                                <th style="width: 12%">Polarité</th>
+                                                                <th style="width: 12%">Visualisation</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                            <tr class="table-primary">
+                                                                <th>Phrase</th>
+                                                                <th>Modèle générale</th>
+                                                                <th>Polarité</th>
+                                                                <th>Visualisation</th>
+                                                            </tr>
+                                                            </tfoot>
+                                                            <tbody>
+                                                            {% for i in range(session['subjective_sentences']|length) %}
+                                                            <tr>
+                                                                <td>{{session['subjective_sentences'][i]}}</td>
+                                                                <td>{{session['model_global'][i]}}</td>
+                                                                <td>Edinburgh</td>
+                                                                <td>61</td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="resultheadingTwo">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                    data-target="#resultcollapseTwo" aria-expanded="false"
+                                                    aria-controls="resultcollapseTwo">
+                                                resultat final
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="resultcollapseTwo" class="collapse show" aria-labelledby="resultheadingTwo"
+                                         data-parent="#resultaccordion">
+                                        <div class="card-body">
+                                            resultat final
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -437,6 +505,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="{{ url_for('static',filename='js/myfunction.js') }}"></script>
 <script src="{{ url_for('static',filename='js/createinterface.js') }}"></script>
+
+<!-- table -->
+<script src="{{ url_for('static',filename='vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static',filename='vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/demo/datatables-demo.js') }}"></script>
 
 <script>
 

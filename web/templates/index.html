@@ -22,7 +22,7 @@
 </head>
 
 <body id="page-top">
-
+<div hidden id="countdown"></div>
 <!-- Page Wrapper -->
 <div id="wrapper">
 
@@ -42,7 +42,7 @@
 
         <!-- Nav Item - Accueil -->
         <li class="nav-item active">
-            <a class="nav-link">
+            <a href="#" class="nav-link">
                 <i class="fa fa-home" aria-hidden="true"></i>
                 <span>Accueil</span></a>
         </li>
@@ -52,7 +52,7 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            Insertion
+            Type Insertion
         </div>
 
 
@@ -81,64 +81,7 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            statistique
-        </div>
 
-        <!-- Nav Item - Pages Collapse Menu segementation -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages1"
-               aria-expanded="true" aria-controls="collapsePages">
-                <i class="fas fa-align-justify"></i>
-                <span>Segmentation</span>
-            </a>
-            <div id="collapsePages1" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item">phrase</a>
-                    <a class="collapse-item">sous phrase</a>
-                </div>
-            </div>
-        </li>
-        <!-- Nav Item - Pages Collapse Menu modeles -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2"
-               aria-expanded="true" aria-controls="collapsePages">
-                <i class="fab fa-hubspot"></i>
-                <span>Modeles</span>
-            </a>
-            <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">modeles</h6>
-                    <a class="collapse-item">verbe</a>
-                    <a class="collapse-item">nom</a>
-                    <a class="collapse-item">adjective</a>
-                    <div class="collapse-divider"></div>
-                    <h6 class="collapse-header">polarite</h6>
-                    <a class="collapse-item">verbe</a>
-                    <a class="collapse-item">nom</a>
-                    <a class="collapse-item">adjective</a>>
-                </div>
-            </div>
-        </li>
-        <!-- Nav Item - Pages Collapse Menu mots -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-               aria-expanded="true" aria-controls="collapsePages">
-                <i class="fas fa-file-word"></i>
-                <span>Mots</span>
-            </a>
-            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item">nombre verbe</a>
-                    <a class="collapse-item">nombre nom</a>
-                    <a class="collapse-item">nombre adjective</a>
-                    <a class="collapse-item">nombre mots</a>
-                </div>
-            </div>
-        </li>
-
-        <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
         <!-- Sidebar Toggler (Sidebar) -->
@@ -160,10 +103,7 @@
                     <p id="emoji" style="font-size:60px">&#128540;</p>
                 </div>
             </div>
-
-
         </div>
-
         <!-- piece two medium -->
         <div id="maincontainerglobal" class="d-flex flex-column">
             <!-- button text-->
@@ -179,7 +119,9 @@
                                   spellcheck="true"></textarea>
                         <div class="d-flex flex-row justify-content-around">
                             <div class="input-group-append">
-                                <button disabled id="button" type="submit" class="btn btn-primary">pre-traitemnt
+                                <button disabled type="submit" id="button"
+                                        class="btn btn-primary">
+                                    pre-traitemnt
                                 </button>
                                 <button style="margin-left:10px" type="reset" class="btn btn-danger">supprimer</button>
                             </div>
@@ -216,67 +158,123 @@
 
             </div>
 
-        </div>
-
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2020</span>
+            <div id="cadretfile" hidden class="card shadow mb-4 card border-left-primary shadow h-100 py-2 mx-2 my-2">
+                <div class="d-flex flex-row justify-content-center card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Twitter</h6>
+                </div>
+                <div class="d-flex flex-row justify-content-center card-body">
+                    cette option nous permettre de selectioner fichier.
+                </div>
+                <div class="d-flex flex-row justify-content-around px-2 py-2">
+                    <form style="width: 100%" method="post" action="/res">
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input onchange="uploadfile()" type="file" class="custom-file-input" id="upload">
+                                <label id="filetext" class="custom-file-label" for="upload">Choose file</label>
+                            </div>
+                            <div class="input-group-append">
+                                <button onclick="uploadfile()" class="btn btn-outline-secondary" type="submit">Button
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </footer>
-        <!-- End of Footer -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+        </div>
+
+
     </div>
+    <!-- End of Content Wrapper -->
 
 
-</div>
-<!-- End of Content Wrapper -->
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
 
 
-<!-- End of Page Wrapper -->
+    <!-- Bootstrap core JavaScript-->
 
-<!-- Scroll to Top Button-->
+    <script src="{{ url_for('static',filename='vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{{ url_for('static',filename='vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{{ url_for('static',filename='js/sb-admin-2.min.js') }}"></script>
+
+    <!-- Page level plugins -->
+    <script src="{{ url_for('static',filename='vendor/chart.js/Chart.min.js') }}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{{ url_for('static',filename='js/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/demo/chart-pie-demo.js') }}"></script>
+
+    <script src="{{ url_for('static',filename='js/main.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='js/myfunction.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/createinterface.js') }}"></script>
+
+    <!-- progress bar-->
+    <script src="{{ url_for('static',filename='js//dist/jquery.progressBarTimer.min.js') }}"></script>
 
 
-<!-- Bootstrap core JavaScript-->
+    <script>
+        $('#textarea').on('keyup', function () {
+            let empty = false;
 
-<script src="{{ url_for('static',filename='vendor/jquery/jquery.min.js') }}"></script>
-<script src="{{ url_for('static',filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            $('#textarea').each(function () {
+                empty = $(this).val().length == 0;
+            });
 
-<!-- Core plugin JavaScript-->
-<script src="{{ url_for('static',filename='vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="{{ url_for('static',filename='js/sb-admin-2.min.js') }}"></script>
-
-<!-- Page level plugins -->
-<script src="{{ url_for('static',filename='vendor/chart.js/Chart.min.js') }}"></script>
-
-<!-- Page level custom scripts -->
-<script src="{{ url_for('static',filename='js/demo/chart-area-demo.js') }}"></script>
-<script src="{{ url_for('static',filename='js/demo/chart-pie-demo.js') }}"></script>
-
-<script src="{{ url_for('static',filename='js/main.js') }}"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="{{ url_for('static',filename='js/myfunction.js') }}"></script>
-<script src="{{ url_for('static',filename='js/createinterface.js') }}"></script>
-
-<script>
-    $('#textarea').on('keyup', function () {
-        let empty = false;
-
-        $('#textarea').each(function () {
-            empty = $(this).val().length == 0;
+            if (empty)
+                $('#button').attr('disabled', 'disabled');
+            else
+                $('#button').attr('disabled', false);
         });
+    </script>
+    <script>
+        function uploadfile() {
+            var input = document.getElementById('filetext');
+            var fullPath = document.getElementById('upload').value;
+            if (fullPath) {
+                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+                var filename = fullPath.substring(startIndex);
+                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                    filename = filename.substring(1);
+                }
+                input.innerText = filename;
+            }
+        }
 
-        if (empty)
-            $('#button').attr('disabled', 'disabled');
-        else
-            $('#button').attr('disabled', false);
-    });
-</script>
-
+        function starprogress() {
+            document.getElementById("countdown").hidden = false;
+            $("#countdown").progressBarTimer({
+                autoStart: true,
+                timeLimit: 10, //total number of seconds
+                warningThreshold: 5, //seconds remaining triggering switch to warning color
+                autoStart: true, // start the countdown automatically //invoked once the timer expires
+                baseStyle: '', //bootstrap progress bar style at the beginning of the timer
+                warningStyle: 'bg-danger', //bootstrap progress bar style in the warning phase
+                smooth: false, // should the timer be smooth or stepping
+                completeStyle: 'bg-success', //bootstrap progress bar style at completion of timer
+                onFinish: function () {
+                    document.getElementById("usrform1").submit();
+                }
+            });
+        }
+    </script>
+</div>
 </body>
 
 </html>

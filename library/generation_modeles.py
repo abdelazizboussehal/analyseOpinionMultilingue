@@ -6,10 +6,10 @@ from library import tools as t
 
 
 class GenerationModels:
-    neg = ["no", "not", "n't", "never", "none", "nobody", "nowhere", "nothing", "neither"]
+    neg = ["isn't","no", "not", "n't", "never", "none", "nobody", "nowhere", "nothing", "neither","do not","have not"]
     # connector english
     addition = ["and", "plus", "furthermore", "moreover", "in addition", "also"]
-    contract_end = ["but", "though", "nevertheless", "whereas", "on the contrary","in contrast", "on the other hand",
+    contract_end = ["but", "though", "nevertheless", "whereas", "on the contrary", "in contrast", "on the other hand",
                     "notwithstanding"]
     contract_start = ["although", "however", "despite", "while", "whereas"]
     # elemnt
@@ -27,6 +27,13 @@ class GenerationModels:
     def __init__(self, sentence):
         self.nlp = spacy.load("en_core_web_sm")
         self.sentence = sentence
+        # tableau des negation et modificateur et connector
+        self.negation_adj = []
+        self.modificateur_adj = []
+        self.negation_verb = []
+        self.modificateur_verb = []
+        self.connector_negation_table = []
+        self.connector_addition_table = []
 
     def extract_element_sub_model_verb(self):
         """extraire le verbe avec leur negation et ces adverbes s'ils existe"""
@@ -46,6 +53,7 @@ class GenerationModels:
                         adv.append(child.lemma_)
                     if child.dep_ == "neg" or child.text in self.neg:
                         neg = True
+                        self.negation_verb.append(str(child.text))
                 if neg:
                     v = t.Tools.sc_negation + token.lemma_
                 else:
@@ -53,6 +61,7 @@ class GenerationModels:
                 if adv_test:
                     text_adv = t.Tools.sc_adv_start
                     for i in range(len(adv) - 1):
+                        self.modificateur_verb.append(adv[i])
                         text_adv = text_adv + adv[i] + t.Tools.sc_adv_cordination
                     text_adv = text_adv + adv[len(adv) - 1] + t.Tools.sc_adv_end
                     v = v + t.Tools.sc_verb + text_adv
@@ -81,18 +90,22 @@ class GenerationModels:
                 for child in token.children:
                     if child.pos_ == "ADV":
                         adv.append(child.lemma_)
-                    if child.dep_ == "neg":
+                    if child.dep_ == "neg" or child.text in self.neg:
                         neg = t.Tools.sc_negation
+                        self.negation_adj.append(str(child.text))
                 if token.head.pos_ == "AUX":
                     for child in token.head.children:
                         if child.text in self.neg:
                             neg = t.Tools.sc_negation
+                            self.negation_adj.append(str(child.text))
 
                 if len(adv) > 0:
                     adverb = t.Tools.sc_adv_start
                     for i in range(len(adv) - 1):
                         adverb = adverb + adv[i] + t.Tools.sc_adv_cordination
+                        self.modificateur_adj.append(adv[i])
                     adverb = adverb + adv[len(adv) - 1] + t.Tools.sc_adv_end
+                    self.modificateur_adj.append(adv[len(adv) - 1])
 
                     adjective.append(neg + token.lemma_ + t.Tools.sc_adjective + adverb)
                 else:
@@ -136,9 +149,11 @@ class GenerationModels:
         for match_id, start, end in matches:
             string_id = self.nlp.vocab.strings[match_id]
             if string_id == "ContractListEnd" or string_id == "ContractListStart":
+                self.connector_negation_table.append(str(match_id))
                 self.connector = " 7 "
                 break
             elif string_id == "AdditionList":
+                self.connector_addition_table.append(str(match_id))
                 self.connector = " + "
                 break
             else:
@@ -174,6 +189,12 @@ class GenerationFrenchModels(GenerationModels):
     def __init__(self, sentence):
         self.nlp = spacy.load("fr_core_news_md")
         self.sentence = sentence
+        self.negation_adj = []
+        self.modificateur_adj = []
+        self.negation_verb = []
+        self.modificateur_verb = []
+        self.connector_negation_table = []
+        self.connector_addition_table = []
 
     def extract_element_sub_model_verb(self):
         """extraire le verbe avec leur negation et ces adverbes s'ils existe"""
@@ -190,9 +211,11 @@ class GenerationFrenchModels(GenerationModels):
             if token.pos_ == "VERB" or token.pos_ == "AUX":
                 for child in token.children:
                     if child.text in self.alternative:
+                        self.negation_verb.append(child.text)
                         continue
                     if child.text in self.neg:
                         print(child.text)
+                        self.negation_verb.append(child.text)
                         neg = True
                     elif child.pos_ == "ADV":
                         adv_test = True
@@ -206,7 +229,9 @@ class GenerationFrenchModels(GenerationModels):
                     text_adv = t.Tools.sc_adv_start
                     for i in range(len(adv) - 1):
                         text_adv = text_adv + adv[i] + t.Tools.sc_adv_cordination
+                        self.modificateur_verb.append(adv[i])
                     text_adv = text_adv + adv[len(adv) - 1] + t.Tools.sc_adv_end
+                    self.modificateur_verb.append(adv[len(adv) - 1])
                     v = v + t.Tools.sc_verb + text_adv
                 verb.append(v)
         self.element_sub_model_verb = verb
@@ -224,6 +249,7 @@ class GenerationFrenchModels(GenerationModels):
                 for child in token.children:
                     if child.text in self.neg:
                         neg = t.Tools.sc_negation
+                        self.negation_adj.append(child.text)
                     elif child.pos_ == "ADV":
                         adv.append(child.lemma_)
 
@@ -231,7 +257,9 @@ class GenerationFrenchModels(GenerationModels):
                     adverb = t.Tools.sc_adv_start
                     for i in range(len(adv) - 1):
                         adverb = adverb + adv[i] + t.Tools.sc_adv_cordination
+                        self.modificateur_adj.append(adv[i])
                     adverb = adverb + adv[len(adv) - 1] + t.Tools.sc_adv_end
+                    self.modificateur_adj.append(adv[len(adv) - 1])
 
                     adjective.append(neg + token.lemma_ + t.Tools.sc_adjective + adverb)
                 else:

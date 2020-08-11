@@ -1,21 +1,17 @@
 import numpy
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, session
 from library import tools as t, analyse_models
 from library import generation_modeles
 from flask import request
 from flask_cors import CORS
+import secrets
 
+secret = secrets.token_urlsafe(32)
 app = Flask(__name__)
+app.secret_key = secret
 l = ""
 
 CORS(app)
-
-
-@app.route('/json/')
-def index_two():
-    return jsonify(username="g.user.username",
-                   email="g.user.email",
-                   id="g.user.id")
 
 
 @app.route('/')
@@ -23,58 +19,9 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/res', methods=['POST'])
-def res():
-    global l
-    content = request.form['input']
-    language = t.Tools.language_detection(content)
-    list_word = []
-    list_suggestion = []
-    l = language
-    sub_sentence = []
-    if language == "en":
-        lang = "anglais"
-    elif language == "fr":
-        lang = "français"
-    elif language == "ar":
-        lang = "arabe"
-
-    list_word.append(t.Tools.correction_orthographe(str(content), language)[0])
-    list_suggestion.append(t.Tools.correction_orthographe(str(content), language)[1])
-
-    # segemntation phrase
-    phrase = t.Tools.sentence_segmentation(content, language)
-
-    # segmentation sous phrase
-    for ph in phrase:
-        sub_sentence.extend(t.Tools.segmentation_with_connectors(str(ph), l))
-
-    # subjectivite
-    sub_sentence_subjectivity = t.Tools.subjectivity_filtering(sub_sentence, l)[1]
-
-    # nbr phrase sub
-    nbr_sub = 0
-    nbr_obj = 0
-    for x in sub_sentence_subjectivity:
-        if x:
-            nbr_sub+=1
-        else:
-            nbr_obj+=1
-
-    return render_template('resultatfinal.html', language=lang, content=content, list_word=list_word,
-                           list_suggestion=list_suggestion,
-                           phrase=phrase, sub_sentence=sub_sentence, subjective_state=sub_sentence_subjectivity,
-                           nbr_sub=nbr_sub,nbr_obj=nbr_obj)
-
-
 @app.route('/a')
-def index1():
+def indexa():
     return render_template('index1.html')
-
-
-@app.route('/b')
-def index2():
-    return render_template('index3.html')
 
 
 @app.route('/preTreatment', methods=['POST'])
@@ -247,6 +194,147 @@ def json_segmentation():
     sub_sentence_subjectivity = t.Tools.subjectivity_filtering(sub_sentence, l)[1]
 
     return jsonify(sentences=sub_sentence, subjective_state=sub_sentence_subjectivity)
+
+
+def correction(content):
+    global l
+    language = t.Tools.language_detection(content)
+    list_word = []
+    list_suggestion = []
+    session['l'] = language
+    sub_sentence = []
+    if language == "en":
+        lang = "anglais"
+    elif language == "fr":
+        lang = "français"
+    elif language == "ar":
+        lang = "arabe"
+    list_word.append(t.Tools.correction_orthographe(str(content), language)[0])
+    list_suggestion.append(t.Tools.correction_orthographe(str(content), language)[1])
+    return lang, list_word, list_suggestion
+
+
+def subjectivity(content, l):
+    # segemntation phrase
+    phrase = t.Tools.sentence_segmentation(content, l)
+
+    # segmentation sous phrase
+    sub_sentence = []
+    for ph in phrase:
+        sub_sentence.extend(t.Tools.segmentation_with_connectors(str(ph), l))
+
+    # subjectivite
+    sub_sentence_subjectivity = t.Tools.subjectivity_filtering(sub_sentence, l)[1]
+
+    # nbr phrase sub
+    nbr_sub = 0
+    nbr_obj = 0
+    for x in sub_sentence_subjectivity:
+        if x:
+            nbr_sub += 1
+        else:
+            nbr_obj += 1
+
+    # creation des modeles
+    subjective_sentences = []
+    # tableux des sous models
+    verbs = []
+    adjs = []
+    nouns = []
+    connectors = []
+    # tableaux negation connecteur modificateur
+    negationv_total = []
+    negationv_chaque_phrase = []
+    negationa_total = []
+    negationa_chaque_phrase = []
+
+    connectora_total = []
+    connectora_chaque_phrase = []
+    connectorn_total = []
+    connectorn_chaque_phrase = []
+
+    modificateura_total = []
+    modificateura_chaque_phrase = []
+    modificateurv_total = []
+    modificateurv_chaque_phrase = []
+
+    total_connectors = []
+    total_adverbe = []
+    total_negation = []
+
+    model_global = []
+    for i in range(len(sub_sentence)):
+        if sub_sentence_subjectivity[i]:
+            if l == "en":
+                generation_model = generation_modeles.GenerationModels(sub_sentence[i])
+            elif l == "fr":
+                generation_model = generation_modeles.GenerationFrenchModels(sub_sentence[i])
+            generation_model.create_model()
+            subjective_sentences.append(sub_sentence[i])
+            verbs.append(generation_model.sub_model_verb)
+            adjs.append(generation_model.sub_model_adjective)
+            nouns.append(generation_model.sub_model_noun)
+            connectors.append(generation_model.connector)
+            model_global.append(generation_model.model_general)
+
+            negationv_total.extend(generation_model.negation_verb)
+            negationv_chaque_phrase.append(generation_model.negation_verb)
+
+            negationa_total.extend(generation_model.negation_adj)
+            negationa_chaque_phrase.append(generation_model.negation_adj)
+
+            modificateura_total.extend(generation_model.modificateur_adj)
+            modificateura_chaque_phrase.append(generation_model.modificateur_adj)
+
+            modificateurv_total.extend(generation_model.modificateur_verb)
+            modificateurv_chaque_phrase.append(generation_model.modificateur_verb)
+
+            connectora_chaque_phrase.append(generation_model.connector_addition_table)
+            connectora_total.extend(generation_model.connector_addition_table)
+
+            connectorn_chaque_phrase.append(generation_model.connector_negation_table)
+            connectorn_total.extend(generation_model.connector_negation_table)
+
+    total_connectors.extend(connectorn_total)
+    total_connectors.extend(connectora_total)
+
+    total_negation.extend(negationa_total)
+    total_negation.extend(negationv_total)
+
+    total_adverbe.extend(modificateura_total)
+    total_adverbe.extend(modificateurv_total)
+
+    return (phrase, sub_sentence, sub_sentence_subjectivity, nbr_sub, nbr_obj, total_adverbe, total_negation,
+            total_connectors, subjective_sentences, verbs, adjs, nouns, model_global)
+
+
+@app.route('/res', methods=['POST'])
+def res():
+    content = request.form['input']
+    session['content'] = content
+    correction_var = correction(content)
+    lang = correction_var[0]
+
+    list_word = correction_var[1]
+    list_suggestion = correction_var[2]
+    session['list_word'] = list_word
+    session['list_suggestion'] = list_suggestion
+
+    subjectivity_var = subjectivity(content, session['l'])
+    session['phrase'] = subjectivity_var[0]
+    session['sub_sentence'] = subjectivity_var[1]
+    session['subjective_state'] = subjectivity_var[2]
+    session['nbr_sub'] = subjectivity_var[3]
+    session['nbr_obj'] = subjectivity_var[4]
+    session['total_adverbe'] = subjectivity_var[5]
+    session['total_negation'] = subjectivity_var[6]
+    session['total_connectors'] = subjectivity_var[7]
+    session['subjective_sentences'] = subjectivity_var[8]
+    session['verbs'] = subjectivity_var[9]
+    session['adjs'] = subjectivity_var[10]
+    session['nouns'] = subjectivity_var[11]
+    session['model_global'] = subjectivity_var[12]
+    return render_template('resultatfinal.html')
 
 
 if __name__ == "__main__":
