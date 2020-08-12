@@ -144,7 +144,7 @@
                                 correction d'othographe
                             </button>
                             <a href="#" class="btn btn-danger btn-icon-split">
-                                <span class="text">{{session['list_word'][0]|length}}</span>
+                                <span id="nbr_errors" class="text">{{session['list_word'][0]|length}}</span>
                                 <span class="icon text-white-50">
                                       <i class="fas fa-times-circle"></i>
                                     </span>
@@ -164,7 +164,7 @@
                                 <h5 class="m-0 font-weight-bold text-primary mx-2">langue est : {{session['language']}}</h5>
                                 <div class="d-flex flex-row justify-content-center card-body">
                                     <textarea class="form-control" id="exampleFormControlTextarea1"
-                                              rows="3">{{content}}</textarea>
+                                              rows="3">{{session['content']}}</textarea>
                                 </div>
                                 {% for j in range(session['list_word'][0]| length) %}
                                 <div class="row justify-content-star align-items-center ml-4">
@@ -350,7 +350,7 @@
                                     aria-expanded="false" aria-controls="collapseThree">
                                 resultat final
                             </button>
-                            <a href="#" class="btn btn-info btn-icon-split">
+                            <a href="#" class="btn btn-success btn-icon-split">
                                 <div class="d-flex flex-column justify-content-center">
                                     <span class="text">connector</span>
                                     <span class="text">{{session['total_connectors']|length}}</span>
@@ -359,7 +359,7 @@
                       <i class="fas fa-info-circle"></i>
                     </span>
                             </a>
-                            <a href="#" class="btn btn-info btn-icon-split">
+                            <a href="#" class="btn btn-secondary btn-icon-split">
                                 <div class="d-flex flex-column justify-content-center">
                                     <span class="text">negation</span>
                                     <span class="text">{{session['total_negation']|length}}</span>
@@ -407,10 +407,10 @@
                                                                width="100%" cellspacing="0">
                                                             <thead>
                                                             <tr class="table-primary">
-                                                                <th style="width: 38%">Phrase</th>
-                                                                <th>Modèle générale</th>
-                                                                <th style="width: 12%">Polarité</th>
-                                                                <th style="width: 12%">Visualisation</th>
+                                                                <th style="width: 40%">Phrase</th>
+                                                                <th style="width: 40%">Modèle générale</th>
+                                                                <th style="width: 10%">Polarité</th>
+                                                                <th style="width: 10%">Visualisation</th>
                                                             </tr>
                                                             </thead>
                                                             <tfoot>

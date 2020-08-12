@@ -114,6 +114,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-center card-body">
                     <form action="/res" method="post" id="usrform1">
+                        <input type="hidden" name="form" value="id_text">
                         <textarea id="textarea" placeholder="Entrer votre texte ici ..... EX :This car is beautiful. "
                                   lang="en" rows="7" cols="100" id="input" name="input" form="usrform1"
                                   spellcheck="true"></textarea>
@@ -166,14 +167,15 @@
                     cette option nous permettre de selectioner fichier.
                 </div>
                 <div class="d-flex flex-row justify-content-around px-2 py-2">
-                    <form style="width: 100%" method="post" action="/res">
+                    <form style="width: 100%" method="post" action="/res" accept=".txt" enctype = "multipart/form-data">
+                        <input type="hidden" name="form" value="id_file">
                         <div class="input-group">
                             <div class="custom-file">
-                                <input onchange="uploadfile()" type="file" class="custom-file-input" id="upload">
-                                <label id="filetext" class="custom-file-label" for="upload">Choose file</label>
+                                <input onchange="uploadfile()" type="file" name="file_text" class="custom-file-input" id="upload">
+                                <label id="filetext" class="custom-file-label" for="upload">choisir fichier</label>
                             </div>
                             <div class="input-group-append">
-                                <button onclick="uploadfile()" class="btn btn-outline-secondary" type="submit">Button
+                                <button onclick="starprogress()" class="btn btn-outline-secondary" type="submit">Button
                                 </button>
                             </div>
                         </div>
@@ -244,35 +246,6 @@
         });
     </script>
     <script>
-        function uploadfile() {
-            var input = document.getElementById('filetext');
-            var fullPath = document.getElementById('upload').value;
-            if (fullPath) {
-                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
-                var filename = fullPath.substring(startIndex);
-                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
-                    filename = filename.substring(1);
-                }
-                input.innerText = filename;
-            }
-        }
-
-        function starprogress() {
-            document.getElementById("countdown").hidden = false;
-            $("#countdown").progressBarTimer({
-                autoStart: true,
-                timeLimit: 10, //total number of seconds
-                warningThreshold: 5, //seconds remaining triggering switch to warning color
-                autoStart: true, // start the countdown automatically //invoked once the timer expires
-                baseStyle: '', //bootstrap progress bar style at the beginning of the timer
-                warningStyle: 'bg-danger', //bootstrap progress bar style in the warning phase
-                smooth: false, // should the timer be smooth or stepping
-                completeStyle: 'bg-success', //bootstrap progress bar style at completion of timer
-                onFinish: function () {
-                    document.getElementById("usrform1").submit();
-                }
-            });
-        }
     </script>
 </div>
 </body>

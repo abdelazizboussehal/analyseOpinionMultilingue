@@ -1,5 +1,9 @@
+import os
+
 import numpy
-from flask import Flask, render_template, jsonify, session
+from flask import Flask, render_template, jsonify, session, url_for
+from werkzeug.utils import secure_filename, redirect
+
 from library import tools as t, analyse_models
 from library import generation_modeles
 from flask import request
@@ -310,10 +314,20 @@ def subjectivity(content, l):
 
 @app.route('/res', methods=['POST'])
 def res():
-    content = request.form['input']
+    req = request.form
+    content = ""
+    if request.form['form'] == 'id_text':
+        content = request.form['input']
+    elif request.form['form'] == 'id_file':
+        file = request.files['file_text']
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(filename))
+            content = open(os.path.join(filename), 'r').read().replace("\n", " ")
+
     session['content'] = content
     correction_var = correction(content)
-    lang = correction_var[0]
+    session['language'] = correction_var[0]
 
     list_word = correction_var[1]
     list_suggestion = correction_var[2]
