@@ -348,6 +348,13 @@ def res():
     session['adjs'] = subjectivity_var[10]
     session['nouns'] = subjectivity_var[11]
     session['model_global'] = subjectivity_var[12]
+
+    # statistic
+    t.Tools.statistic(session['content'], session['l'])
+    session['stat_verb'] = t.Tools.verbC
+    session['stat_adj'] = t.Tools.adjectifC
+    session['stat_nom'] = t.Tools.nounC
+    session['stat_total'] = t.Tools.total - len(t.Tools.verbC) - len(t.Tools.adjectifC) - len(t.Tools.nounC)
     return render_template('resultatfinal.html')
 
 

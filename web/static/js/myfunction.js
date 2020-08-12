@@ -64,17 +64,18 @@ function statistic() {
     Chart.defaults.global.defaultFontColor = '#858796';
 
 // Pie Chart Example
-    var ctx = document.getElementById("myPieChart");
+    var ctx = document.getElementById("mon_model");
     var myPieChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ["verbe", "adjective", "nouns"],
+            labels: ["verbe", "adjective", "nouns", "autre"],
             datasets: [{
                 data: [document.getElementById("nbr_verb").value,
                     document.getElementById("nbr_adj").value,
-                    document.getElementById("nbr_nom").value],
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                    document.getElementById("nbr_nom").value,
+                    document.getElementById("nbr_autre").value],
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#23cc2d'],
+                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#cc37c7'],
                 hoverBorderColor: "rgba(234, 236, 244, 1)",
             }],
         },
@@ -96,7 +97,18 @@ function statistic() {
             cutoutPercentage: 80,
         },
     });
-    document.getElementById("statistique_cadre").hidden = false;
+}
+
+function save_graphe() {
+    var canvas = document.getElementById('mon_model');
+    var context = canvas.getContext('2d');
+    var button=document.getElementById("save_button");
+
+    // only jpeg is supported by jsPDF
+    var imgData = canvas.toDataURL();
+    button.href = imgData;
+    button.download="graphe.png";
+
 
 }
 

@@ -56,6 +56,13 @@ class Tools:
     contract_start_fr = ["malgré tout", "malgré", "bien que"]
     addition_fr = ["et de même que", "sans compter que", "ainsi que", "ensuite", "voire", "d'ailleurs", "encore",
                    "de plus", "quant à", "non seulement", "mais encore", "de surcroît", "en outre"]
+    verbC = []
+    adjectifC = []
+    nounC = []
+    propnC = []
+    auxC = []
+    adverbC = []
+    total = 0
 
     @staticmethod
     def read(path):
@@ -117,7 +124,6 @@ class Tools:
             blob = nlpAr(content)
             for sentence in blob.sentences:
                 phrase.append(str(sentence))
-
 
         return phrase
 
@@ -270,3 +276,32 @@ class Tools:
         if suffix and text.endswith(suffix):
             return text[:-len(suffix)]
         return text
+
+    @staticmethod
+    def statistic(sentence, langue):
+        Tools.verbC = []
+        Tools.adjectifC = []
+        Tools.nounC = []
+        Tools.propnC = []
+        Tools.auxC = []
+        Tools.adverbC = []
+        Tools.total = 0
+        if langue == "en":
+            nlp = spacy.load("en_core_web_sm")
+        elif langue == "fr":
+            nlp = spacy.load("fr_core_news_md")
+        doc = nlp(sentence)
+        for token in doc:
+            Tools.total += 1
+            if token.pos_ == "VERB":
+                Tools.verbC.append(str(token.text))
+            if token.pos_ == "ADJ":
+                Tools.adjectifC.append(str(token.text))
+            if token.pos_ == "NOUN":
+                Tools.nounC.append(str(token.text))
+            if token.pos_ == "PROPN":
+                Tools.propnC.append(str(token.text))
+            if token.pos_ == "AUX":
+                Tools.auxC.append(str(token.text))
+            if token.pos_ == "ADV":
+                Tools.adverbC.append(str(token.text))

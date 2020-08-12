@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>home</title>
+    <title> Resultat</title>
     <!-- Custom fonts for this template dash board-->
     <link href="{{ url_for('static',filename='vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet"
           type="text/css">
@@ -58,12 +58,11 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages1"
                aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-align-justify"></i>
-                <span>Segmentation</span>
+                <span>graphe</span>
             </a>
             <div id="collapsePages1" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item">phrase</a>
-                    <a class="collapse-item">sous phrase</a>
+                    <a class="collapse-item" data-toggle="modal" data-target="#exampleModal">graphique anneaux</a>
                 </div>
             </div>
         </li>
@@ -97,10 +96,27 @@
             </a>
             <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a href="#" onclick="statistic()" class="collapse-item">nombre verbe</a>
-                    <a class="collapse-item">nombre nom</a>
-                    <a class="collapse-item">nombre adjective</a>
-                    <a class="collapse-item">nombre mots</a>
+                    <ul class="list-group">
+                        <li data-toggle="modal" data-target="#list_verb"
+                            class="list-group-item d-flex justify-content-between align-items-center">
+                            verbe :
+                            <span class="badge badge-primary badge-pill">{{session['stat_verb']|length}}</span>
+                        </li>
+                        <li data-toggle="modal" data-target="#list_adj"
+                            class="list-group-item d-flex justify-content-between align-items-center">
+                            adjective :
+                            <span class="badge badge-primary badge-pill">{{session['stat_adj']|length}}</span>
+                        </li>
+                        <li data-toggle="modal" data-target="#list_nom"
+                            class="list-group-item d-flex justify-content-between align-items-center">
+                            noms :
+                            <span class="badge badge-primary badge-pill">{{session['stat_nom']|length}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            autre :
+                            <span class="badge badge-primary badge-pill">{{session['stat_total']}}</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </li>
@@ -461,24 +477,7 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <div hidden id="statistique_cadre" class="col-xl-4 col-lg-5">
-                    <div class="card shadow mb-4">
-                        <!-- Card Header - Dropdown -->
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Graphique en anneau</h6>
-                        </div>
-                        <!-- Card Body -->
-                        <div class="card-body">
-                            <div class="chart-pie pt-4">
-                                <canvas id="myPieChart"></canvas>
-                            </div>
-                            <hr>
-                            ce praphique reprisente taux des verbe noms et adejective dans texte entrer
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
 
         <!-- Footer -->
@@ -491,10 +490,95 @@
         </footer>
         <!-- End of Footer -->
     </div>
-    <input id="nbr_verb" type="hidden" value="{{20}}">
-    <input id="nbr_adj" type="hidden" value="{{30}}">
-    <input id="nbr_nom" type="hidden" value="{{50}}">
+    <input id="nbr_verb" type="hidden" value="{{session['stat_verb']|length}}">
+    <input id="nbr_adj" type="hidden" value="{{session['stat_adj']|length}}">
+    <input id="nbr_nom" type="hidden" value="{{session['stat_nom']|length}}">
+    <input id="nbr_autre" type="hidden" value="{{session['stat_total']}}">
 
+    <!-- dialog statistic -->
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">phraphe en anneaux</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="chart-pie pt-4">
+                        <canvas id="mon_model"></canvas>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">fermer</button>
+                    <a href="#" id="save_button" onclick="save_graphe()" type="button" class="btn btn-primary">sauvgarder</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- dialog liste des elemnt -->
+
+    <div class="modal fade" id="list_verb" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">liste des verbes</h5>
+                </div>
+                <div class="modal-body">
+                    {% for item in session['stat_verb'] %}
+                    <span class="badge badge-secondary">{{item}}</span>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="list_adj" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">liste des adjectifs</h5>
+                </div>
+                <div class="modal-body">
+                    {% for item in session['stat_adj'] %}
+                    <span class="badge badge-secondary">{{item}}</span>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="list_nom" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">liste des noms</h5>
+                </div>
+                <div class="modal-body">
+                    {% for item in session['stat_nom'] %}
+                    <span class="badge badge-secondary">{{item}}</span>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- End of Content Wrapper -->
@@ -537,7 +621,7 @@
 
 <script>
 
-
+    statistic();
     $('#textarea').on('keyup', function () {
         let empty = false;
 
