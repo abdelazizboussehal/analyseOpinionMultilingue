@@ -38,7 +38,7 @@ function uploadfile() {
             filename = filename.substring(1);
         }
         input.innerText = filename;
-        document.getElementById('button_file').hidden=false;
+        document.getElementById('button_file').hidden = false;
     }
 }
 
@@ -54,7 +54,7 @@ function starprogress() {
         smooth: false, // should the timer be smooth or stepping
         completeStyle: 'bg-success', //bootstrap progress bar style at completion of timer
         onFinish: function () {
-            document.getElementById("usrform1").submit();
+
         }
     });
 }
@@ -120,6 +120,15 @@ function save_table() {
         // file name
         filename: 'csv.pdf'
     });
+}
+
+function reprocess_correction() {
+    document.getElementById("form_correction").submit();
+}
+
+
+function reprocess_subjectivity() {
+    document.getElementById("form_subjectivity").submit();
 }
 
 

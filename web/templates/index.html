@@ -114,7 +114,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-center card-body">
                     <form action="/res" method="post" id="usrform1">
-                        <input type="hidden" name="form" value="id_text">
+                        <input type="hidden" name="id_reprocess" value="id_text">
                         <textarea id="textarea" placeholder="Entrer votre texte ici ..... EX :This car is beautiful. "
                                   lang="en" rows="7" cols="100" id="input" name="input" form="usrform1"
                                   spellcheck="true" autofocus="true"></textarea>
@@ -149,6 +149,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-around px-2 py-2">
                     <form method="post" id="usrform2" action="/GetTextFromTwitter">
+                        <input type="hidden" name="id_reprocess" value="twitter">
                         <input type="text" class="form-control" name="subject" placeholder="Sujet">
                     </form>
                 </div>
@@ -173,7 +174,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-around px-2 py-2">
                     <form style="width: 100%" method="post" action="/res" accept=".txt" enctype="multipart/form-data">
-                        <input type="hidden" name="form" value="id_file">
+                        <input type="hidden" name="id_reprocess" value="id_file">
                         <div class="input-group">
                             <div class="custom-file">
                                 <input onchange="uploadfile()" type="file" name="file_text" accept=".txt"

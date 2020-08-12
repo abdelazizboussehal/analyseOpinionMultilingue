@@ -316,14 +316,20 @@ def subjectivity(content, l):
 def res():
     req = request.form
     content = ""
-    if request.form['form'] == 'id_text':
+    if request.form['id_reprocess'] == 'id_text':
         content = request.form['input']
-    elif request.form['form'] == 'id_file':
+    elif request.form['id_reprocess'] == 'id_file':
         file = request.files['file_text']
         if file:
             filename = secure_filename(file.filename)
             file.save(os.path.join(filename))
             content = open(os.path.join(filename), 'r').read().replace("\n", " ")
+    elif request.form['id_reprocess'] == 'twitter':
+        print("twitter")
+    elif request.form['id_reprocess'] == 'form_correction':
+        content = request.form['content']
+    elif request.form['id_reprocess'] == 'form_subjectivity':
+        print("subjeitivty")
 
     session['content'] = content
     correction_var = correction(content)
