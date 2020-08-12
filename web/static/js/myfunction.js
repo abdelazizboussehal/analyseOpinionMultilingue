@@ -38,6 +38,7 @@ function uploadfile() {
             filename = filename.substring(1);
         }
         input.innerText = filename;
+        document.getElementById('button_file').hidden=false;
     }
 }
 
@@ -102,14 +103,23 @@ function statistic() {
 function save_graphe() {
     var canvas = document.getElementById('mon_model');
     var context = canvas.getContext('2d');
-    var button=document.getElementById("save_button");
+    var button = document.getElementById("save_button");
 
     // only jpeg is supported by jsPDF
     var imgData = canvas.toDataURL();
     button.href = imgData;
-    button.download="graphe.png";
+    button.download = "graphe.png";
 
 
+}
+
+function save_table() {
+    $("#dataTable").tableHTMLExport({
+        // csv, txt, json, pdf
+        type: 'csv',
+        // file name
+        filename: 'csv.pdf'
+    });
 }
 
 

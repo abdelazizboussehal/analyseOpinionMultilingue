@@ -92,7 +92,7 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-file-word"></i>
-                <span>Mots</span>
+                <span>Elemnt de texte:</span>
             </a>
             <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
@@ -160,7 +160,10 @@
                                 correction d'othographe
                             </button>
                             <a href="#" class="btn btn-danger btn-icon-split">
-                                <span id="nbr_errors" class="text">{{session['list_word'][0]|length}}</span>
+                                <div>
+                                    <span class="text">erreurs</span>
+                                    <span id="nbr_errors" class="badge badge-light mx-2">{{session['list_word'][0]|length}}</span>
+                                </div>
                                 <span class="icon text-white-50">
                                       <i class="fas fa-times-circle"></i>
                                     </span>
@@ -292,13 +295,19 @@
                                 subjectvite
                             </button>
                             <a href="#" class="btn btn-success btn-icon-split">
-                                <span class="text">subjective {{session['nbr_sub']}}</span>
+                                <div>
+                                    <span class="text">subjective</span>
+                                    <span class="badge badge-light mx-2">{{session['nbr_sub']}}</span>
+                                </div>
                                 <span class="icon text-white-50">
                       <i class="fas fa-info-circle"></i>
                     </span>
                             </a>
                             <a href="#" class="btn btn-info btn-icon-split">
-                                <span class="text">objectif {{session['nbr_obj']}}</span>
+                                <div>
+                                    <span class="text">objectif</span>
+                                    <span class="badge badge-light mx-2">{{session['nbr_obj']}}</span>
+                                </div>
                                 <span class="icon text-white-50">
                       <i class="fas fa-info-circle"></i>
                                       </span>
@@ -362,38 +371,38 @@
                 </div>
                 <div class="card">
                     <div class="card-header" id="headingThree">
-                        <h5 class="mb-0 d-flex flex-row justify-content-between">
+                        <h5 class="mb-0 d-flex flex-row ">
                             <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree"
                                     aria-expanded="false" aria-controls="collapseThree">
                                 resultat final
                             </button>
-                            <a href="#" class="btn btn-success btn-icon-split"
+                            <a href="#" class="btn btn-success btn-icon-split mx-2"
                                data-toggle="modal" data-target="#list_connector">
-                                <div class="d-flex flex-column justify-content-center">
+                                <div>
                                     <span class="text">connector</span>
-                                    <span class="text">{{session['total_connectors']|length}}</span>
+                                    <span class="badge badge-light mx-2">{{session['total_connectors']|length}}</span>
                                 </div>
-                                <span class="icon d-flex flex-column justify-content-center text-white-50">
+                                <span class="icon text-white-50">
                       <i class="fas fa-info-circle"></i>
                     </span>
                             </a>
-                            <a href="#" class="btn btn-secondary btn-icon-split"
+                            <a href="#" class="btn btn-secondary btn-icon-split mx-2"
                                data-toggle="modal" data-target="#list_neg">
-                                <div class="d-flex flex-column justify-content-center">
+                                <div>
                                     <span class="text">negation</span>
-                                    <span class="text">{{session['total_negation']|length}}</span>
+                                    <span class="badge badge-light mx-2">{{session['total_negation']|length}}</span>
                                 </div>
-                                <span class="icon d-flex flex-column justify-content-center text-white-50">
+                                <span class="icon text-white-50">
                       <i class="fas fa-info-circle"></i>
                     </span>
                             </a>
-                            <a href="#" class="btn btn-info btn-icon-split"
-                            data-toggle="modal" data-target="#list_adv">
-                                <div class="d-flex flex-column justify-content-center">
+                            <a href="#" class="btn btn-info btn-icon-split mx-2"
+                               data-toggle="modal" data-target="#list_adv">
+                                <div>
                                     <span class="text">adverbe</span>
-                                    <span class="text">{{session['total_adverbe']|length}}</span>
+                                    <span class="badge badge-light mx-2">{{session['total_adverbe']|length}}</span>
                                 </div>
-                                <span class="icon d-flex flex-column justify-content-center text-white-50">
+                                <span class="icon text-white-50">
                       <i class="fas fa-info-circle"></i>
                     </span>
                             </a>
@@ -420,6 +429,14 @@
                                             <div class="card shadow mb-4">
                                                 <div class="card-header py-3">
                                                     <h6 class="m-0 font-weight-bold text-primary">Résultat Détaillé</h6>
+                                                    <button class="btn btn-success btn-icon-split mx-2 my-2"
+                                                            onclick="save_table()">
+                                                        <span>download table to exel
+                                                    </span>
+                                                        <span>
+                                                            <i class="fas fa-download"></i>
+                                                        </span>
+                                                    </button>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="table-responsive">
@@ -590,9 +607,9 @@
                 <div class="modal-header">
                     <h5 class="modal-title">liste des negation</h5>
                 </div>
-                <div class="modal-body">
+                <div>
                     {% for item in session['total_negation'] %}
-                    <span class="badge badge-secondary">{{item}}</span>
+                    <span class="badge badge-info mx-2">{{item}}</span>
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
@@ -677,6 +694,9 @@
 
 <!-- graphique -->
 <script src="{{ url_for('static',filename='vendor/chart.js/Chart.min.js') }}"></script>
+
+<!-- download file -->
+<script src="{{ url_for('static',filename='vendor/exportfile/tableHTMLExport.js') }}"></script>
 
 
 <script>

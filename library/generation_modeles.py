@@ -6,7 +6,8 @@ from library import tools as t
 
 
 class GenerationModels:
-    neg = ["isn't","no", "not", "n't", "never", "none", "nobody", "nowhere", "nothing", "neither","do not","have not"]
+    neg = ["isn't", "no", "not", "n't", "never", "none", "nobody", "nowhere", "nothing", "neither", "do not",
+           "have not"]
     # connector english
     addition = ["and", "plus", "furthermore", "moreover", "in addition", "also"]
     contract_end = ["but", "though", "nevertheless", "whereas", "on the contrary", "in contrast", "on the other hand",
@@ -148,12 +149,14 @@ class GenerationModels:
         matches = matcher(doc)
         for match_id, start, end in matches:
             string_id = self.nlp.vocab.strings[match_id]
+            # gat texte
+            span = doc[start:end]
             if string_id == "ContractListEnd" or string_id == "ContractListStart":
-                self.connector_negation_table.append(str(match_id))
+                self.connector_negation_table.append(str(span.text))
                 self.connector = " 7 "
                 break
             elif string_id == "AdditionList":
-                self.connector_addition_table.append(str(match_id))
+                self.connector_addition_table.append(str(span.text))
                 self.connector = " + "
                 break
             else:
