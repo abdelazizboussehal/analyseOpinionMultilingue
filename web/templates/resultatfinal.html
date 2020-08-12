@@ -97,7 +97,7 @@
             </a>
             <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item">nombre verbe</a>
+                    <a href="#" onclick="statistic()" class="collapse-item">nombre verbe</a>
                     <a class="collapse-item">nombre nom</a>
                     <a class="collapse-item">nombre adjective</a>
                     <a class="collapse-item">nombre mots</a>
@@ -161,7 +161,8 @@
                                 <div class="d-flex flex-row justify-content-center card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Texte</h6>
                                 </div>
-                                <h5 class="m-0 font-weight-bold text-primary mx-2">langue est : {{session['language']}}</h5>
+                                <h5 class="m-0 font-weight-bold text-primary mx-2">langue est :
+                                    {{session['language']}}</h5>
                                 <div class="d-flex flex-row justify-content-center card-body">
                                     <textarea class="form-control" id="exampleFormControlTextarea1"
                                               rows="3">{{session['content']}}</textarea>
@@ -460,6 +461,24 @@
                     </div>
                 </div>
             </div>
+            <div>
+                <div hidden id="statistique_cadre" class="col-xl-4 col-lg-5">
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Graphique en anneau</h6>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <div class="chart-pie pt-4">
+                                <canvas id="myPieChart"></canvas>
+                            </div>
+                            <hr>
+                            ce praphique reprisente taux des verbe noms et adejective dans texte entrer
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Footer -->
@@ -472,9 +491,12 @@
         </footer>
         <!-- End of Footer -->
     </div>
-
+    <input id="nbr_verb" type="hidden" value="{{20}}">
+    <input id="nbr_adj" type="hidden" value="{{30}}">
+    <input id="nbr_nom" type="hidden" value="{{50}}">
 
 </div>
+
 <!-- End of Content Wrapper -->
 
 
@@ -482,9 +504,7 @@
 
 <!-- Scroll to Top Button-->
 
-
 <!-- Bootstrap core JavaScript-->
-{{ url_for('static',filename='vendor/fontawesome-free/css/all.min.css') }}
 <script src="{{ url_for('static',filename='vendor/jquery/jquery.min.js') }}"></script>
 <script src="{{ url_for('static',filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
@@ -511,7 +531,12 @@
 <script src="{{ url_for('static',filename='vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script src="{{ url_for('static',filename='js/demo/datatables-demo.js') }}"></script>
 
+<!-- graphique -->
+<script src="{{ url_for('static',filename='vendor/chart.js/Chart.min.js') }}"></script>
+
+
 <script>
+
 
     $('#textarea').on('keyup', function () {
         let empty = false;
