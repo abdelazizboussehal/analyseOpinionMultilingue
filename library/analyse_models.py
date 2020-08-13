@@ -25,10 +25,13 @@ class AnalyseModels:
         self.model_general = model
 
     def extract_sub_models(self):
-        s = self.model_general
-        ss = str(s.split())
+        s = str(self.model_general)
+        ss = s.split()
         for i in range(len(ss)):
-            if ss[i] == t.Tools.sc_model_global_connector.replace(" ", ""):
+            if ss[i] == t.Tools.sc_model_global_connector and \
+                    ss[i + 1] != t.Tools.sc_noun_start.replace(" ", "") and \
+                    ss[i + 1] != t.Tools.sc_adjective_start.replace(" ", "") and\
+                    ss[i + 1] != t.Tools.sc_verb_start.replace(" ", ""):
                 self.connector = ss[i + 1]
                 break
         result = re.search(t.Tools.sc_verb_start + "(.*)" + t.Tools.sc_verb_end, s)
@@ -46,7 +49,7 @@ class AnalyseModels:
         table_verb = sub_model_verb.split(t.Tools.sc_verb_cordination)
         table_dic_verb = []
         for verb in table_verb:
-            if verb !='':
+            if verb != '':
                 [v, a, n] = AnalyseModels.get_elements_verb(verb)
                 table_dic_verb.append({"verb": v, "adverb": a, "negation": n})
         return table_dic_verb
@@ -56,7 +59,7 @@ class AnalyseModels:
         table_adjective = sub_model_adjective.split(t.Tools.sc_adjective_cordination)
         table_dic_adjective = []
         for adj in table_adjective:
-            if adj!='':
+            if adj != '':
                 [v, a, n] = AnalyseModels.get_elements_adjective(adj)
                 table_dic_adjective.append({"adjective": v, "adverb": a, "negation": n})
         return table_dic_adjective
@@ -77,10 +80,10 @@ class AnalyseModels:
                                                            element.get("negation"))
                 if polarity != -1000:
                     array_polarity_verb.append(polarity)
-            if len(array_polarity_verb)!=0:
+            if len(array_polarity_verb) != 0:
                 self.polarity_sub_model_verb = numpy.array(array_polarity_verb).mean()
             else:
-                self.polarity_sub_model_verb = -55 # kan kayenne element ou ma lguinahach f lexicon
+                self.polarity_sub_model_verb = -55  # kan kayenne element ou ma lguinahach f lexicon
 
     def get_polarity_sub_model_adjective(self):
         """ recuperer polarite de sous model adjective """
@@ -94,7 +97,7 @@ class AnalyseModels:
             if len(array_polarity_adjective) != 0:
                 self.polarity_sub_model_adjective = numpy.array(array_polarity_adjective).mean()
             else:
-                self.polarity_sub_model_adjective = -55 # kan kayenne element ou ma lguinahach f lexicon
+                self.polarity_sub_model_adjective = -55  # kan kayenne element ou ma lguinahach f lexicon
 
     def get_polarity_sub_model_noun(self):
         if self.sub_model_noun:
