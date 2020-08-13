@@ -326,7 +326,7 @@ def res():
             if x.startswith("r_id"):
                 sub_sentence.append(request.form[x])
             if x.startswith("optradio"):
-                if request.form[x] == "on":
+                if request.form[x] == "true":
                     sub_sentence_subjectivity.append(True)
                 else:
                     sub_sentence_subjectivity.append(False)

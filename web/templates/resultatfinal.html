@@ -191,9 +191,10 @@
                                 <h5 class="m-0 font-weight-bold text-primary mx-2">langue est :
                                     {{session['language']}}</h5>
                                 <div class="d-flex flex-row justify-content-center card-body">
-                                    <form class="d-flex " id="form_correction"  method="post" action="/res">
+                                    <form class="d-flex " id="form_correction" method="post" action="/res">
                                         <input type="hidden" name="id_reprocess" value="form_correction">
-                                        <textarea lang="en" rows="7" cols="100" name="content" class="form-control" id="exampleFormControlTextarea1"
+                                        <textarea lang="en" rows="7" cols="100" name="content" class="form-control"
+                                                  id="exampleFormControlTextarea1"
                                                   rows="3">{{session['content']}}</textarea>
                                     </form>
 
@@ -354,32 +355,29 @@
                                         <h5 class="ml-3" id="input" name="input{{n}}" value="1">
                                             {{session['sub_sentence'][n]}}</h5>
                                         <input type="hidden" name="r_id{{n}}" value="{{session['sub_sentence'][n]}}"/>
-                                        <div class="mx-4">
+                                        <div class="btn-group btn-group-toggle mx-2" data-toggle="buttons">
                                             {% if session['subjective_state'][n] %}
-                                            <div class="form-check">
-                                                <label class="form-check-label">
-                                                    <input type="radio" class="form-check-input" name="optradio{{n}}"
-                                                           checked>porteurse</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <label class="form-check-label">
-                                                    <input type="radio" class="form-check-input" name="optradio{{n}}">non
-                                                    porteurse</label>
-                                            </div>
+                                            <label class="btn btn-outline-primary active">
+                                                <input type="radio" name="optradio{{n}}" value="true" autocomplete="off"
+                                                       checked> subjectif
+                                            </label>
+                                            <label class="btn btn-outline-primary">
+                                                <input type="radio" name="optradio{{n}}" value="true"
+                                                       autocomplete="off"> objectif
+                                            </label>
                                             {% else %}
-                                            <div class="form-check">
-                                                <label class="form-check-label">
-                                                    <input type="radio" class="form-check-input" name="optradio{{n}}">porteurse</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <label class="form-check-label">
-                                                    <input type="radio" class="form-check-input" name="optradio{{n}}"
-                                                           checked>non
-                                                    porteurse</label>
-                                            </div>
+                                            <label class="btn btn-outline-primary active">
+                                                <input type="radio" name="optradio{{n}}" value="true" autocomplete="off"
+                                                > subjectif
+                                            </label>
+                                            <label class="btn btn-outline-primary">
+                                                <input type="radio" name="optradio{{n}}" value="true"
+                                                       autocomplete="off" checked> objectif
+                                            </label>
                                             {% endif %}
                                         </div>
                                     </div>
+
                                     <hr class="mx-4">
                                     {% endfor %}
                                 </form>
@@ -556,7 +554,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">fermer</button>
-                    <a href="#" id="save_button" onclick="save_graphe()" type="button" class="btn btn-primary">sauvgarder</a>
+                    <a href="#" id="save_button" onclick="save_graphe()" type="button"
+                       class="btn btn-primary">sauvgarder</a>
                 </div>
             </div>
         </div>
