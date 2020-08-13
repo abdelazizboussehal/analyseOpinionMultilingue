@@ -71,8 +71,12 @@ class AnalyseModels:
             for element in self.extract_element_verb():
                 polarity = self.get_elements_polarity_verb(element.get("verb"), element.get("adverb"),
                                                            element.get("negation"))
-                array_polarity_verb.append(polarity)
-            self.polarity_sub_model_verb = numpy.array(array_polarity_verb).mean()
+                if polarity != -1000:
+                    array_polarity_verb.append(polarity)
+            if len(array_polarity_verb)!=0:
+                self.polarity_sub_model_verb = numpy.array(array_polarity_verb).mean()
+            else:
+                self.polarity_sub_model_verb = -55 # kan kayenne element ou ma lguinahach f lexicon
 
     def get_polarity_sub_model_adjective(self):
         """ recuperer polarite de sous model adjective """
@@ -81,8 +85,12 @@ class AnalyseModels:
             for element in self.extract_element_adjective():
                 polarity = self.get_elements_polarity_adjective(element.get("adjective"), element.get("adverb"),
                                                                 element.get("negation"))
-                array_polarity_adjective.append(polarity)
-            self.polarity_sub_model_adjective = numpy.array(array_polarity_adjective).mean()
+                if polarity != -1000:
+                    array_polarity_adjective.append(polarity)
+            if len(array_polarity_adjective) != 0:
+                self.polarity_sub_model_adjective = numpy.array(array_polarity_adjective).mean()
+            else:
+                self.polarity_sub_model_adjective = -55 # kan kayenne element ou ma lguinahach f lexicon
 
     def get_polarity_sub_model_noun(self):
         if self.sub_model_noun:
@@ -124,7 +132,6 @@ class AnalyseModels:
             "noun": self.extract_element_noun()
         }
 
-
     @staticmethod
     def get_polarity_adverb_neg(polarity_element, adverb, neg, language):
         """recuprer polarite de liste des adverbes et negation"""
@@ -135,44 +142,52 @@ class AnalyseModels:
             if len(adverb) != 0:
                 for adv in adverb:
                     polarity_adv = SentiWordNet.get_sentiment(adv, language, "r")
-                    if polarity_adv != -2000:
+                    if polarity_adv != -1000:
                         polarity_adv_total.append(polarity_adv)
         return polarity_element, polarity_adv_total
 
     def get_elements_polarity_verb(self, verb, adverb, neg):
         """calculer polarite groupe  verbe"""
         polarity_verb = 0
-        if verb != "":
+        if verb != "":  # model non existe
             polarity_verb = SentiWordNet.get_sentiment(verb, self.language, "v")
-        elements_verb_polarity = AnalyseModels.get_polarity_adverb_neg(polarity_verb, adverb, neg, self.language)
-        polarity_verb = elements_verb_polarity[0]
-        while -1000 in elements_verb_polarity[1]:
-            elements_verb_polarity[1].remove(-1000)
-        if len(elements_verb_polarity[1]) > 0:
-            mean_adv = np.array(elements_verb_polarity[1]).mean()
-        else:
-            mean_adv = 0
+        if polarity_verb != -1000:  # polarite verbe non existe
+            elements_verb_polarity = AnalyseModels.get_polarity_adverb_neg(polarity_verb, adverb, neg, self.language)
+            polarity_verb = elements_verb_polarity[0]
+            while -1000 in elements_verb_polarity[1]:  # polarite adv non existe
+                elements_verb_polarity[1].remove(-1000)
+            if len(elements_verb_polarity[1]) > 0:  # moyenne liste des adverbe
+                mean_adv = np.array(elements_verb_polarity[1]).mean()
+            else:
+                mean_adv = 0  # non calculable
 
-        if polarity_verb > 0:
-            return polarity_verb + (1 - polarity_verb) * mean_adv
-        else:
-            return polarity_verb - (1 + polarity_verb) * mean_adv
+            if polarity_verb > 0:
+                return polarity_verb + (1 - polarity_verb) * mean_adv
+            else:
+                return polarity_verb - (1 + polarity_verb) * mean_adv
+
+        return polarity_verb
 
     def get_elements_polarity_adjective(self, adj, adverb, neg):
         """recuper polarite groupe adjective """
         polarity_adj = 0
-        if adj != "":
+        if adj != "":  # modele adj n exisite pas
             polarity_adj = SentiWordNet.get_sentiment(adj, self.language, "a")
-        elements_adjective_polarity = AnalyseModels.get_polarity_adverb_neg(polarity_adj, adverb, neg, self.language)
-        polarity_adjective = elements_adjective_polarity[0]
-        if len(elements_adjective_polarity[1]) > 0:  # calcul moyenne polarite adverbe
-            mean_adv = np.array(elements_adjective_polarity[1]).mean()
-        else:
-            mean_adv = 0
-        if polarity_adjective > 0:
-            return polarity_adjective + (1 - polarity_adjective) * mean_adv
-        else:
-            return polarity_adjective - (1 - polarity_adjective) * mean_adv
+        if polarity_adj != -1000:  # polarite adj non exite
+            elements_adjective_polarity = AnalyseModels.get_polarity_adverb_neg(polarity_adj, adverb, neg,
+                                                                                self.language)
+            polarity_adjective = elements_adjective_polarity[0]
+
+            if len(elements_adjective_polarity[1]) > 0:  # calcul moyenne polarite adverbe
+                mean_adv = np.array(elements_adjective_polarity[1]).mean()
+            else:
+                mean_adv = 0
+
+            if polarity_adjective > 0:
+                return polarity_adjective + (1 - polarity_adjective) * mean_adv
+            else:
+                return polarity_adjective - (1 + polarity_adjective) * mean_adv
+        return -1000
 
     @staticmethod
     def get_elements_verb(model):
