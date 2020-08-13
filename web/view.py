@@ -372,7 +372,8 @@ def res():
         session['stat_verb'] = t.Tools.verbC
         session['stat_adj'] = t.Tools.adjectifC
         session['stat_nom'] = t.Tools.nounC
-        session['stat_total'] = t.Tools.total - len(t.Tools.verbC) - len(t.Tools.adjectifC) - len(t.Tools.nounC)
+        session['stat_total'] = t.Tools.total
+        session['stat_other'] = t.Tools.total - len(t.Tools.verbC) - len(t.Tools.adjectifC) - len(t.Tools.nounC)
         tableaux_dic_model_global = []
         tableaux_plarity_global_sentence = []
         tableaux_emoji_global_sentence = []

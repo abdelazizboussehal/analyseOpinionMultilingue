@@ -64,7 +64,9 @@
             <div id="collapsePages1" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" data-toggle="modal" data-target="#exampleModal">graphique anneaux</a>
+                    <a class="collapse-item" data-toggle="modal" data-target="#exampleModal1">graphique colonne</a>
                 </div>
+
             </div>
         </li>
         <!-- Nav Item - Pages Collapse Menu modeles -->
@@ -497,7 +499,8 @@
                                                                         {% if dic['verb']|length >0 %}
                                                                         {{dic['verb']|length}} verbe:
                                                                         {% for i in range(dic['verb']|length) %}
-                                                                        le verbe numero {{i+1}} est {{dic['verb'][i]['verb']}}
+                                                                        le verbe numero {{i+1}} est
+                                                                        {{dic['verb'][i]['verb']}}
                                                                         {% if dic['verb'][i]['negation']!= False or
                                                                         dic['verb'][i]['adverbe'] | length >0 %}
                                                                         avec
@@ -516,7 +519,8 @@
                                                                         <br>
                                                                         {{dic['adjective']|length}} adjective:
                                                                         {% for i in range(dic['adjective']|length) %}
-                                                                        l'adjective numero {{i+1}} est {{dic['adjective'][i]['adjective']}}
+                                                                        l'adjective numero {{i+1}} est
+                                                                        {{dic['adjective'][i]['adjective']}}
                                                                         {% if dic['adjective'][i]['negation']!= False or
                                                                         dic['adjective'][i]['adverbe'] | length >0 %}
                                                                         avec
@@ -535,13 +539,10 @@
                                                                         <br>
                                                                         {{dic['noun']|length}} noms:
                                                                         {% for i in range(dic['noun']|length) %}
-                                                                        le  nom numero {{i+1}} est : {{dic['noun'][i]}}
+                                                                        le nom numero {{i+1}} est : {{dic['noun'][i]}}
 
                                                                         {% endfor %}
                                                                         {% endif %}
-
-
-
 
 
                                                                     </p>
@@ -585,20 +586,28 @@
                                                 <tr>
 
                                                     <td>{% if session['polarity_global']< -0.5 : %}
-                                                        <span style="font-size: 25px" class="badge badge-pill badge-danger">Trés Négative </span>
+                                                        <span style="font-size: 25px"
+                                                              class="badge badge-pill badge-danger">Trés Négative </span>
                                                         {% elif session['polarity_global'] < 0 : %}
-                                                        <span style="font-size: 25px" class="badge badge-pill badge-warning">Négative</span>
+                                                        <span style="font-size: 25px"
+                                                              class="badge badge-pill badge-warning">Négative</span>
                                                         {% elif session['polarity_global'] == 0 : %}
-                                                        <span style="font-size: 25px" class="badge badge-pill badge-secondary">Neutre</span>
+                                                        <span style="font-size: 25px"
+                                                              class="badge badge-pill badge-secondary">Neutre</span>
                                                         {% elif session['polarity_global'] > 0 : %}
-                                                        <span style="font-size: 25px" class="badge badge-pill badge-success">Positive</span>
+                                                        <span style="font-size: 25px"
+                                                              class="badge badge-pill badge-success">Positive</span>
                                                         {% elif session['polarity_global'] > 0.5 : %}
-                                                        <span style="font-size: 25px" class="badge badge-pill badge-success">Trés Positive</span>
+                                                        <span style="font-size: 25px"
+                                                              class="badge badge-pill badge-success">Trés Positive</span>
 
                                                         {% endif %}
                                                     </td>
-                                                    <td><span style="font-size: 25px" class="badge badge-secondary">{{session['polarity_global']}}</span> </td>
-                                                    <td><span style="font-size: 40px">&#{{session['emoji_global']}}</span></td>
+                                                    <td><span style="font-size: 25px" class="badge badge-secondary">{{session['polarity_global']}}</span>
+                                                    </td>
+                                                    <td><span
+                                                            style="font-size: 40px">&#{{session['emoji_global']}}</span>
+                                                    </td>
                                                 </tr>
 
                                                 </tbody>
@@ -628,7 +637,8 @@
     <input id="nbr_verb" type="hidden" value="{{session['stat_verb']|length}}">
     <input id="nbr_adj" type="hidden" value="{{session['stat_adj']|length}}">
     <input id="nbr_nom" type="hidden" value="{{session['stat_nom']|length}}">
-    <input id="nbr_autre" type="hidden" value="{{session['stat_total']}}">
+    <input id="nbr_autre" type="hidden" value="{{session['stat_other']}}">
+    <input id="total" type="hidden" value="{{session['stat_total']}}">
 
     <!-- dialog statistic -->
 
@@ -650,6 +660,30 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">fermer</button>
                     <a href="#" id="save_button" onclick="save_graphe()" type="button"
+                       class="btn btn-primary">sauvgarder</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">phraphe colonne</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="chart-bar">
+                        <canvas id="myBarChart"></canvas>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">fermer</button>
+                    <a href="#" id="save_button1" onclick="save_graphe_column()" type="button"
                        class="btn btn-primary">sauvgarder</a>
                 </div>
             </div>
@@ -818,6 +852,7 @@
 <script>
 
     statistic();
+    statistic2();
     $('#textarea').on('keyup', function () {
         let empty = false;
 
