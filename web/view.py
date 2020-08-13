@@ -320,7 +320,7 @@ def res():
     elif request.form['id_reprocess'] == 'form_subjectivity':
         billet = 1
         sub_sentence = []
-        sub_sentence_subjectivity = [True]
+        sub_sentence_subjectivity = []
         for x in request.form:
             x = str(x)
             if x.startswith("r_id"):
