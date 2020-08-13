@@ -23,6 +23,7 @@
 
 <body id="page-top">
 
+
 <!-- Page Wrapper -->
 <div id="wrapper">
 
@@ -484,7 +485,66 @@
                                                             <tr>
                                                                 <td>{{session['subjective_sentences'][i]}}</td>
                                                                 <td>{{session['model_global'][i]}}
-                                                                <p>Ce texte contien : </p>
+                                                                    <p>
+                                                                        {% set
+                                                                        dic=session['dictionnaire_model_global'][i]%}
+                                                                        Ce model contien :
+                                                                        {% if dic['connector']!="" %}
+                                                                        le connecteur {{dic['connector']}} et
+                                                                        {% endif %}
+
+
+                                                                        {% if dic['verb']|length >0 %}
+                                                                        {{dic['verb']|length}} verbe:
+                                                                        {% for i in range(dic['verb']|length) %}
+                                                                        le verbe numero {{i+1}} est {{dic['verb'][i]['verb']}}
+                                                                        {% if dic['verb'][i]['negation']!= False or
+                                                                        dic['verb'][i]['adverbe'] | length >0 %}
+                                                                        avec
+                                                                        {% if dic['verb'][i]['negation']!= False %}
+                                                                        negation et
+                                                                        {% endif %}
+                                                                        {% for adv in dic['verb'][i]['adverbe'] %}
+                                                                        {{adv}}
+                                                                        {% endfor %}
+                                                                        {% endif %}
+
+                                                                        {% endfor %}
+                                                                        {% endif %}
+
+                                                                        {% if dic['adjective']|length >0 %}
+                                                                        <br>
+                                                                        {{dic['adjective']|length}} adjective:
+                                                                        {% for i in range(dic['adjective']|length) %}
+                                                                        l'adjective numero {{i+1}} est {{dic['adjective'][i]['adjective']}}
+                                                                        {% if dic['adjective'][i]['negation']!= False or
+                                                                        dic['adjective'][i]['adverbe'] | length >0 %}
+                                                                        avec
+                                                                        {% if dic['adjective'][i]['negation']!= False %}
+                                                                        negation et
+                                                                        {% endif %}
+                                                                        {% for adv in dic['adjective'][i]['adverbe'] %}
+                                                                        {{adv}}
+                                                                        {% endfor %}
+                                                                        {% endif %}
+
+                                                                        {% endfor %}
+                                                                        {% endif %}
+
+                                                                        {% if dic['noun']|length >0 %}
+                                                                        <br>
+                                                                        {{dic['noun']|length}} noms:
+                                                                        {% for i in range(dic['noun']|length) %}
+                                                                        le  nom numero {{i+1}} est : {{dic['noun'][i]}}
+
+                                                                        {% endfor %}
+                                                                        {% endif %}
+
+
+
+
+
+                                                                    </p>
                                                                 </td>
                                                                 <td>{{session['polarity_sentences'][i]}}</td>
                                                                 <td><span style="font-size:40px">&#{{session['emoji_sentences'][i]}}</span>
@@ -525,20 +585,20 @@
                                                 <tr>
 
                                                     <td>{% if session['polarity_global']< -0.5 : %}
-                                                        <span class="badge badge-pill badge-danger">Trés Négative </span>
+                                                        <span style="font-size: 25px" class="badge badge-pill badge-danger">Trés Négative </span>
                                                         {% elif session['polarity_global'] < 0 : %}
-                                                        <span class="badge badge-pill badge-warning">Négative</span>
+                                                        <span style="font-size: 25px" class="badge badge-pill badge-warning">Négative</span>
                                                         {% elif session['polarity_global'] == 0 : %}
-                                                        <span class="badge badge-pill badge-secondary">Neutre</span>
+                                                        <span style="font-size: 25px" class="badge badge-pill badge-secondary">Neutre</span>
                                                         {% elif session['polarity_global'] > 0 : %}
-                                                        <span class="badge badge-pill badge-success">Positive</span>
+                                                        <span style="font-size: 25px" class="badge badge-pill badge-success">Positive</span>
                                                         {% elif session['polarity_global'] > 0.5 : %}
-                                                        <span class="badge badge-pill badge-success">Trés Positive</span>
+                                                        <span style="font-size: 25px" class="badge badge-pill badge-success">Trés Positive</span>
 
                                                         {% endif %}
                                                     </td>
-                                                    <td>{{session['polarity_global']}}</td>
-                                                    <td>&#{{session['emoji_global']}}</td>
+                                                    <td><span style="font-size: 25px" class="badge badge-secondary">{{session['polarity_global']}}</span> </td>
+                                                    <td><span style="font-size: 40px">&#{{session['emoji_global']}}</span></td>
                                                 </tr>
 
                                                 </tbody>

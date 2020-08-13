@@ -46,8 +46,9 @@ class AnalyseModels:
         table_verb = sub_model_verb.split(t.Tools.sc_verb_cordination)
         table_dic_verb = []
         for verb in table_verb:
-            [v, a, n] = AnalyseModels.get_elements_verb(verb)
-            table_dic_verb.append({"verb": v, "adverb": a, "negation": n})
+            if verb !='':
+                [v, a, n] = AnalyseModels.get_elements_verb(verb)
+                table_dic_verb.append({"verb": v, "adverb": a, "negation": n})
         return table_dic_verb
 
     def extract_element_adjective(self):
@@ -55,13 +56,16 @@ class AnalyseModels:
         table_adjective = sub_model_adjective.split(t.Tools.sc_adjective_cordination)
         table_dic_adjective = []
         for adj in table_adjective:
-            [v, a, n] = AnalyseModels.get_elements_adjective(adj)
-            table_dic_adjective.append({"adjective": v, "adverb": a, "negation": n})
+            if adj!='':
+                [v, a, n] = AnalyseModels.get_elements_adjective(adj)
+                table_dic_adjective.append({"adjective": v, "adverb": a, "negation": n})
         return table_dic_adjective
 
     def extract_element_noun(self):
         sub_model_noun = self.sub_model_noun
         table_noun = sub_model_noun.split(t.Tools.sc_noun_addition)
+        while '' in table_noun:
+            table_noun.remove('')
         return table_noun
 
     def get_polarity_sub_model_verb(self):
