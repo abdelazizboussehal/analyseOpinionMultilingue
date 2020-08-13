@@ -398,7 +398,7 @@
                                 resultat final
                             </button>
                             <button class="btn btn-success btn-sm btn-icon-split mx-2"
-                               data-toggle="modal" data-target="#list_connector">
+                                    data-toggle="modal" data-target="#list_connector">
                                 <div>
                                     <span class="text">connector</span>
                                     <span class="badge badge-light mx-2">{{session['total_connectors']|length}}</span>
@@ -408,7 +408,7 @@
                     </span>
                             </button>
                             <button class="btn btn-secondary btn-sm btn-icon-split mx-2"
-                               data-toggle="modal" data-target="#list_neg">
+                                    data-toggle="modal" data-target="#list_neg">
                                 <div>
                                     <span class="text">negation</span>
                                     <span class="badge badge-light mx-2">{{session['total_negation']|length}}</span>
@@ -418,7 +418,7 @@
                     </span>
                             </button>
                             <button class="btn btn-info btn-sm btn-icon-split mx-2"
-                               data-toggle="modal" data-target="#list_adv">
+                                    data-toggle="modal" data-target="#list_adv">
                                 <div>
                                     <span class="text">adverbe</span>
                                     <span class="badge badge-light mx-2">{{session['total_adverbe']|length}}</span>
@@ -484,8 +484,9 @@
                                                             <tr>
                                                                 <td>{{session['subjective_sentences'][i]}}</td>
                                                                 <td>{{session['model_global'][i]}}</td>
-                                                                <td>Edinburgh</td>
-                                                                <td>61</td>
+                                                                <td>{{session['polarity_sentences'][i]}}</td>
+                                                                <td><span style="font-size:40px">&#{{session['emoji_sentences'][i]}}</span>
+                                                                </td>
                                                             </tr>
                                                             {% endfor %}
                                                             </tbody>

@@ -1,14 +1,13 @@
 import os
+import secrets
 
-import numpy
-from flask import Flask, render_template, jsonify, session, url_for
-from werkzeug.utils import secure_filename, redirect
-
-from library import tools as t, analyse_models
-from library import generation_modeles
+from flask import Flask, render_template, jsonify, session
 from flask import request
 from flask_cors import CORS
-import secrets
+from werkzeug.utils import secure_filename
+
+from library import generation_modeles
+from library import tools as t, analyse_models
 
 secret = secrets.token_urlsafe(32)
 app = Flask(__name__)
@@ -373,6 +372,28 @@ def res():
         session['stat_adj'] = t.Tools.adjectifC
         session['stat_nom'] = t.Tools.nounC
         session['stat_total'] = t.Tools.total - len(t.Tools.verbC) - len(t.Tools.adjectifC) - len(t.Tools.nounC)
+        tableaux_dic_model_global = []
+        tableaux_plarity_global_sentence = []
+        tableaux_emoji_global_sentence = []
+        for model_glob in session['model_global']:
+            # module analyse
+            if session['l'] == "en":
+                analyse_model = analyse_models.AnalyseModels(session['l'], model_glob)
+            elif session['l'] == "fr":
+                analyse_model = analyse_models.AnalyseFrenchModels(session['l'], model_glob)
+            analyse_model.extract_sub_models()
+            analyse_model.get_polarity_sub_model_verb()
+            analyse_model.get_polarity_sub_model_adjective()
+            analyse_model.get_polarity_sub_model_noun()
+            analyse_model.extract_element_model_global()
+            tableaux_dic_model_global.append(analyse_model.dictionnaire_model_global)
+            tableaux_plarity_global_sentence.append(analyse_model.polarity_model())
+            tableaux_emoji_global_sentence.append(t.Tools.get_emoji_from_polarity(analyse_model.polarity_model()))
+
+        session['dictionnaire_model_global'] = tableaux_dic_model_global
+        session['polarity_sentences'] = tableaux_plarity_global_sentence
+        session['emoji_sentences'] = tableaux_emoji_global_sentence
+
     return render_template('resultatfinal.html')
 
 

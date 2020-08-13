@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+import re
+
 import numpy
+import numpy as np
 
 from library import tools as t, lexicon
-import numpy as np
-import re
 from library.SentiWordNet import SentiWordNet
 
 
@@ -17,6 +18,7 @@ class AnalyseModels:
     polarity_sub_model_verb = 0
     polarity_sub_model_noun = 0
     polarity_sub_model_adjective = 0
+    dictionnaire_model_global = {}
 
     def __init__(self, language, model):
         self.language = language
@@ -95,7 +97,7 @@ class AnalyseModels:
                 self.polarity_sub_model_noun = numpy.array(array_polarity_noun).mean()
 
     def polarity_model(self):
-
+        # calculer polarite model global
         if self.sub_model_adjective and self.sub_model_verb and self.sub_model_noun:
             return (3 * self.polarity_sub_model_verb +
                     2 * self.polarity_sub_model_adjective + self.polarity_sub_model_noun) / 6
@@ -114,6 +116,15 @@ class AnalyseModels:
         elif self.sub_model_verb:
             return self.polarity_sub_model_verb
 
+    def extract_element_model_global(self):
+        self.dictionnaire_model_global = {
+            "connector": self.connector,
+            "verb": self.extract_element_verb(),
+            "adjective": self.extract_element_adjective(),
+            "noun": self.extract_element_noun()
+        }
+
+
     @staticmethod
     def get_polarity_adverb_neg(polarity_element, adverb, neg, language):
         """recuprer polarite de liste des adverbes et negation"""
@@ -129,12 +140,12 @@ class AnalyseModels:
         return polarity_element, polarity_adv_total
 
     def get_elements_polarity_verb(self, verb, adverb, neg):
-        """recuper polarite groupe  verbe"""
+        """calculer polarite groupe  verbe"""
         polarity_verb = 0
         if verb != "":
             polarity_verb = SentiWordNet.get_sentiment(verb, self.language, "v")
         elements_verb_polarity = AnalyseModels.get_polarity_adverb_neg(polarity_verb, adverb, neg, self.language)
-        polarity_verb=elements_verb_polarity[0]
+        polarity_verb = elements_verb_polarity[0]
         while -1000 in elements_verb_polarity[1]:
             elements_verb_polarity[1].remove(-1000)
         if len(elements_verb_polarity[1]) > 0:
