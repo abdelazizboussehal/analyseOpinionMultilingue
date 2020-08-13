@@ -13,7 +13,6 @@ import secrets
 secret = secrets.token_urlsafe(32)
 app = Flask(__name__)
 app.secret_key = secret
-l = ""
 
 CORS(app)
 
@@ -218,18 +217,7 @@ def correction(content):
     return lang, list_word, list_suggestion
 
 
-def subjectivity(content, l):
-    # segemntation phrase
-    phrase = t.Tools.sentence_segmentation(content, l)
-
-    # segmentation sous phrase
-    sub_sentence = []
-    for ph in phrase:
-        sub_sentence.extend(t.Tools.segmentation_with_connectors(str(ph), l))
-
-    # subjectivite
-    sub_sentence_subjectivity = t.Tools.subjectivity_filtering(sub_sentence, l)[1]
-
+def subjectivity(sub_sentence, sub_sentence_subjectivity, l):
     # nbr phrase sub
     nbr_sub = 0
     nbr_obj = 0
@@ -308,12 +296,13 @@ def subjectivity(content, l):
     total_adverbe.extend(modificateura_total)
     total_adverbe.extend(modificateurv_total)
 
-    return (phrase, sub_sentence, sub_sentence_subjectivity, nbr_sub, nbr_obj, total_adverbe, total_negation,
+    return ("phrase", sub_sentence, sub_sentence_subjectivity, nbr_sub, nbr_obj, total_adverbe, total_negation,
             total_connectors, subjective_sentences, verbs, adjs, nouns, model_global)
 
 
 @app.route('/res', methods=['POST'])
 def res():
+    billet = 0
     req = request.form
     content = ""
     if request.form['id_reprocess'] == 'id_text':
@@ -329,38 +318,61 @@ def res():
     elif request.form['id_reprocess'] == 'form_correction':
         content = request.form['content']
     elif request.form['id_reprocess'] == 'form_subjectivity':
-        print("subjeitivty")
+        billet = 1
+        sub_sentence = []
+        sub_sentence_subjectivity = [True]
+        for x in request.form:
+            x = str(x)
+            if x.startswith("r_id"):
+                sub_sentence.append(request.form[x])
+            if x.startswith("optradio"):
+                if request.form[x] == "on":
+                    sub_sentence_subjectivity.append(True)
+                else:
+                    sub_sentence_subjectivity.append(False)
 
-    session['content'] = content
-    correction_var = correction(content)
-    session['language'] = correction_var[0]
+    if billet < 1:
+        session['content'] = content
+        correction_var = correction(content)
+        session['language'] = correction_var[0]
 
-    list_word = correction_var[1]
-    list_suggestion = correction_var[2]
-    session['list_word'] = list_word
-    session['list_suggestion'] = list_suggestion
+        list_word = correction_var[1]
+        list_suggestion = correction_var[2]
+        session['list_word'] = list_word
+        session['list_suggestion'] = list_suggestion
+        # segemntation phrase
+        phrase = t.Tools.sentence_segmentation(content, session['l'])
+        session['phrase'] = phrase
 
-    subjectivity_var = subjectivity(content, session['l'])
-    session['phrase'] = subjectivity_var[0]
-    session['sub_sentence'] = subjectivity_var[1]
-    session['subjective_state'] = subjectivity_var[2]
-    session['nbr_sub'] = subjectivity_var[3]
-    session['nbr_obj'] = subjectivity_var[4]
-    session['total_adverbe'] = subjectivity_var[5]
-    session['total_negation'] = subjectivity_var[6]
-    session['total_connectors'] = subjectivity_var[7]
-    session['subjective_sentences'] = subjectivity_var[8]
-    session['verbs'] = subjectivity_var[9]
-    session['adjs'] = subjectivity_var[10]
-    session['nouns'] = subjectivity_var[11]
-    session['model_global'] = subjectivity_var[12]
+        # segmentation sous phrase
+        sub_sentence = []
+        for ph in phrase:
+            sub_sentence.extend(t.Tools.segmentation_with_connectors(str(ph), session['l']))
+            # subjectivite
+            sub_sentence_subjectivity = t.Tools.subjectivity_filtering(sub_sentence, session['l'])[1]
+    if billet < 2:
 
-    # statistic
-    t.Tools.statistic(session['content'], session['l'])
-    session['stat_verb'] = t.Tools.verbC
-    session['stat_adj'] = t.Tools.adjectifC
-    session['stat_nom'] = t.Tools.nounC
-    session['stat_total'] = t.Tools.total - len(t.Tools.verbC) - len(t.Tools.adjectifC) - len(t.Tools.nounC)
+        # reprocess subjectivity
+        subjectivity_var = subjectivity(sub_sentence, sub_sentence_subjectivity, session['l'])
+        session['sub_sentence'] = subjectivity_var[1]
+        session['subjective_state'] = subjectivity_var[2]
+        session['nbr_sub'] = subjectivity_var[3]
+        session['nbr_obj'] = subjectivity_var[4]
+        session['total_adverbe'] = subjectivity_var[5]
+        session['total_negation'] = subjectivity_var[6]
+        session['total_connectors'] = subjectivity_var[7]
+        session['subjective_sentences'] = subjectivity_var[8]
+        session['verbs'] = subjectivity_var[9]
+        session['adjs'] = subjectivity_var[10]
+        session['nouns'] = subjectivity_var[11]
+        session['model_global'] = subjectivity_var[12]
+
+        # statistic
+        t.Tools.statistic(session['content'], session['l'])
+        session['stat_verb'] = t.Tools.verbC
+        session['stat_adj'] = t.Tools.adjectifC
+        session['stat_nom'] = t.Tools.nounC
+        session['stat_total'] = t.Tools.total - len(t.Tools.verbC) - len(t.Tools.adjectifC) - len(t.Tools.nounC)
     return render_template('resultatfinal.html')
 
 
