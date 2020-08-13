@@ -169,12 +169,12 @@
                                     </span>
                             </button>
                             <button onclick="reprocess_correction()"
-                                    class="btn btn-outline-primary btn-sm float-right btn-icon-split">
+                                    class="btn btn-outline-danger btn-sm float-right btn-icon-split">
                                 <div>
                                     <span class="text">retraitement</span>
                                 </div>
-                                <span class="icon text-white-50">
-                                      <i class="fas fa-times-circle"></i>
+                                <span class="icon bg-danger text-white-50">
+                                    <i class="fas fa-undo"></i>
                                     </span>
                             </button>
                         </h5>
@@ -327,12 +327,12 @@
                                       </span>
                             </button>
                             <button onclick="reprocess_subjectivity()"
-                                    class="btn btn-outline-primary btn-sm float-right btn-icon-split">
+                                    class="btn btn-outline-danger btn-sm float-right btn-icon-split">
                                 <div>
                                     <span class="text">retraitement</span>
                                 </div>
-                                <span class="icon text-white-50">
-                                      <i class="fas fa-times-circle"></i>
+                                <span class="icon bg-danger text-white-50">
+                                      <i class="fas fa-undo"></i>
                                     </span>
                             </button>
 
@@ -483,7 +483,9 @@
                                                             {% for i in range(session['subjective_sentences']|length) %}
                                                             <tr>
                                                                 <td>{{session['subjective_sentences'][i]}}</td>
-                                                                <td>{{session['model_global'][i]}}</td>
+                                                                <td>{{session['model_global'][i]}}
+                                                                <p>Ce texte contien : </p>
+                                                                </td>
                                                                 <td>{{session['polarity_sentences'][i]}}</td>
                                                                 <td><span style="font-size:40px">&#{{session['emoji_sentences'][i]}}</span>
                                                                 </td>
@@ -510,7 +512,38 @@
                                     <div id="resultcollapseTwo" class="collapse show" aria-labelledby="resultheadingTwo"
                                          data-parent="#resultaccordion">
                                         <div class="card-body">
-                                            resultat final
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+
+                                                    <th scope="col">Classification</th>
+                                                    <th scope="col">Score</th>
+                                                    <th scope="col">Visualisation</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+
+                                                    <td>{% if session['polarity_global']< -0.5 : %}
+                                                        <span class="badge badge-pill badge-danger">Trés Négative </span>
+                                                        {% elif session['polarity_global'] < 0 : %}
+                                                        <span class="badge badge-pill badge-warning">Négative</span>
+                                                        {% elif session['polarity_global'] == 0 : %}
+                                                        <span class="badge badge-pill badge-secondary">Neutre</span>
+                                                        {% elif session['polarity_global'] > 0 : %}
+                                                        <span class="badge badge-pill badge-success">Positive</span>
+                                                        {% elif session['polarity_global'] > 0.5 : %}
+                                                        <span class="badge badge-pill badge-success">Trés Positive</span>
+
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{session['polarity_global']}}</td>
+                                                    <td>&#{{session['emoji_global']}}</td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+
                                         </div>
                                     </div>
                                 </div>

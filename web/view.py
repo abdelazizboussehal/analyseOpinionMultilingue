@@ -1,6 +1,7 @@
 import os
 import secrets
 
+import numpy
 from flask import Flask, render_template, jsonify, session
 from flask import request
 from flask_cors import CORS
@@ -375,6 +376,8 @@ def res():
         tableaux_dic_model_global = []
         tableaux_plarity_global_sentence = []
         tableaux_emoji_global_sentence = []
+        polarity_global = 0
+
         for model_glob in session['model_global']:
             # module analyse
             if session['l'] == "en":
@@ -391,6 +394,8 @@ def res():
             tableaux_emoji_global_sentence.append(t.Tools.get_emoji_from_polarity(analyse_model.polarity_model()))
 
         session['dictionnaire_model_global'] = tableaux_dic_model_global
+        session['polarity_global'] = numpy.array(tableaux_plarity_global_sentence).mean()
+        session['emoji_global'] = t.Tools.get_emoji_from_polarity(session['polarity_global'])
         session['polarity_sentences'] = tableaux_plarity_global_sentence
         session['emoji_sentences'] = tableaux_emoji_global_sentence
 
