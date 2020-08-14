@@ -63,20 +63,24 @@ function statistic() {
 // Set new default font family and font color to mimic Bootstrap's default styling
     Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#858796';
+    console.log(document.getElementById("nbr_aux").value + "+++" +
+        document.getElementById("nbr_proprn").value);
 
 // Pie Chart Example
     var ctx = document.getElementById("mon_model");
     var myPieChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ["verbe", "adjective", "nouns", "autre"],
+            labels: ["verbe", "adjective", "nouns", "auxiliaire", "propre nom", "autre"],
             datasets: [{
                 data: [document.getElementById("nbr_verb").value,
                     document.getElementById("nbr_adj").value,
                     document.getElementById("nbr_nom").value,
+                    document.getElementById("nbr_aux").value,
+                    document.getElementById("nbr_proprn").value,
                     document.getElementById("nbr_autre").value],
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#23cc2d'],
-                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#cc37c7'],
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#23cc2d', '#36b9cc', '#23cc2d'],
+                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#cc37c7', '#2c9faf', '#cc37c7'],
                 hoverBorderColor: "rgba(234, 236, 244, 1)",
             }],
         },
@@ -121,6 +125,7 @@ function save_graphe_column() {
     button.href = imgData;
     button.download = "graphe_column.png";
 }
+
 function save_table() {
     $("#dataTable").tableHTMLExport({
         // csv, txt, json, pdf
@@ -141,42 +146,43 @@ function reprocess_subjectivity() {
 
 
 function number_format(number, decimals, dec_point, thousands_sep) {
-        // *     example: number_format(1234.56, 2, ',', ' ');
-        // *     return: '1 234,56'
-        number = (number + '').replace(',', '').replace(' ', '');
-        var n = !isFinite(+number) ? 0 : +number,
-            prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-            sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-            dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-            s = '',
-            toFixedFix = function (n, prec) {
-                var k = Math.pow(10, prec);
-                return '' + Math.round(n * k) / k;
-            };
-        // Fix for IE parseFloat(0.55).toFixed(0) = 0;
-        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-        if (s[0].length > 3) {
-            s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-        }
-        if ((s[1] || '').length < prec) {
-            s[1] = s[1] || '';
-            s[1] += new Array(prec - s[1].length + 1).join('0');
-        }
-        return s.join(dec);
+    // *     example: number_format(1234.56, 2, ',', ' ');
+    // *     return: '1 234,56'
+    number = (number + '').replace(',', '').replace(' ', '');
+    var n = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s = '',
+        toFixedFix = function (n, prec) {
+            var k = Math.pow(10, prec);
+            return '' + Math.round(n * k) / k;
+        };
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
     }
+    if ((s[1] || '').length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    return s.join(dec);
+}
 
 function statistic2() {
     // Set new default font family and font color to mimic Bootstrap's default styling
     Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#858796';
-
+    console.log(document.getElementById("nbr_aux").value + "+++" +
+        document.getElementById("nbr_proprn").value);
 
 // Bar Chart Example
     var ctx = document.getElementById("myBarChart");
     var myBarChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Noms", "Verbes", "Adjectifs", "Autres"],
+            labels: ["Noms", "Verbes", "Adjectifs", "Auxiliaire", "Propre nom", "Autres"],
             datasets: [{
                 label: "Revenue",
                 backgroundColor: "#4e73df",
@@ -185,6 +191,8 @@ function statistic2() {
                 data: [document.getElementById("nbr_verb").value,
                     document.getElementById("nbr_adj").value,
                     document.getElementById("nbr_nom").value,
+                    document.getElementById("nbr_aux").value,
+                    document.getElementById("nbr_proprn").value,
                     document.getElementById("nbr_autre").value],
             }],
         },
@@ -257,6 +265,18 @@ function statistic2() {
         }
     });
 
+}
+
+function visualizer_dep(bt) {
+    var content = bt.previousSibling.previousSibling.previousSibling.previousSibling.value;
+    document.getElementById("div_vis_dep").innerHTML = content;
+    $('#list_vis_dep').modal('show');
+}
+
+function visualizer_ent(bt) {
+    var content = bt.previousSibling.previousSibling.previousSibling.previousSibling.value;
+    document.getElementById("div_vis_dep").innerHTML = content;
+    $('#list_vis_dep').modal('show');
 }
 
 

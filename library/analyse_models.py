@@ -30,7 +30,7 @@ class AnalyseModels:
         for i in range(len(ss)):
             if ss[i] == t.Tools.sc_model_global_connector and \
                     ss[i + 1] != t.Tools.sc_noun_start.replace(" ", "") and \
-                    ss[i + 1] != t.Tools.sc_adjective_start.replace(" ", "") and\
+                    ss[i + 1] != t.Tools.sc_adjective_start.replace(" ", "") and \
                     ss[i + 1] != t.Tools.sc_verb_start.replace(" ", ""):
                 self.connector = ss[i + 1]
                 break
@@ -113,7 +113,9 @@ class AnalyseModels:
 
     def polarity_model(self):
         # calculer polarite model global
-        if self.sub_model_adjective and self.sub_model_verb and self.sub_model_noun:
+        if self.connector == t.Tools.sc_negation.replace(" ", ""):
+            return 0
+        elif self.sub_model_adjective and self.sub_model_verb and self.sub_model_noun:
             return (3 * self.polarity_sub_model_verb +
                     2 * self.polarity_sub_model_adjective + self.polarity_sub_model_noun) / 6
         elif self.sub_model_verb and self.sub_model_noun:
@@ -249,7 +251,7 @@ class AnalyseFrenchModels(AnalyseModels):
     def get_polarity_adverb_neg(self, polarity_element, adverb, neg, language):
         """recuprer polarite de liste des adverbes et negation"""
         polarity_adv_total = []
-        if polarity_element != 0 and polarity_element != []:
+        if polarity_element != 0 and polarity_element != [] and polarity_element != -1000:
             if neg:
                 polarity_element = -1 * polarity_element
             if len(adverb) != 0:
@@ -257,7 +259,7 @@ class AnalyseFrenchModels(AnalyseModels):
                     polarity_adv = self.lexicon_lib.get_polarity_lexicon(adv, "RB")
                     if polarity_adv == -1000:
                         polarity_adv = SentiWordNet.get_sentiment(adv, language, "r")
-                    if polarity_adv != -2000:
+                    if polarity_adv != -1000:
                         polarity_adv_total.append(polarity_adv)
         return polarity_element, polarity_adv_total
 
@@ -270,6 +272,8 @@ class AnalyseFrenchModels(AnalyseModels):
                 polarity_verb = SentiWordNet.get_sentiment(verb, self.language, "v")
         elements_verb_polarity = self.get_polarity_adverb_neg(polarity_verb, adverb, neg, self.language)
         polarity_verb = elements_verb_polarity[0]
+        if polarity_verb == -1000 :
+            return polarity_verb
         while -1000 in elements_verb_polarity[1]:
             elements_verb_polarity[1].remove(-1000)
         if len(elements_verb_polarity[1]) > 0:
@@ -292,6 +296,8 @@ class AnalyseFrenchModels(AnalyseModels):
         elements_adjective_polarity = AnalyseModels.get_polarity_adverb_neg(polarity_adj, adverb, neg,
                                                                             self.language)
         polarity_adjective = elements_adjective_polarity[0]
+        if polarity_adjective == -1000:
+            return polarity_adjective
         if len(elements_adjective_polarity[1]) > 0:  # calcul moyenne polarite adverbe
             mean_adv = np.array(elements_adjective_polarity[1]).mean()
         else:
@@ -299,7 +305,7 @@ class AnalyseFrenchModels(AnalyseModels):
         if polarity_adjective > 0:
             return polarity_adjective + (1 - polarity_adjective) * mean_adv
         else:
-            return polarity_adjective - (1 - polarity_adjective) * mean_adv
+            return polarity_adjective - (1 + polarity_adjective) * mean_adv
 
 
 """

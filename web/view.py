@@ -373,10 +373,15 @@ def res():
         session['stat_adj'] = t.Tools.adjectifC
         session['stat_nom'] = t.Tools.nounC
         session['stat_total'] = t.Tools.total
-        session['stat_other'] = t.Tools.total - len(t.Tools.verbC) - len(t.Tools.adjectifC) - len(t.Tools.nounC)
+        session['stat_aux'] = t.Tools.auxC
+        session['stat_propre_noun'] = t.Tools.propnC
+        session['stat_other'] = t.Tools.total - len(t.Tools.verbC) - len(t.Tools.adjectifC) - len(t.Tools.nounC) - len(
+            t.Tools.auxC) - len(t.Tools.propnC)
         tableaux_dic_model_global = []
         tableaux_plarity_global_sentence = []
         tableaux_emoji_global_sentence = []
+        tableaux_vis_dep = []
+        tableaux_vis_ent = []
         polarity_global = 0
 
         for model_glob in session['model_global']:
@@ -399,6 +404,11 @@ def res():
         session['emoji_global'] = t.Tools.get_emoji_from_polarity(session['polarity_global'])
         session['polarity_sentences'] = tableaux_plarity_global_sentence
         session['emoji_sentences'] = tableaux_emoji_global_sentence
+        for ph in session['subjective_sentences']:
+            tableaux_vis_dep.append(t.Tools.visualize_dep(ph, session['l']))
+            tableaux_vis_ent.append(t.Tools.visualize_ent(ph, session['l']))
+        session['visualizer_dep'] = tableaux_vis_dep
+        session['visualizer_ent'] = tableaux_vis_ent
 
     return render_template('resultatfinal.html')
 

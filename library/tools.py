@@ -1,15 +1,16 @@
 import numpy
 import spacy
 from enchant.checker import SpellChecker
-from spacy.matcher.phrasematcher import PhraseMatcher
-from textblob import TextBlob as textblobEnglish, TextBlob
-from textblob_ar import TextBlob as textblobArabic
-from textblob import Blobber
-from textblob_fr import PatternTagger, PatternAnalyzer
-from textblob_ar import TextBlob as nlpAr
 from pattern.web import Twitter, cache
+from spacy import displacy
 from spacy.lang.en import English
 from spacy.lang.fr import French
+from spacy.matcher.phrasematcher import PhraseMatcher
+from textblob import Blobber
+from textblob import TextBlob as textblobEnglish, TextBlob
+from textblob_ar import TextBlob as nlpAr
+from textblob_ar import TextBlob as textblobArabic
+from textblob_fr import PatternTagger, PatternAnalyzer
 
 from library import analyse_models
 
@@ -305,3 +306,21 @@ class Tools:
                 Tools.auxC.append(str(token.text))
             if token.pos_ == "ADV":
                 Tools.adverbC.append(str(token.text))
+
+    @staticmethod
+    def visualize_dep(content, langue):
+        nlp = ""
+        doc = ""
+        if langue == "en":
+            nlp = spacy.load("en_core_web_sm")
+            doc = nlp(content)
+        return displacy.render(doc, style="dep")
+
+    @staticmethod
+    def visualize_ent(content, langue):
+        nlp = ""
+        doc = ""
+        if langue == "en":
+            nlp = spacy.load("en_core_web_sm")
+            doc = nlp(content)
+        return displacy.render(doc, style="ent")

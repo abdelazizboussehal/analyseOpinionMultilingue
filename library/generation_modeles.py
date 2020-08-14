@@ -190,7 +190,7 @@ class GenerationFrenchModels(GenerationModels):
                 "de plus", "quant à", "non seulement", "mais encore", "de surcroît", "en outre"]
 
     def __init__(self, sentence):
-        self.nlp = spacy.load("fr_core_news_md")
+        self.nlp = spacy.load("fr_core_news_sm")
         self.sentence = sentence
         self.negation_adj = []
         self.modificateur_adj = []
