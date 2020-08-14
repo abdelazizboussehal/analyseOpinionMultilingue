@@ -268,13 +268,13 @@ function statistic2() {
 }
 
 function visualizer_dep(bt) {
-    var content = bt.previousSibling.previousSibling.previousSibling.previousSibling.value;
+    var content = bt.value;
     document.getElementById("div_vis_dep").innerHTML = content;
     $('#list_vis_dep').modal('show');
 }
 
 function visualizer_ent(bt) {
-    var content = bt.previousSibling.previousSibling.previousSibling.previousSibling.value;
+    var content = bt.value;
     document.getElementById("div_vis_dep").innerHTML = content;
     $('#list_vis_dep').modal('show');
 }

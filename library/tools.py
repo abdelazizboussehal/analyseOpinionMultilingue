@@ -313,8 +313,12 @@ class Tools:
         doc = ""
         if langue == "en":
             nlp = spacy.load("en_core_web_sm")
-            doc = nlp(content)
-        return displacy.render(doc, style="dep")
+        else:
+            nlp = spacy.load("fr_core_news_sm")
+        doc = nlp(content)
+        options = {"compact": True, "bg": "#09a3d5",
+                   "color": "white", "font": "Source Sans Pro"}
+        return displacy.render(doc, style="dep", options=options)
 
     @staticmethod
     def visualize_ent(content, langue):
@@ -322,5 +326,7 @@ class Tools:
         doc = ""
         if langue == "en":
             nlp = spacy.load("en_core_web_sm")
-            doc = nlp(content)
+        else:
+            nlp = spacy.load("fr_core_news_sm")
+        doc = nlp(content)
         return displacy.render(doc, style="ent")

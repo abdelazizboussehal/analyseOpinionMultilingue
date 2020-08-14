@@ -496,12 +496,8 @@
                                                             <tr>
                                                                 <td>
                                                                     <span>{{session['subjective_sentences'][i]}}</span>
-                                                                    <input type="hidden" value="{{session['visualizer_dep'][i]}}">
-                                                                    <div></div>
-                                                                    <button onclick="visualizer_dep(this)"> visulaize</button>
-                                                                    <input type="hidden" value="{{session['visualizer_ent'][i]}}">
-                                                                    <div></div>
-                                                                    <button onclick="visualizer_dep(this)"> visulaize</button>
+                                                                    <button class="btn btn-outline-success btn-sm" onclick="visualizer_dep(this)" value="{{session['visualizer_dep'][i]}}"> visulaize</button>
+                                                                    <button class="btn btn-outline-success btn-sm" onclick="visualizer_dep(this)" value="{{session['visualizer_ent'][i]}}"> visulaize</button>
                                                                 </td>
                                                                 <td>{{session['model_global'][i]}}
                                                                     <p>
