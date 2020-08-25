@@ -13,10 +13,19 @@
     <!-- Custom fonts for this template dash board-->
     <link href="{{ url_for('static',filename='vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet"
           type="text/css">
+
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="{{ url_for('static',filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/mycss.css') }}" rel="stylesheet"
+          type="text/css">
+    <!-- font style classification d'opinion  -->
+    <link href="{{ url_for('static',filename='css/googlefont.css') }}" rel="stylesheet"
+          type="text/css">
+    <!-- font style emoji  -->
+    <link href="{{ url_for('static',filename='css/myemoji.css') }}" rel="stylesheet"
+          type="text/css">
 
 
 </head>
@@ -34,7 +43,7 @@
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">Opinion mining<sup></sup></div>
+            <div class="sidebar-brand-text mx-3">Macha3ir<sup></sup></div>
         </a>
 
         <!-- Divider -->
@@ -52,7 +61,7 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            Type Insertion
+            Type D'insertion
         </div>
 
 
@@ -74,7 +83,7 @@
         <li class="nav-item active">
             <a href="#" onclick="addfichiertext()" class="nav-link">
                 <i class="fas fa-file-upload"></i>
-                <span>File</span></a>
+                <span>Fichier</span></a>
         </li>
 
 
@@ -99,8 +108,8 @@
         <div class="d-flex flex-column">
             <div style="margin-top: 10px;" class="row  justify-content-md-center">
                 <div class="row">
-                    <p style="font-size:60px" class="text-secondary">Classification d'opinion </p>
-                    <p id="emoji" style="font-size:60px">&#128540;</p>
+                    <h1 id="text"> <a href="#">Classification d'opinion</a>  </h1>
+                    <h1 class="mx-2"><i class="em em-heart_eyes" aria-role="presentation" aria-label="SMILING FACE WITH HEART-SHAPED EYES"></i></h1>
                 </div>
             </div>
         </div>
@@ -110,23 +119,23 @@
 
             <div id="cadretexte" class="card shadow mb-4 card border-left-primary shadow h-100 py-2 mx-2 my-2">
                 <div class="d-flex flex-row justify-content-center card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">inserer text</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Inserer un texte</h6>
                 </div>
                 <div class="d-flex flex-row justify-content-center card-body">
                     <form action="/res" method="post" id="usrform1">
                         <input type="hidden" name="id_reprocess" value="id_text">
-                        <textarea id="textarea" placeholder="Entrer votre texte ici ..... EX :This car is beautiful. "
+                        <textarea id="textarea" placeholder="Saisissez votre texte ici ..... EX :This car is beautiful. "
                                   lang="en" rows="7" cols="100" id="input" name="input" form="usrform1"
                                   spellcheck="true" autofocus="true"></textarea>
                         <div class="d-flex flex-row justify-content-around">
                             <button disabled type="submit" id="button" class="btn btn-primary btn-icon-split">
-                                <span class="text">commencer</span>
+                                <span class="text">Commencer</span>
                                 <span class="icon text-white-50">
                                 <i class="fas fa-chevron-circle-right"></i>
                                 </span>
                             </button>
                             <button type="reset" class="btn btn-danger btn-icon-split">
-                                <span class="text">effacer</span>
+                                <span class="text">Effacer</span>
                                 <span class="icon text-white-50">
                                 <i class="far fa-trash-alt"></i>
                                 </span>
@@ -145,7 +154,7 @@
                     <h6 class="m-0 font-weight-bold text-primary">Twitter</h6>
                 </div>
                 <div class="d-flex flex-row justify-content-center card-body">
-                    cette option nous permettre de cherche un sujet depuis twitter.
+                    Cette option permettre d'effectuer une recherche sur twitter
                 </div>
                 <div class="d-flex flex-row justify-content-around px-2 py-2">
                     <form method="post" id="usrform2" action="/GetTextFromTwitter">
@@ -159,7 +168,7 @@
                 <span class="icon text-white-50">
                 <i class="fas fa-chevron-circle-right"></i>
             </span>
-                        <span class="text">next</span>
+                        <span class="text">Chercher</span>
                     </a>
                 </div>
 
@@ -170,7 +179,7 @@
                     <h6 class="m-0 font-weight-bold text-primary">Document</h6>
                 </div>
                 <div class="d-flex flex-row justify-content-center card-body">
-                    cette option nous permettre de selectioner fichier.
+                    Cette option permettre d'effectuer une sélection de fichier
                 </div>
                 <div class="d-flex flex-row justify-content-around px-2 py-2">
                     <form style="width: 100%" method="post" action="/res" accept=".txt" enctype="multipart/form-data">
@@ -179,7 +188,7 @@
                             <div class="custom-file">
                                 <input onchange="uploadfile()" type="file" name="file_text" accept=".txt"
                                        class="custom-file-input" id="upload">
-                                <label id="filetext" class="custom-file-label" for="upload">choisir fichier</label>
+                                <label id="filetext" class="custom-file-label" for="upload">choisir un fichier</label>
                             </div>
 
                         </div>

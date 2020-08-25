@@ -19,6 +19,13 @@
     <!-- Custom styles for this template-->
     <link href="{{ url_for('static',filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+    <!-- css classification -->
+    <link href="{{ url_for('static',filename='css/mycss.css') }}" rel="stylesheet"
+          type="text/css">
+    <!-- font style classification d'opinion  -->
+    <link href="{{ url_for('static',filename='css/googlefont.css') }}" rel="stylesheet"
+          type="text/css">
+
 
 </head>
 
@@ -34,7 +41,7 @@
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">Opinion mining<sup></sup></div>
+            <div class="sidebar-brand-text mx-3">Macha3ir</div>
         </a>
 
         <!-- Divider -->
@@ -50,7 +57,7 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            statistique
+            statistiques
         </div>
 
         <!-- Nav Item - Pages Collapse Menu segementation -->
@@ -58,12 +65,12 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages1"
                aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-align-justify"></i>
-                <span>graphe</span>
+                <span>Graphe</span>
             </a>
             <div id="collapsePages1" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" data-toggle="modal" data-target="#exampleModal">graphique anneaux</a>
-                    <a class="collapse-item" data-toggle="modal" data-target="#exampleModal1">graphique colonne</a>
+                    <a class="collapse-item" data-toggle="modal" data-target="#exampleModal">Graphe anneaux</a>
+                    <a class="collapse-item" data-toggle="modal" data-target="#exampleModal1">Graphe colonne</a>
                 </div>
 
             </div>
@@ -94,38 +101,38 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-file-word"></i>
-                <span>Elemnt de texte:</span>
+                <span>Unité linguistique:</span>
             </a>
             <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <ul class="list-group">
                         <li data-toggle="modal" data-target="#list_verb"
                             class="list-group-item d-flex justify-content-between align-items-center">
-                            verbe :
+                            Verbes :
                             <span class="badge badge-primary badge-pill">{{session['stat_verb']|length}}</span>
                         </li>
                         <li data-toggle="modal" data-target="#list_adj"
                             class="list-group-item d-flex justify-content-between align-items-center">
-                            adjective :
+                            Adjectifs :
                             <span class="badge badge-primary badge-pill">{{session['stat_adj']|length}}</span>
                         </li>
                         <li data-toggle="modal" data-target="#list_nom"
                             class="list-group-item d-flex justify-content-between align-items-center">
-                            noms :
+                            Noms :
                             <span class="badge badge-primary badge-pill">{{session['stat_nom']|length}}</span>
                         </li>
                         <li data-toggle="modal" data-target="#list_aux"
                             class="list-group-item d-flex justify-content-between align-items-center">
-                            Auxiliaire :
+                            Auxiliaires :
                             <span class="badge badge-primary badge-pill">{{session['stat_aux']|length}}</span>
                         </li>
                         <li data-toggle="modal" data-target="#list_proprn"
                             class="list-group-item d-flex justify-content-between align-items-center">
-                            Propre noms :
+                            Noms prompres :
                             <span class="badge badge-primary badge-pill">{{session['stat_propre_noun']|length}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            autre :
+                            Autres :
                             <span class="badge badge-primary badge-pill">{{session['stat_total']}}</span>
                         </li>
                     </ul>
@@ -146,17 +153,13 @@
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column ">
-
         <!-- piece one top -->
         <div class="d-flex flex-column">
             <div style="margin-top: 10px;" class="row  justify-content-md-center">
                 <div class="row">
-                    <p style="font-size:60px" class="text-secondary">Classification d'opinion </p>
-                    <p id="emoji" style="font-size:60px">&#128540;</p>
+                    <h1 id="text"> <a href="#">Classification d'opinion</a> </h1>
                 </div>
             </div>
-
-
         </div>
 
         <!-- piece two medium -->
@@ -169,11 +172,11 @@
                         <h5 class="mb-0">
                             <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
                                     aria-expanded="true" aria-controls="collapseOne">
-                                correction d'othographe
+                                Correcteur d'orthographe
                             </button>
                             <button class="btn btn-danger btn-sm btn-icon-split">
                                 <div>
-                                    <span class="text">erreurs</span>
+                                    <span class="text">Mots Erronés</span>
                                     <span id="nbr_errors" class="badge badge-light mx-2">{{session['list_word'][0]|length}}</span>
                                 </div>
                                 <span class="icon text-white-50">
@@ -183,7 +186,7 @@
                             <button onclick="reprocess_correction()"
                                     class="btn btn-outline-danger btn-sm float-right btn-icon-split">
                                 <div>
-                                    <span class="text">retraitement</span>
+                                    <span class="text">Retraitement</span>
                                 </div>
                                 <span class="icon bg-danger text-white-50">
                                     <i class="fas fa-undo"></i>
@@ -201,7 +204,7 @@
                                 <div class="d-flex flex-row justify-content-center card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Texte</h6>
                                 </div>
-                                <h5 class="m-0 font-weight-bold text-primary mx-2">langue est :
+                                <h5 class="m-0 font-weight-bold text-primary mx-2">Langue :
                                     {{session['language']}}</h5>
                                 <div class="d-flex flex-row justify-content-center card-body">
                                     <form class="d-flex " id="form_correction" method="post" action="/res">
@@ -235,7 +238,7 @@
                         <h5 class="mb-0">
                             <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
                                     aria-expanded="false" aria-controls="collapseTwo">
-                                segmentation
+                                Segmentation
                             </button>
                         </h5>
                     </div>
@@ -248,7 +251,7 @@
                                             <button class="btn btn-link" data-toggle="collapse"
                                                     data-target="#segmentationcollapseOne" aria-expanded="true"
                                                     aria-controls="segmentationcollapseOne">
-                                                segmentation par phrase
+                                                Segmentation par ponctuation
                                             </button>
                                             <a href="#" class="btn btn-info btn-icon-split">
 
@@ -282,7 +285,7 @@
                                             <button class="btn btn-link collapsed" data-toggle="collapse"
                                                     data-target="#segmentationcollapseTwo" aria-expanded="false"
                                                     aria-controls="segmentationcollapseTwo">
-                                                segmentation par sous phrase
+                                                Segmentation par connecteur
                                             </button>
                                             <a href="#" class="btn btn-info btn-icon-split">
                                                 <span class="text">{{session['sub_sentence']|length}}</span>
@@ -318,11 +321,11 @@
                         <h5 class="mb-0">
                             <button class="btn btn-link" data-toggle="collapse" data-target="#subjectivitycollapseOne"
                                     aria-expanded="true" aria-controls="subjectivitycollapseOne">
-                                subjectvite
+                                Subjectivité
                             </button>
                             <button class="btn btn-success btn-sm btn-icon-split">
                                 <div>
-                                    <span class="text">subjective</span>
+                                    <span class="text">Subjectif</span>
                                     <span class="badge badge-light mx-2">{{session['nbr_sub']}}</span>
                                 </div>
                                 <span class="icon text-white-50">
@@ -331,7 +334,7 @@
                             </button>
                             <button class="btn btn-info btn-sm btn-icon-split">
                                 <div>
-                                    <span class="text">objectif</span>
+                                    <span class="text">Objectif</span>
                                     <span class="badge badge-light mx-2">{{session['nbr_obj']}}</span>
                                 </div>
                                 <span class="icon text-white-50">
@@ -341,7 +344,7 @@
                             <button onclick="reprocess_subjectivity()"
                                     class="btn btn-outline-danger btn-sm float-right btn-icon-split">
                                 <div>
-                                    <span class="text">retraitement</span>
+                                    <span class="text">Retraitement</span>
                                 </div>
                                 <span class="icon bg-danger text-white-50">
                                       <i class="fas fa-undo"></i>
@@ -357,7 +360,7 @@
 
                             <div class="card shadow mb-4 card border-left-primary shadow h-100 py-2 mx-2 my-2">
                                 <div class="d-flex flex-row justify-content-center card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Liste des phrases et subjectivite</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Liste des phrases et subjectivité</h6>
                                 </div>
 
                                 <form id="form_subjectivity" action="/res" method="post"
@@ -372,20 +375,20 @@
                                             {% if session['subjective_state'][n] %}
                                             <label class="btn btn-outline-primary btn-sm active">
                                                 <input type="radio" name="optradio{{n}}" value="true" autocomplete="off"
-                                                       checked> subjectif
+                                                       checked> Subjectif
                                             </label>
                                             <label class="btn btn-outline-primary btn-sm">
                                                 <input type="radio" name="optradio{{n}}" value="false"
-                                                       autocomplete="off"> objectif
+                                                       autocomplete="off"> Objectif
                                             </label>
                                             {% else %}
                                             <label class="btn btn-outline-primary btn-sm active">
                                                 <input type="radio" name="optradio{{n}}" value="true" autocomplete="off"
-                                                > subjectif
+                                                > Subjectif
                                             </label>
                                             <label class="btn btn-outline-primary btn-sm">
                                                 <input type="radio" name="optradio{{n}}" value="false"
-                                                       autocomplete="off" checked> objectif
+                                                       autocomplete="off" checked> Objectif
                                             </label>
                                             {% endif %}
                                         </div>
@@ -407,12 +410,12 @@
                         <h5 class="mb-0">
                             <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree"
                                     aria-expanded="false" aria-controls="collapseThree">
-                                resultat final
+                                Résultat final
                             </button>
                             <button class="btn btn-success btn-sm btn-icon-split mx-2"
                                     data-toggle="modal" data-target="#list_connector">
                                 <div>
-                                    <span class="text">connector</span>
+                                    <span class="text">Connecteur</span>
                                     <span class="badge badge-light mx-2">{{session['total_connectors']|length}}</span>
                                 </div>
                                 <span class="icon text-white-50">
@@ -422,7 +425,7 @@
                             <button class="btn btn-secondary btn-sm btn-icon-split mx-2"
                                     data-toggle="modal" data-target="#list_neg">
                                 <div>
-                                    <span class="text">negation</span>
+                                    <span class="text">Négation</span>
                                     <span class="badge badge-light mx-2">{{session['total_negation']|length}}</span>
                                 </div>
                                 <span class="icon text-white-50">
@@ -432,7 +435,7 @@
                             <button class="btn btn-info btn-sm btn-icon-split mx-2"
                                     data-toggle="modal" data-target="#list_adv">
                                 <div>
-                                    <span class="text">adverbe</span>
+                                    <span class="text">Adverbe</span>
                                     <span class="badge badge-light mx-2">{{session['total_adverbe']|length}}</span>
                                 </div>
                                 <span class="icon text-white-50">
@@ -451,7 +454,7 @@
                                             <button class="btn btn-link" data-toggle="collapse"
                                                     data-target="#resultcollapseOne" aria-expanded="true"
                                                     aria-controls="resultcollapseOne">
-                                                resultat detaille
+                                                Resultat detaille
                                             </button>
                                         </h5>
                                     </div>
@@ -464,7 +467,7 @@
                                                     <h6 class="m-0 font-weight-bold text-primary">Résultat Détaillé</h6>
                                                     <button class="btn btn-success btn-icon-split mx-2 my-2"
                                                             onclick="save_table()">
-                                                        <span>download table to exel
+                                                        <span>Télécharger la table
                                                     </span>
                                                         <span>
                                                             <i class="fas fa-download"></i>
@@ -477,10 +480,10 @@
                                                                width="100%" cellspacing="0">
                                                             <thead>
                                                             <tr class="table-primary">
-                                                                <th style="width: 40%">Phrase</th>
+                                                                <th style="width: 40%">Segment</th>
                                                                 <th style="width: 40%">Modèle générale</th>
                                                                 <th style="width: 10%">Polarité</th>
-                                                                <th style="width: 10%">Visualisation</th>
+                                                                <th style="width: 10%">Symbole</th>
                                                             </tr>
                                                             </thead>
                                                             <tfoot>
@@ -496,11 +499,18 @@
                                                             <tr>
                                                                 <td>
                                                                     <span>{{session['subjective_sentences'][i]}}</span>
-                                                                    <button class="btn btn-outline-success btn-sm" onclick="visualizer_dep(this)" value="{{session['visualizer_dep'][i]}}"> visulaize</button>
-                                                                    <button class="btn btn-outline-success btn-sm" onclick="visualizer_dep(this)" value="{{session['visualizer_ent'][i]}}"> visulaize</button>
+                                                                    <hr>
+                                                                    <span>Visualisation :</span>
+                                                                    </br>
+                                                                    <button class="btn btn-outline-success btn-sm my-2" onclick="visualizer_dep(this)" value="{{session['visualizer_dep'][i]}}"> Correspendances</button>
+                                                                    </br>
+                                                                    <button class="btn btn-outline-success btn-sm my-2" onclick="visualizer_dep(this)" value="{{session['visualizer_ent'][i]}}"> Noms Propres</button>
                                                                 </td>
-                                                                <td>{{session['model_global'][i]}}
-                                                                    <p>
+                                                                <td>
+                                                                    <h4>
+                                                                    <div class="badge badge-primary text-wrap">{{session['model_global'][i]}}</div>
+                                                                    </h4>
+                                                                        <p>
                                                                         {% set
                                                                         dic=session['dictionnaire_model_global'][i]%}
                                                                         Ce model contien :
@@ -579,7 +589,7 @@
                                             <button class="btn btn-link collapsed" data-toggle="collapse"
                                                     data-target="#resultcollapseTwo" aria-expanded="false"
                                                     aria-controls="resultcollapseTwo">
-                                                resultat final
+                                                Resultat final
                                             </button>
                                         </h5>
                                     </div>
@@ -590,9 +600,9 @@
                                                 <thead>
                                                 <tr>
 
-                                                    <th scope="col">Classification</th>
+                                                    <th scope="col">Classe d'opinion</th>
                                                     <th scope="col">Score</th>
-                                                    <th scope="col">Visualisation</th>
+                                                    <th scope="col">Symbole de classe d'opinion</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -600,26 +610,26 @@
 
                                                     <td>{% if session['polarity_global']< -0.5 : %}
                                                         <span style="font-size: 25px"
-                                                              class="badge badge-pill badge-danger">Trés Négative </span>
+                                                              class="badge badge-pill badge-danger">Trés Négatif </span>
                                                         {% elif session['polarity_global'] < 0 : %}
                                                         <span style="font-size: 25px"
-                                                              class="badge badge-pill badge-warning">Négative</span>
+                                                              class="badge badge-pill badge-warning">Négatif</span>
                                                         {% elif session['polarity_global'] == 0 : %}
                                                         <span style="font-size: 25px"
                                                               class="badge badge-pill badge-secondary">Neutre</span>
                                                         {% elif session['polarity_global'] > 0 : %}
                                                         <span style="font-size: 25px"
-                                                              class="badge badge-pill badge-success">Positive</span>
+                                                              class="badge badge-pill badge-success">Positif</span>
                                                         {% elif session['polarity_global'] > 0.5 : %}
                                                         <span style="font-size: 25px"
-                                                              class="badge badge-pill badge-success">Trés Positive</span>
+                                                              class="badge badge-pill badge-success">Trés Positif</span>
 
                                                         {% endif %}
                                                     </td>
                                                     <td><span style="font-size: 25px" class="badge badge-secondary">{{session['polarity_global']}}</span>
                                                     </td>
                                                     <td><span
-                                                            style="font-size: 40px">&#{{session['emoji_global']}}</span>
+                                                            style="font-size: 60px">&#{{session['emoji_global']}}</span>
                                                     </td>
                                                 </tr>
 
@@ -663,7 +673,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">phraphe en anneaux</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Graphe Anneaux</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -687,7 +697,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">phraphe colonne</h5>
+                    <h5 class="modal-title">Graphe Colonne</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -722,7 +732,7 @@
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -741,7 +751,7 @@
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -760,7 +770,7 @@
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -771,7 +781,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">liste des negation</h5>
+                    <h5 class="modal-title">Liste des negation</h5>
                 </div>
                 <div>
                     {% for item in session['total_negation'] %}
@@ -779,7 +789,7 @@
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -798,7 +808,7 @@
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -817,7 +827,7 @@
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -836,7 +846,7 @@
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -855,7 +865,7 @@
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -867,13 +877,13 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">visulisation dep</h5>
+                    <h5 class="modal-title">Graphe des correspendances</h5>
                 </div>
-                <div id="div_vis_dep" class="modal-body">
+                <div style="overflow:auto" id="div_vis_dep" class="modal-body">
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -883,13 +893,13 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">visulisation dep</h5>
+                    <h5 class="modal-title">Visualisation des noms propres </h5>
                 </div>
                 <div id="div_vis_ent" class="modal-body">
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
