@@ -14,19 +14,21 @@ function submitform() {
     document.getElementById("usrform").submit();
 }
 
-function correction(id) {
-    var textarea = document.getElementById("exampleFormControlTextarea1");
-    var str = textarea.value;
-    var text1 = id.innerText;
-    var text2 = id.parentNode.childNodes[1].innerText
-    var res = str.replace(text2, text1);
-    textarea.value = res;
-    id.parentNode.hidden = true;
-    var nbr_error = document.getElementById("nbr_errors");
-    nbr_error.innerText = parseInt(nbr_error.innerText) - 1;
-
-
+function correction(button) {
+    let textarea = document.getElementById("exampleFormControlTextarea1");
+    let input_text = textarea.value;
+    let incorrect_word = button.innerText;
+    let suggested_word = button.parentNode.childNodes[1].innerText
+    let correct_text = input_text.replace(suggested_word, incorrect_word);
+    textarea.value = correct_text;
+    button.parentNode.hidden = true;//cacher ligne de suggestion
+    //Decrimenter nombre des erreurs
+    let number_errors = document.getElementById("nbr_errors");
+    number_errors.innerText = parseInt(number_errors.innerText) - 1;
 }
+
+
+
 
 function uploadfile() {
     var input = document.getElementById('filetext');

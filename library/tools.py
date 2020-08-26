@@ -9,12 +9,11 @@ from spacy.matcher.phrasematcher import PhraseMatcher
 from textblob import Blobber
 from textblob import TextBlob as textblobEnglish, TextBlob
 from textblob_ar import TextBlob as nlpAr
-from textblob_ar import TextBlob as textblobArabic
 from textblob_fr import PatternTagger, PatternAnalyzer
 
 from library import analyse_models
 
-textblob_arabic = Blobber(pos_tagger=PatternTagger(), analyzer=PatternAnalyzer())
+textblobFrench = Blobber(pos_tagger=PatternTagger(), analyzer=PatternAnalyzer())
 
 
 class Tools:
@@ -81,26 +80,21 @@ class Tools:
 
     @staticmethod
     def language_detection(content):
-        blob = textblobEnglish(content)
+        blob = TextBlob(content)
         return blob.detect_language()
 
     @staticmethod
     def correction_orthographe(content, language):
-        """"""
-        list_error = []
         if language == "en":
-            checker = SpellChecker("en_US")
+            checker = SpellChecker("en_US")  # Fonction pour la langue anglais
         elif language == "fr":
-            checker = SpellChecker("fr")
-        elif language == "ar":
-            checker = SpellChecker("ar")
-
+            checker = SpellChecker("fr")  # Fonction pour la langue anglais
         checker.set_text(content)
         list_word = []
         list_suggestion = []
-        for err in checker:
-            list_word.append(err.word)
-            list_suggestion.append(err.suggest())
+        for error in checker:
+            list_word.append(error.word)  # Les mots erronés
+            list_suggestion.append(error.suggest())  # Les suggestions
         return list_word, list_suggestion
 
     @staticmethod
@@ -129,37 +123,24 @@ class Tools:
         return phrase
 
     @staticmethod
-    def subjectivity_filtering(content, language):
-        """enter une liste des phrases et la langue  retourner seul qui sont subjective"""
-        subjective_sentence = []
-        subjective_stat = []
+    def subjectivity_filtering(table_sentence, language):
+        """enter une liste des phrases et la langue  retourner etat de la subjectivité"""
+        subjective_stat = [] #table d'etat de subjecvité
         if language == "en":
-            for phrase in content:
-                test_subjective = textblobEnglish(str(phrase))
+            for phrase in table_sentence:
+                test_subjective = textblobEnglish(str(phrase)) #utilise TextBlob pour la langue anglaise
                 if test_subjective.sentiment.subjectivity > 0:
-                    subjective_sentence.append(phrase)
                     subjective_stat.append(True)
                 else:
                     subjective_stat.append(False)
         elif language == "fr":
-            for phrase in content:
-                test_subjective = textblob_arabic(u"" + phrase)
+            for phrase in table_sentence:
+                test_subjective = textblobFrench(u"" + phrase) #utilise TextBlob pour la langue française
                 if test_subjective.sentiment[1] > 0:
-                    subjective_sentence.append(phrase)
                     subjective_stat.append(True)
                 else:
                     subjective_stat.append(False)
-
-        elif language == "ar":
-            for phrase in content:
-                test_subjective = textblobArabic(phrase)
-                if test_subjective.sentiment.subjectivity > 0:
-                    subjective_sentence.append(phrase)
-                    subjective_stat.append(True)
-                else:
-                    subjective_stat.append(False)
-
-        return subjective_sentence, subjective_stat
+        return table_sentence, subjective_stat #registre des segments linguistiques avec ses etats
 
     @staticmethod
     def get_twit_from_twitter(subject, number):

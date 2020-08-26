@@ -65,7 +65,7 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages1"
                aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-align-justify"></i>
-                <span>Graphe</span>
+                <span>Graphes</span>
             </a>
             <div id="collapsePages1" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
@@ -84,15 +84,14 @@
             </a>
             <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">modeles</h6>
-                    <a class="collapse-item">verbe</a>
-                    <a class="collapse-item">nom</a>
-                    <a class="collapse-item">adjective</a>
+                    <h6 class="collapse-header">Segements linguistiques</h6>
+                    <a class="collapse-item" data-toggle="modal" data-target="#list_s_l_v">Verbes</a>
+                    <a class="collapse-item" data-toggle="modal" data-target="#list_s_l_n">Noms</a>
+                    <a class="collapse-item" data-toggle="modal" data-target="#list_s_l_a">Adjectives</a>
                     <div class="collapse-divider"></div>
-                    <h6 class="collapse-header">polarite</h6>
-                    <a class="collapse-item">verbe</a>
-                    <a class="collapse-item">nom</a>
-                    <a class="collapse-item">adjective</a>>
+                    <h6 class="collapse-header">Unités linguistiques</h6>
+                    <a class="collapse-item" data-toggle="modal" data-target="#list_u_l_v">Verbes</a>
+                    <a class="collapse-item" data-toggle="modal" data-target="#list_u_l_a">Adjectives</a>>
                 </div>
             </div>
         </li>
@@ -363,24 +362,19 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Liste des phrases et subjectivité</h6>
                                 </div>
 
-                                <form id="form_subjectivity" action="/res" method="post"
-                                      class="d-flex flex-column mx-4 my-4">
+                                <form id="form_subjectivity" action="/res" method="post" class="d-flex flex-column mx-4 my-4">
                                     <input type="hidden" name="id_reprocess" value="form_subjectivity">
-                                    {% for n in range(session['sub_sentence']| length) %}
+                                    {% for n in range(session['sub_sentence']| length) %} <!--parcourir liste des segments linguistiques -->
                                     <div class="d-flex flex-row align-items-center">
-                                        <h5 class="ml-3" id="input" name="input{{n}}" value="1">
+                                        <h5 class="ml-3" id="input" name="input{{n}}" value="1"><!-- affichier iste des segments linguistique -->
                                             {{session['sub_sentence'][n]}}</h5>
                                         <input type="hidden" name="r_id{{n}}" value="{{session['sub_sentence'][n]}}"/>
                                         <div class="btn-group btn-group-toggle mx-2" data-toggle="buttons">
                                             {% if session['subjective_state'][n] %}
-                                            <label class="btn btn-outline-primary btn-sm active">
-                                                <input type="radio" name="optradio{{n}}" value="true" autocomplete="off"
-                                                       checked> Subjectif
-                                            </label>
+                                            <label class="btn btn-outline-primary btn-sm active"><!-- affichier liste des segments linguistique -->
+                                                <input type="radio" name="optradio{{n}}" value="true" autocomplete="off" checked> Subjectif</label>
                                             <label class="btn btn-outline-primary btn-sm">
-                                                <input type="radio" name="optradio{{n}}" value="false"
-                                                       autocomplete="off"> Objectif
-                                            </label>
+                                                <input type="radio" name="optradio{{n}}" value="false" autocomplete="off"> Objectif</label>
                                             {% else %}
                                             <label class="btn btn-outline-primary btn-sm active">
                                                 <input type="radio" name="optradio{{n}}" value="true" autocomplete="off"
@@ -393,7 +387,6 @@
                                             {% endif %}
                                         </div>
                                     </div>
-
                                     <hr class="mx-4">
                                     {% endfor %}
                                 </form>
@@ -464,7 +457,7 @@
                                         <div class="card-body">
                                             <div class="card shadow mb-4">
                                                 <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">Résultat Détaillé</h6>
+
                                                     <button class="btn btn-success btn-icon-split mx-2 my-2"
                                                             onclick="save_table()">
                                                         <span>Télécharger la table
@@ -475,8 +468,8 @@
                                                     </button>
                                                 </div>
                                                 <div class="card-body">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-bordered table-striped" id="dataTable"
+                                                    <div lang="fr" class="table-responsive">
+                                                        <table lang="fr" class="table table-bordered table-striped" id="dataTable"
                                                                width="100%" cellspacing="0">
                                                             <thead>
                                                             <tr class="table-primary">
@@ -589,7 +582,7 @@
                                             <button class="btn btn-link collapsed" data-toggle="collapse"
                                                     data-target="#resultcollapseTwo" aria-expanded="false"
                                                     aria-controls="resultcollapseTwo">
-                                                Resultat final
+                                                Resultat général
                                             </button>
                                         </h5>
                                     </div>
@@ -904,6 +897,106 @@
             </div>
         </div>
     </div>
+
+
+    <!-- dialog liste des elemnt -->
+    <div class="modal fade" id="list_s_l_v" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Liste des segments linguistiques verbes</h5>
+                </div>
+                <div class="modal-body">
+                    {% for item in session['tab_s_l_v'] %}
+                    <h4><span class="badge badge-primary">{{item}}</span></h4>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="list_s_l_a" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Liste des segments linguistiques adjectifs</h5>
+                </div>
+                <div class="modal-body">
+                    {% for item in session['tab_s_l_a'] %}
+                    <h4><span class="badge badge-primary">{{item}}</span></h4>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="list_s_l_n" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Liste des segments linguistiques noms</h5>
+                </div>
+                <div class="modal-body">
+                    {% for item in session['tab_s_l_n'] %}
+                    <h4><span class="badge badge-primary">{{item}}</span></h4>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- dialog unite linguistique-->
+    <div class="modal fade" id="list_u_l_v" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Liste des unites linguistiques verbes</h5>
+                </div>
+                <div class="modal-body">
+                    {% for item in session['tab_u_l_v'] %}
+                    <h4><span class="badge badge-primary">{{item}}</span></h4>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="list_u_l_a" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Liste des unites linguistiques adjectifs</h5>
+                </div>
+                <div class="modal-body">
+                    {% for item in session['tab_u_l_a'] %}
+                    <h4><span class="badge badge-primary">{{item}}</span></h4>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
 
 <!-- End of Content Wrapper -->

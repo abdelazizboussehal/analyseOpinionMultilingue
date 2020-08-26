@@ -96,15 +96,15 @@ def extract_adj_verb():
                 generation_model = generation_modeles.GenerationFrenchModels(all_sentences[i])
             generation_model.create_model()
             subjective_sentences.append(all_sentences[i])
-            verbs.append(generation_model.sub_model_verb)
-            adjs.append(generation_model.sub_model_adjective)
+            verbs.append(generation_model.modele_segement_linguistique_verbe)
+            adjs.append(generation_model.modele_segement_linguistique_adjectif)
             nouns.append(generation_model.sub_model_noun)
             connectors.append(generation_model.connector)
 
             if l == "en":
-                analyse_model = analyse_models.AnalyseModels(l, generation_model.model_general)
+                analyse_model = analyse_models.AnalyseModels(l, generation_model.modele_globale)
             elif l == "fr":
-                analyse_model = analyse_models.AnalyseFrenchModels(l, generation_model.model_general)
+                analyse_model = analyse_models.AnalyseFrenchModels(l, generation_model.modele_globale)
             analyse_model.extract_sub_models()
             analyse_model.get_polarity_sub_model_verb()
             analyse_model.get_polarity_sub_model_adjective()
@@ -129,7 +129,6 @@ def enter_text():
 
 @app.route('/GetTextFromTwitter', methods=['POST'])
 def get_text_from_twitter():
-    aziz = request.form.get("subject")
     twitters = t.Tools.get_twit_from_twitter(request.form.get("subject"), 6)
     sentences = []
     errors = []
@@ -234,6 +233,14 @@ def subjectivity(sub_sentence, sub_sentence_subjectivity, l):
     adjs = []
     nouns = []
     connectors = []
+    # tableau segment linguistique
+    tab_s_l_v = []
+    tab_s_l_a = []
+    tab_s_l_n = []
+
+    # tableau segment linguistique
+    tab_u_l_v = []
+    tab_u_l_a = []
     # tableaux negation connecteur modificateur
     negationv_total = []
     negationv_chaque_phrase = []
@@ -263,11 +270,18 @@ def subjectivity(sub_sentence, sub_sentence_subjectivity, l):
                 generation_model = generation_modeles.GenerationFrenchModels(sub_sentence[i])
             generation_model.create_model()
             subjective_sentences.append(sub_sentence[i])
-            verbs.append(generation_model.sub_model_verb)
-            adjs.append(generation_model.sub_model_adjective)
+            verbs.append(generation_model.modele_segement_linguistique_verbe)
+            adjs.append(generation_model.modele_segement_linguistique_adjectif)
             nouns.append(generation_model.sub_model_noun)
             connectors.append(generation_model.connector)
-            model_global.append(generation_model.model_general)
+            model_global.append(generation_model.modele_globale)
+
+            tab_s_l_a.append(generation_model.modele_segement_linguistique_adjectif)
+            tab_s_l_v.append(generation_model.modele_segement_linguistique_verbe)
+            tab_s_l_n.append(generation_model.modele_segement_linguistique_nom)
+
+            tab_u_l_a.extend(generation_model.table_m_u_l_a)
+            tab_u_l_v.extend(generation_model.table_m_u_l_v)
 
             negationv_total.extend(generation_model.negation_verb)
             negationv_chaque_phrase.append(generation_model.negation_verb)
@@ -295,6 +309,11 @@ def subjectivity(sub_sentence, sub_sentence_subjectivity, l):
 
     total_adverbe.extend(modificateura_total)
     total_adverbe.extend(modificateurv_total)
+    session['tab_s_l_n'] = tab_s_l_n
+    session['tab_s_l_v'] = tab_s_l_v
+    session['tab_s_l_a'] = tab_s_l_a
+    session['tab_u_l_v'] = tab_u_l_v
+    session['tab_u_l_a'] = tab_u_l_a
 
     return ("phrase", sub_sentence, sub_sentence_subjectivity, nbr_sub, nbr_obj, total_adverbe, total_negation,
             total_connectors, subjective_sentences, verbs, adjs, nouns, model_global)
@@ -302,22 +321,26 @@ def subjectivity(sub_sentence, sub_sentence_subjectivity, l):
 
 @app.route('/res', methods=['POST'])
 def res():
-    billet = 0
-    req = request.form
+    billet = 0  # le point de reprendre le processus
     content = ""
-    if request.form['id_reprocess'] == 'id_text':
+    if request.form['id_reprocess'] == 'id_text':  # Acquisition depuis la zone de saisie
         content = request.form['input']
-    elif request.form['id_reprocess'] == 'id_file':
+
+    elif request.form['id_reprocess'] == 'id_file':  # Acquisition depuis une fichier
         file = request.files['file_text']
         if file:
             filename = secure_filename(file.filename)
             file.save(os.path.join(filename))
             content = open(os.path.join(filename), 'r').read().replace("\n", " ")
-    elif request.form['id_reprocess'] == 'twitter':
-        print("twitter")
-    elif request.form['id_reprocess'] == 'form_correction':
+    elif request.form['id_reprocess'] == 'twitter': # Acquisition depuis twitter
+        twitters = t.Tools.get_twit_from_twitter(request.form.get("subject"), 6)
+        languages = ["ar", "en", "fr"]
+        for twit in twitters:
+            if twit[2] in languages:
+                x = 0
+    elif request.form['id_reprocess'] == 'form_correction':  # retraitement correction
         content = request.form['content']
-    elif request.form['id_reprocess'] == 'form_subjectivity':
+    elif request.form['id_reprocess'] == 'form_subjectivity':  # retraitement subjectivité
         billet = 1
         sub_sentence = []
         sub_sentence_subjectivity = []
