@@ -268,7 +268,7 @@
 
                                             <div class="card shadow mb-4 card border-left-primary shadow h-100 py-2 mx-2 my-2">
                                                 <div class="d-flex flex-row justify-content-center card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">Liste des phrases</h6>
+                                                    <h6 class="m-0 font-weight-bold text-primary">Listes des Segements linguistiques</h6>
                                                 </div>
                                                 {% for n in range(session['phrase']| length) %}
                                                 <label class="ml-3">{{session['phrase'][n]}}</label>
@@ -473,16 +473,16 @@
                                                                width="100%" cellspacing="0">
                                                             <thead>
                                                             <tr class="table-primary">
-                                                                <th style="width: 40%">Segment</th>
-                                                                <th style="width: 40%">Modèle générale</th>
+                                                                <th style="width: 40%">Segments linguistiques</th>
+                                                                <th style="width: 40%">Modèles Globals</th>
                                                                 <th style="width: 10%">Polarité</th>
                                                                 <th style="width: 10%">Symbole</th>
                                                             </tr>
                                                             </thead>
                                                             <tfoot>
                                                             <tr class="table-primary">
-                                                                <th>Phrase</th>
-                                                                <th>Modèle générale</th>
+                                                                <th>Segments linguistiques</th>
+                                                                <th>Modèles Globals</th>
                                                                 <th>Polarité</th>
                                                                 <th>Visualisation</th>
                                                             </tr>
@@ -601,7 +601,9 @@
                                                 <tbody>
                                                 <tr>
 
-                                                    <td>{% if session['polarity_global']< -0.5 : %}
+                                                    <td>
+                                                        <br>
+                                                        {% if session['polarity_global']< -0.5 : %}
                                                         <span style="font-size: 25px"
                                                               class="badge badge-pill badge-danger">Trés Négatif </span>
                                                         {% elif session['polarity_global'] < 0 : %}
@@ -619,7 +621,9 @@
 
                                                         {% endif %}
                                                     </td>
-                                                    <td><span style="font-size: 25px" class="badge badge-secondary">{{session['polarity_global']}}</span>
+                                                    <td>
+                                                        <br>
+                                                        <span style="font-size: 25px" class="badge badge-secondary">{{session['polarity_global']}}</span>
                                                     </td>
                                                     <td><span
                                                             style="font-size: 60px">&#{{session['emoji_global']}}</span>

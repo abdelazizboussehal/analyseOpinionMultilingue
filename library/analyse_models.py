@@ -83,7 +83,7 @@ class AnalyseModels:
             if len(array_polarity_verb) != 0:
                 self.polarity_sub_model_verb = numpy.array(array_polarity_verb).mean()
             else:
-                self.polarity_sub_model_verb = -55  # kan kayenne element ou ma lguinahach f lexicon
+                self.polarity_sub_model_verb = 0  # kan kayenne element ou ma lguinahach f lexicon
 
     def get_polarity_sub_model_adjective(self):
         """ recuperer polarite de sous model adjective """
@@ -97,7 +97,7 @@ class AnalyseModels:
             if len(array_polarity_adjective) != 0:
                 self.polarity_sub_model_adjective = numpy.array(array_polarity_adjective).mean()
             else:
-                self.polarity_sub_model_adjective = -55  # kan kayenne element ou ma lguinahach f lexicon
+                self.polarity_sub_model_adjective = 0  # kan kayenne element ou ma lguinahach f lexicon
 
     def get_polarity_sub_model_noun(self):
         if self.sub_model_noun:
@@ -272,7 +272,7 @@ class AnalyseFrenchModels(AnalyseModels):
                 polarity_verb = SentiWordNet.get_sentiment(verb, self.language, "v")
         elements_verb_polarity = self.get_polarity_adverb_neg(polarity_verb, adverb, neg, self.language)
         polarity_verb = elements_verb_polarity[0]
-        if polarity_verb == -1000 :
+        if polarity_verb == -1000:
             return polarity_verb
         while -1000 in elements_verb_polarity[1]:
             elements_verb_polarity[1].remove(-1000)

@@ -8,21 +8,19 @@ class SentiWordNet:
     @staticmethod
     def get_sentiment(word, language, tag):
         """ recuperer le polarite d'un mot """
-        if language == "ar" or language == "fr" or language == "en":
+        # Traduction de mots
+        if language == "fr" or language == "en":
             if language != "en":
                 word = t.Tools.translate_word_to_other_language(language, "en", word)
                 print(word)
         else:
             return []
-
-        synsets = wn.synsets(word, pos=tag)
+        synsets = wn.synsets(word, pos=tag) # recuperer syset depuis WordNet
         if not synsets:
             return -1000
-
         # Take the first sense, the most common
         synset = synsets[0]
-
-        swn_synset = swn.senti_synset(synset.name())
+        swn_synset = swn.senti_synset(synset.name()) # recuperer polarité depuis sentiWordnet
         if swn_synset.pos_score() == swn_synset.neg_score() == 0:  # neutre
             return 0
         elif swn_synset.pos_score() == swn_synset.neg_score():  # egaux pos 0.5 neg 0.5

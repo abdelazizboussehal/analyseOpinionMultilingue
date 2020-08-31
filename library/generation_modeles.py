@@ -92,7 +92,7 @@ class GenerationModels:
             if token.pos_ == "ADJ":  # si l'unite linguistique est une adjectif
                 negation = ""
                 adverb = []
-                adverb_string=""
+                adverb_string = ""
                 for child in token.children:  # les elements en ralation avec l'adjectif
                     if child.pos_ == "ADV":  # si l'unite linguistique est une adverbe
                         adverb.append(child.lemma_)  # garder seul le lemme
@@ -104,7 +104,6 @@ class GenerationModels:
                         if child.text in self.table_word_negation:
                             negation = t.Tools.sc_negation
                             self.negation_adj.append(str(child.text))
-
 
                 if len(adverb) > 0:
                     adverb_string = t.Tools.sc_adv_start
@@ -227,8 +226,8 @@ class GenerationFrenchModels(GenerationModels):
                     if child.text in self.alternative:
                         self.negation_verb.append(child.text)
                         continue
-                    if child.text in self.neg:
-                        print(child.text)
+                    if child.text in self.table_word_negation:
+
                         self.negation_verb.append(child.text)
                         neg = True
                     elif child.pos_ == "ADV":
@@ -248,14 +247,13 @@ class GenerationFrenchModels(GenerationModels):
                     self.modificateur_verb.append(adv[len(adv) - 1])
                     v = v + t.Tools.sc_verb + text_adv
                 verb.append(v)
-        self.element_sub_model_verb = verb
+        self.element_modele_segement_linguistique_verbe = verb
 
     def extract_element_sub_model_adjective(self):
         """extraire les adjectives avec la negation s'il existe"""
         doc = self.nlp(self.sentence)
         adjective = []
         for token in doc:
-
             if token.pos_ == "ADJ":
                 neg = ""
                 adv = []
@@ -266,7 +264,6 @@ class GenerationFrenchModels(GenerationModels):
                         self.negation_adj.append(child.text)
                     elif child.pos_ == "ADV":
                         adv.append(child.lemma_)
-
                 if len(adv) > 0:
                     adverb = t.Tools.sc_adv_start
                     for i in range(len(adv) - 1):
@@ -278,4 +275,4 @@ class GenerationFrenchModels(GenerationModels):
                     adjective.append(neg + token.lemma_ + t.Tools.sc_adjective + adverb)
                 else:
                     adjective.append(neg + token.lemma_)
-        self.element_sub_model_adjective = adjective
+        self.element_modele_segement_linguistique_adjectif = adjective

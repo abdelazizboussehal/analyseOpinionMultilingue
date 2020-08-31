@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 
@@ -125,7 +125,7 @@
                     <form action="/res" method="post" id="usrform1">
                         <input type="hidden" name="id_reprocess" value="id_text">
                         <textarea id="textarea" placeholder="Saisissez votre texte ici ..... EX :This car is beautiful. "
-                                  lang="en" rows="7" cols="100" id="input" name="input" form="usrform1"
+                                  rows="7" cols="100" id="input" name="input" form="usrform1"
                                   spellcheck="true" autofocus="true"></textarea>
                         <div class="d-flex flex-row justify-content-around">
                             <button disabled type="submit" id="button" class="btn btn-primary btn-icon-split">
@@ -159,7 +159,7 @@
                 <div class="d-flex flex-row justify-content-around px-2 py-2">
                     <form method="post" id="usrform2" action="/GetTextFromTwitter">
                         <input type="hidden" name="id_reprocess" value="twitter">
-                        <input type="text" class="form-control" name="subject" placeholder="Sujet">
+                        <input type="text" class="form-control" name="subject" placeholder="#HashTag">
                     </form>
                 </div>
                 <div class="d-flex flex-row justify-content-around">
@@ -168,7 +168,7 @@
                 <span class="icon text-white-50">
                 <i class="fas fa-chevron-circle-right"></i>
             </span>
-                        <span class="text">Chercher</span>
+                        <span class="text">Commencer</span>
                     </a>
                 </div>
 
@@ -193,9 +193,9 @@
 
                         </div>
                          <div class="d-flex flex-row justify-content-center my-2">
-                                <button id="button_file" hidden onclick="starprogress()" class="btn btn-outline-secondary btn-icon-split "
+                                <button id="button_file" hidden onclick="starprogress()" class="btn btn-secondary btn-icon-split "
                                         type="submit">
-                                    <span class="text">commencer</span>
+                                    <span class="text">Commencer</span>
                                     <span class="icon text-white-50">
                                 <i class="fas fa-chevron-circle-right"></i>
                                 </span>
@@ -209,7 +209,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Boussehal & Mahmoudi 2020</span>
                     </div>
                 </div>
             </footer>

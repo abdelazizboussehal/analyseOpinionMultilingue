@@ -282,4 +282,27 @@ function visualizer_ent(bt) {
 }
 
 
+function statistic_graphe_column() {
+    let container_chart = document.getElementById("myBarChart");
+    let myBarChart = new Chart(container_chart, {
+        type: 'bar',
+        data: {     //Les noms des colonnes
+            labels: ["Noms", "Verbes", "Adjectifs", "Auxiliaire", "Propre nom", "Autres"],
+            datasets: [{
+                // Style Css
+                label: "Revenue",
+                backgroundColor: "#4e73df",
+                hoverBackgroundColor: "#2e59d9",
+                borderColor: "#4e73df",
+                    // La valeur de chaque colonne
+                data: [document.getElementById("nbr_verb").value,
+                    document.getElementById("nbr_adj").value,
+                    document.getElementById("nbr_nom").value,
+                    document.getElementById("nbr_aux").value,
+                    document.getElementById("nbr_proprn").value,
+                    document.getElementById("nbr_autre").value],
+            }]}});
+}
+
+
 

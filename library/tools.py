@@ -237,7 +237,7 @@ class Tools:
             for match_id, start, end in matches:
                 string_id = nlp.vocab.strings[match_id]
                 texteturu = doc[start:end]
-                print(texteturu)
+
                 if string_id == "ContractListEnd":
                     doc[end].is_sent_start = True
                 elif string_id == "ContractListStart":
