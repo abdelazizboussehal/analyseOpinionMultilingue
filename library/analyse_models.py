@@ -132,6 +132,8 @@ class AnalyseModels:
             return self.polarity_sub_model_noun
         elif self.sub_model_verb:
             return self.polarity_sub_model_verb
+        else:
+            return -1996
 
     def extract_element_model_global(self):
         self.dictionnaire_model_global = {

@@ -46,7 +46,7 @@ class Tools:
     sc_model_global_connector = "cc>"
 
     # connector english
-    addition = ["and", "plus", "furthermore", "moreover", "in addition", "also"]
+    addition = ["and", "plus", "furthermore", "moreover", "in addition", "also", ","]
     contract_end = ["but", "though", "nevertheless", "despite", "whereas", "while", "on the contrary",
                     "notwithstanding", "however"]
     contract_start = ["although"]
@@ -55,7 +55,7 @@ class Tools:
                        "toutefois", "néanmoins", "en revanche", "au contraire", "certes"]
     contract_start_fr = ["malgré tout", "malgré", "bien que"]
     addition_fr = ["et de même que", "sans compter que", "ainsi que", "ensuite", "voire", "d'ailleurs", "encore",
-                   "de plus", "quant à", "non seulement", "mais encore", "de surcroît", "en outre"]
+                   "de plus", "quant à", "non seulement", "mais encore", "de surcroît", "en outre", ","]
     verbC = []
     adjectifC = []
     nounC = []
@@ -100,6 +100,7 @@ class Tools:
     @staticmethod
     def sentence_segmentation(content, language):
         phrase = []
+        content = str(content).lower()
         if language == "fr":
             nlp_fr = French()  # just the language with no model
             sentencizer = nlp_fr.create_pipe("sentencizer")
@@ -125,22 +126,22 @@ class Tools:
     @staticmethod
     def subjectivity_filtering(table_sentence, language):
         """enter une liste des phrases et la langue  retourner etat de la subjectivité"""
-        subjective_stat = [] #table d'etat de subjecvité
+        subjective_stat = []  # table d'etat de subjecvité
         if language == "en":
             for phrase in table_sentence:
-                test_subjective = textblobEnglish(str(phrase)) #utilise TextBlob pour la langue anglaise
+                test_subjective = textblobEnglish(str(phrase))  # utilise TextBlob pour la langue anglaise
                 if test_subjective.sentiment.subjectivity > 0:
                     subjective_stat.append(True)
                 else:
                     subjective_stat.append(False)
         elif language == "fr":
             for phrase in table_sentence:
-                test_subjective = textblobFrench(u"" + phrase) #utilise TextBlob pour la langue française
+                test_subjective = textblobFrench(u"" + phrase)  # utilise TextBlob pour la langue française
                 if test_subjective.sentiment[1] > 0:
                     subjective_stat.append(True)
                 else:
                     subjective_stat.append(False)
-        return table_sentence, subjective_stat #registre des segments linguistiques avec ses etats
+        return table_sentence, subjective_stat  # registre des segments linguistiques avec ses etats
 
     @staticmethod
     def get_twit_from_twitter(subject, number):
@@ -167,19 +168,23 @@ class Tools:
     @staticmethod
     def get_emoji_from_polarity(polarity):
         """entrer plarite et retourner emoji"""
+        if polarity is None:
+            return 128373
+        if polarity == -1996:
+            return 128373
         if polarity == -1000:
             return 9940
         elif 1 >= polarity >= -1:
             if polarity < - 0.5:
-                return 128545
+                return "em em-cry"
             elif polarity < 0:
-                return 128542
+                return "em em-confused"
             elif polarity == 0:
-                return 128528
+                return "em em-neutral_face"
             elif polarity < 0.5:
-                return 128513
+                return "em em-smile"
             elif polarity <= 1:
-                return 128514
+                return "em em-sweat_smile"
         else:
             return 9940
 

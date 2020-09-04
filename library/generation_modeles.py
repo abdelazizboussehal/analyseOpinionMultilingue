@@ -144,7 +144,7 @@ class GenerationModels:
                                                              t.Tools.sc_noun_addition) + t.Tools.sc_noun_end
 
     def extract_connector(self):
-        doc = self.nlp(self.sentence)
+        doc = self.nlp(str(self.sentence).lower())
         matcher = PhraseMatcher(self.nlp.vocab)
         patterns_contract_end = [self.nlp.make_doc(text) for text in self.contract_end]
         patterns_contract_start = [self.nlp.make_doc(text) for text in self.contract_start]

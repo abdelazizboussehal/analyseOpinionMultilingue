@@ -26,6 +26,10 @@
     <link href="{{ url_for('static',filename='css/googlefont.css') }}" rel="stylesheet"
           type="text/css">
 
+    <!-- font style emoji  -->
+    <link href="{{ url_for('static',filename='css/myemoji.css') }}" rel="stylesheet"
+          type="text/css">
+
 
 </head>
 
@@ -156,7 +160,7 @@
         <div class="d-flex flex-column">
             <div style="margin-top: 10px;" class="row  justify-content-md-center">
                 <div class="row">
-                    <h1 id="text"> <a href="#">Classification d'opinion</a> </h1>
+                    <h1 id="text"><a href="#">Analyse d'opinion</a></h1>
                 </div>
             </div>
         </div>
@@ -183,7 +187,7 @@
                                     </span>
                             </button>
                             <button onclick="reprocess_correction()"
-                                    class="btn btn-outline-danger btn-sm float-right btn-icon-split">
+                                    class="btcommencer btn btn-outline-danger btn-sm float-right btn-icon-split">
                                 <div>
                                     <span class="text">Retraitement</span>
                                 </div>
@@ -268,7 +272,8 @@
 
                                             <div class="card shadow mb-4 card border-left-primary shadow h-100 py-2 mx-2 my-2">
                                                 <div class="d-flex flex-row justify-content-center card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">Listes des Segements linguistiques</h6>
+                                                    <h6 class="m-0 font-weight-bold text-primary">Listes des Segements
+                                                        linguistiques</h6>
                                                 </div>
                                                 {% for n in range(session['phrase']| length) %}
                                                 <label class="ml-3">{{session['phrase'][n]}}</label>
@@ -341,7 +346,7 @@
                                       </span>
                             </button>
                             <button onclick="reprocess_subjectivity()"
-                                    class="btn btn-outline-danger btn-sm float-right btn-icon-split">
+                                    class="btcommencer btn btn-outline-danger btn-sm float-right btn-icon-split">
                                 <div>
                                     <span class="text">Retraitement</span>
                                 </div>
@@ -362,19 +367,25 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Liste des phrases et subjectivité</h6>
                                 </div>
 
-                                <form id="form_subjectivity" action="/res" method="post" class="d-flex flex-column mx-4 my-4">
+                                <form id="form_subjectivity" action="/res" method="post"
+                                      class="d-flex flex-column mx-4 my-4">
                                     <input type="hidden" name="id_reprocess" value="form_subjectivity">
-                                    {% for n in range(session['sub_sentence']| length) %} <!--parcourir liste des segments linguistiques -->
+                                    {% for n in range(session['sub_sentence']| length) %}
+                                    <!--parcourir liste des segments linguistiques -->
                                     <div class="d-flex flex-row align-items-center">
-                                        <h5 class="ml-3" id="input" name="input{{n}}" value="1"><!-- affichier iste des segments linguistique -->
+                                        <h5 class="ml-3" id="input" name="input{{n}}" value="1">
+                                            <!-- affichier iste des segments linguistique -->
                                             {{session['sub_sentence'][n]}}</h5>
                                         <input type="hidden" name="r_id{{n}}" value="{{session['sub_sentence'][n]}}"/>
                                         <div class="btn-group btn-group-toggle mx-2" data-toggle="buttons">
                                             {% if session['subjective_state'][n] %}
-                                            <label class="btn btn-outline-primary btn-sm active"><!-- affichier liste des segments linguistique -->
-                                                <input type="radio" name="optradio{{n}}" value="true" autocomplete="off" checked> Subjectif</label>
+                                            <label class="btn btn-outline-primary btn-sm active">
+                                                <!-- affichier liste des segments linguistique -->
+                                                <input type="radio" name="optradio{{n}}" value="true" autocomplete="off"
+                                                       checked> Subjectif</label>
                                             <label class="btn btn-outline-primary btn-sm">
-                                                <input type="radio" name="optradio{{n}}" value="false" autocomplete="off"> Objectif</label>
+                                                <input type="radio" name="optradio{{n}}" value="false"
+                                                       autocomplete="off"> Objectif</label>
                                             {% else %}
                                             <label class="btn btn-outline-primary btn-sm active">
                                                 <input type="radio" name="optradio{{n}}" value="true" autocomplete="off"
@@ -469,7 +480,8 @@
                                                 </div>
                                                 <div class="card-body">
                                                     <div lang="fr" class="table-responsive">
-                                                        <table lang="fr" class="table table-bordered table-striped" id="dataTable"
+                                                        <table lang="fr" class="table table-bordered table-striped"
+                                                               id="dataTable"
                                                                width="100%" cellspacing="0">
                                                             <thead>
                                                             <tr class="table-primary">
@@ -495,15 +507,25 @@
                                                                     <hr>
                                                                     <span>Visualisation :</span>
                                                                     </br>
-                                                                    <button class="btn btn-outline-success btn-sm my-2" onclick="visualizer_dep(this)" value="{{session['visualizer_dep'][i]}}"> Correspendances</button>
+                                                                    <button class="btn btn-outline-success btn-sm my-2"
+                                                                            onclick="visualizer_dep(this)"
+                                                                            value="{{session['visualizer_dep'][i]}}">
+                                                                        Correspendances
+                                                                    </button>
                                                                     </br>
-                                                                    <button class="btn btn-outline-success btn-sm my-2" onclick="visualizer_dep(this)" value="{{session['visualizer_ent'][i]}}"> Noms Propres</button>
+                                                                    <button class="btn btn-outline-success btn-sm my-2"
+                                                                            onclick="visualizer_dep(this)"
+                                                                            value="{{session['visualizer_ent'][i]}}">
+                                                                        Noms Propres
+                                                                    </button>
                                                                 </td>
                                                                 <td>
                                                                     <h4>
-                                                                    <div class="badge badge-primary text-wrap">{{session['model_global'][i]}}</div>
+                                                                        <div class="badge badge-primary text-wrap">
+                                                                            {{session['model_global'][i]}}
+                                                                        </div>
                                                                     </h4>
-                                                                        <p>
+                                                                    <p>
                                                                         {% set
                                                                         dic=session['dictionnaire_model_global'][i]%}
                                                                         Ce model contien :
@@ -564,7 +586,10 @@
                                                                     </p>
                                                                 </td>
                                                                 <td>{{session['polarity_sentences'][i]}}</td>
-                                                                <td><span style="font-size:40px">&#{{session['emoji_sentences'][i]}}</span>
+                                                                <td><span style="font-size:40px">
+                    <i class="{{session['emoji_sentences'][i]}}" aria-role="presentation"
+                       aria-label="FROWNING FACE WITH OPEN MOUTH"></i>
+                                                                </span>
                                                                 </td>
                                                             </tr>
                                                             {% endfor %}
@@ -626,7 +651,9 @@
                                                         <span style="font-size: 25px" class="badge badge-secondary">{{session['polarity_global']}}</span>
                                                     </td>
                                                     <td><span
-                                                            style="font-size: 60px">&#{{session['emoji_global']}}</span>
+                                                            style="font-size: 60px">
+ <i class="{{session['emoji_global']}}" aria-role="presentation" aria-label="FUEL PUMP"></i>
+                                                        </span>
                                                     </td>
                                                 </tr>
 
@@ -648,7 +675,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2020</span>
+                    <span>Copyright &copy; Boussehal & Mahmoudi 2020</span>
                 </div>
             </div>
         </footer>
@@ -999,6 +1026,47 @@
         </div>
     </div>
 
+    <!-- dialog unite linguistique-->
+    <div class="modal fade" id="dialog_progrss" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div style="background-color: rgba(0,0,0,0); border: 5px solid transparent;" class="modal-content">
+                <div style="background-color: rgba(0,0,0,0); border: 5px solid transparent;"
+                     class="modal-body d-flex justify-content-center">
+                    <div class="loadingio-spinner-spin-g599boslcbo">
+                        <div class="loadingio-spinner-spin-vqhc8fqgo9a">
+                            <div class="ldio-0qfj4n283gz">
+                                <div>
+                                    <div></div>
+                                </div>
+                                <div>
+                                    <div></div>
+                                </div>
+                                <div>
+                                    <div></div>
+                                </div>
+                                <div>
+                                    <div></div>
+                                </div>
+                                <div>
+                                    <div></div>
+                                </div>
+                                <div>
+                                    <div></div>
+                                </div>
+                                <div>
+                                    <div></div>
+                                </div>
+                                <div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </div>
@@ -1058,6 +1126,10 @@
         else
             $('#button').attr('disabled', false);
     });
+    $(".btcommencer").click(function () {
+        $('#dialog_progrss').modal('show');
+    });
+
 
 </script>
 </body>
