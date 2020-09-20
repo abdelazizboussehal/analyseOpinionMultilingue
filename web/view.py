@@ -23,18 +23,16 @@ def index():
 
 
 def correction(content):
-    global l
     language = t.Tools.language_detection(content)
     list_word = []
     list_suggestion = []
     session['l'] = language
     sub_sentence = []
     if language == "en":
-        lang = "anglais"
+        lang = "Anglaise"
     elif language == "fr":
-        lang = "français"
-    elif language == "ar":
-        lang = "arabe"
+        lang = "Française"
+
     list_word.append(t.Tools.correction_orthographe(str(content), language)[0])
     list_suggestion.append(t.Tools.correction_orthographe(str(content), language)[1])
     return lang, list_word, list_suggestion
@@ -155,7 +153,10 @@ def subjectivity(sub_sentence, sub_sentence_subjectivity, l):
     session['visualizer_dep'] = tableaux_vis_dep
     session['visualizer_ent'] = tableaux_vis_ent
     session['total_connectors'] = connectors
-    session['total_adverbe'] = generation_model_optimized.adverbC
+    try:
+        session['total_adverbe'] = generation_model_optimized.adverbC
+    except:
+        session['total_adverbe'] = []
 
     return ("phrase", sub_sentence, sub_sentence_subjectivity, nbr_sub, nbr_obj, total_adverbe, total_negation,
             "", subjective_sentences, verbs, adjs, nouns, model_global)
@@ -173,13 +174,13 @@ def res():
         if file:
             filename = secure_filename(file.filename)
             file.save(os.path.join(filename))
-            content = open(os.path.join(filename), 'r').read().replace("\n", " ")
+            content = open(os.path.join(filename), 'r', encoding="utf-8").read().replace("\n", " ")
     elif request.form['id_reprocess'] == 'twitter':  # Acquisition depuis twitter
         twitters = t.Tools.get_twit_from_twitter(request.form.get("subject"), 6)
-        languages = ["ar", "en", "fr"]
+        languages = ["en"]
         for twit in twitters:
             if twit[2] in languages:
-                x = 0
+                content = content + twit[1] + ". "
     elif request.form['id_reprocess'] == 'form_correction':  # retraitement correction
         content = request.form['content']
     elif request.form['id_reprocess'] == 'form_subjectivity':  # retraitement subjectivité

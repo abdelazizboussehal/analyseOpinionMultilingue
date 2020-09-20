@@ -1,6 +1,6 @@
 #text {
     position: relative;
-    font-size: 50px;
+    font-size: 15px;
     margin-top: 0;
     font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;
 }
@@ -13,7 +13,7 @@
 }
 
 #text:after {
-    content: "Analyse d'opinion";
+    content: "Traitement automatique des textes multilingues par un modèle unifié indépendant de la langue utilisé :";
     color: #d6d6d6;
     text-shadow: 0 1px 0 white;
 }

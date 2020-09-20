@@ -12,7 +12,6 @@ class SentiWordNet:
         if language == "fr" or language == "en":
             if language != "en":
                 word = t.Tools.translate_word_to_other_language(language, "en", word)
-                print(word)
         else:
             return []
         synsets = wn.synsets(word, pos=tag) # recuperer syset depuis WordNet

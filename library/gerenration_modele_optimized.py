@@ -64,6 +64,8 @@ class GenerationModels:
         for token in doc:
 
             self.total += 1
+            if token.pos_ == "ADV":
+                self.adverbC.append(str(token.text))
             if token.pos_ == "VERB":
                 self.verbC.append(str(token.text))
             if token.pos_ == "ADJ":
@@ -74,8 +76,7 @@ class GenerationModels:
                 self.propnC.append(str(token.text))
             if token.pos_ == "AUX":
                 self.auxC.append(str(token.text))
-            if token.pos_ == "ADV":
-                self.adverbC.append(str(token.text))
+
 
             if token.pos_ == "ADJ":  # si l'unite linguistique est une adjectif
                 dependency_dicionary_adjective = {'adj': token.lemma_, 'neg': False, 'adv': []}
@@ -226,12 +227,12 @@ class GenerationFrenchModels(GenerationModels):
     def __init__(self, sentence):
         self.nlp = spacy.load("fr_core_news_sm")
         self.total = 0
+        self.adverbC = []
         self.propnC = []
         self.auxC = []
         self.verbC = []
         self.adjectifC = []
         self.nounC = []
-        self.adverbC = []
         self.sentence = sentence
         self.negation_adj = []
         self.modificateur_adj = []
@@ -260,6 +261,8 @@ class GenerationFrenchModels(GenerationModels):
         for token in doc:
 
             self.total += 1
+            if token.pos_ == "ADV":
+                self.adverbC.append(str(token.text))
             if token.pos_ == "VERB":
                 self.verbC.append(str(token.text))
             if token.pos_ == "ADJ":
@@ -270,8 +273,7 @@ class GenerationFrenchModels(GenerationModels):
                 self.propnC.append(str(token.text))
             if token.pos_ == "AUX":
                 self.auxC.append(str(token.text))
-            if token.pos_ == "ADV":
-                self.adverbC.append(str(token.text))
+
 
             if token.pos_ == "ADJ":  # si l'unite linguistique est une adjectif
                 dependency_dicionary_adjective = {'adj': token.lemma_, 'neg': False, 'adv': []}

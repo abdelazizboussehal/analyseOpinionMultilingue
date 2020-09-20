@@ -1,3 +1,5 @@
+import re
+
 import numpy
 import spacy
 from enchant.checker import SpellChecker
@@ -33,10 +35,10 @@ class Tools:
     sc_adjective = " <= "
     sc_adjective_start = " <<a "
     sc_adjective_end = " a>> "
-    sc_adjective_cordination = " §§ "
+    sc_adjective_cordination = " &a& "
 
     # noun
-    sc_noun_addition = " && "
+    sc_noun_addition = " &n& "
     sc_noun_start = " <<n "
     sc_noun_end = " n>> "
 
@@ -130,7 +132,7 @@ class Tools:
         if language == "en":
             for phrase in table_sentence:
                 test_subjective = textblobEnglish(str(phrase))  # utilise TextBlob pour la langue anglaise
-                if test_subjective.sentiment.subjectivity > 0:
+                if test_subjective.sentiment.subjectivity != 0:
                     subjective_stat.append(True)
                 else:
                     subjective_stat.append(False)
@@ -151,7 +153,8 @@ class Tools:
         sentence = []
         for j in range(1):
             for tweet in twitter.search(subject, start=index, count=number):
-                sentence.append((tweet.author, tweet.text, tweet.language))
+                text = ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet.text).split())
+                sentence.append((tweet.author, text, tweet.language))
         cache.clear()
         return sentence
 

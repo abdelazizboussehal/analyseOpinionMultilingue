@@ -13,6 +13,9 @@ function testhttp() {
 function submitform() {
     document.getElementById("usrform").submit();
 }
+function submitform2() {
+    document.getElementById("usrform2").submit();
+}
 
 function correction(button) {
     let textarea = document.getElementById("exampleFormControlTextarea1");
@@ -25,9 +28,8 @@ function correction(button) {
     //Decrimenter nombre des erreurs
     let number_errors = document.getElementById("nbr_errors");
     number_errors.innerText = parseInt(number_errors.innerText) - 1;
+    document.getElementById("bt_correction").hidden = false
 }
-
-
 
 
 function uploadfile() {
@@ -278,14 +280,29 @@ function statistic_graphe_column() {
                 backgroundColor: "#4e73df",
                 hoverBackgroundColor: "#2e59d9",
                 borderColor: "#4e73df",
-                    // La valeur de chaque colonne
+                // La valeur de chaque colonne
                 data: [document.getElementById("nbr_verb").value,
                     document.getElementById("nbr_adj").value,
                     document.getElementById("nbr_nom").value,
                     document.getElementById("nbr_aux").value,
                     document.getElementById("nbr_proprn").value,
                     document.getElementById("nbr_autre").value],
-            }]}});
+            }]
+        }
+    });
+}
+
+function retraitement_activate_texte() {
+    textearea = document.getElementById("exampleFormControlTextarea1").value;
+    text_original = document.getElementById("text_original").value;
+    if (textearea == text_original) {
+        debugger
+        document.getElementById("bt_correction").hidden = true
+    } else {
+        document.getElementById("bt_correction").hidden = false
+        debugger
+
+    }
 }
 
 
