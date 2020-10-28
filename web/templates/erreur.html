@@ -1,11 +1,133 @@
 <!DOCTYPE html>
-<!--suppress HtmlUnknownAttribute -->
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>home</title>
+    <!-- Custom fonts for this template dash board-->
+    <link href="{{ url_for('static',filename='vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet"
+          type="text/css">
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="{{ url_for('static',filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/mycss.css') }}" rel="stylesheet"
+          type="text/css">
+    <!-- font style classification d'opinion  -->
+    <link href="{{ url_for('static',filename='css/googlefont.css') }}" rel="stylesheet"
+          type="text/css">
+    <!-- font style emoji  -->
+    <link href="{{ url_for('static',filename='css/myemoji.css') }}" rel="stylesheet"
+          type="text/css">
+
+
 </head>
-<body>
-erreur
+
+<body id="page-top">
+<div class="text-center">
+    <div class="error mx-auto" data-text="404">404</div>
+    <p class="lead text-gray-800 mb-5">Erreur de connection</p>
+    <p class="text-gray-500 mb-0">{{e}}</p>
+    <a href="/">&larr; Accueil</a>
+</div>
+
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Boussehal & Mahmoudi 2020</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+</div>
+
+
+</div>
+<!-- End of Content Wrapper -->
+
+
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+
+<!-- Modal -->
+<div class="modal fade" id="dialog_progrss" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div style="background-color: rgba(0,0,0,0); border: 5px solid transparent;" class="modal-content">
+            <div style="background-color: rgba(0,0,0,0); border: 5px solid transparent;"
+                 class="modal-body d-flex justify-content-center">
+                <div class="loadingio-spinner-spin-g599boslcbo">
+                    <div class="loadingio-spinner-spin-vqhc8fqgo9a">
+                        <div class="ldio-0qfj4n283gz">
+                            <div>
+                                <div></div>
+                            </div>
+                            <div>
+                                <div></div>
+                            </div>
+                            <div>
+                                <div></div>
+                            </div>
+                            <div>
+                                <div></div>
+                            </div>
+                            <div>
+                                <div></div>
+                            </div>
+                            <div>
+                                <div></div>
+                            </div>
+                            <div>
+                                <div></div>
+                            </div>
+                            <div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript-->
+<script src="{{ url_for('static',filename='vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="{{ url_for('static',filename='vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ url_for('static',filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+<!-- Core plugin JavaScript-->
+
+
+<!-- Custom scripts for all pages-->
+<script src="{{ url_for('static',filename='js/sb-admin-2.min.js') }}"></script>
+
+<!-- Page level plugins -->
+<script src="{{ url_for('static',filename='vendor/chart.js/Chart.min.js') }}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{{ url_for('static',filename='js/demo/chart-area-demo.js') }}"></script>
+<script src="{{ url_for('static',filename='js/demo/chart-pie-demo.js') }}"></script>
+
+<script src="{{ url_for('static',filename='js/main.js') }}"></script>
+
+<script src="{{ url_for('static',filename='js/myfunction.js') }}"></script>
+<script src="{{ url_for('static',filename='js/createinterface.js') }}"></script>
+
+
+</div>
 </body>
+
 </html>

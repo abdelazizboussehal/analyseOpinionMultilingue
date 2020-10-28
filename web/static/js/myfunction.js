@@ -305,5 +305,9 @@ function retraitement_activate_texte() {
     }
 }
 
+function home() {
+    document.getElementById('from_home').submit();
+
+}
 
 

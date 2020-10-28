@@ -155,7 +155,7 @@ def subjectivity(sub_sentence, sub_sentence_subjectivity, l):
     session['total_connectors'] = connectors
     try:
         session['total_adverbe'] = generation_model_optimized.adverbC
-    except:
+    except Exception as e:
         session['total_adverbe'] = []
 
     return ("phrase", sub_sentence, sub_sentence_subjectivity, nbr_sub, nbr_obj, total_adverbe, total_negation,
@@ -199,7 +199,10 @@ def res():
 
     if billet < 1:
         session['content'] = content
-        correction_var = correction(content)
+        try:
+            correction_var = correction(content)
+        except Exception as e:
+            return render_template('erreur.html', e=e)
         session['language'] = correction_var[0]
 
         list_word = correction_var[1]
@@ -219,7 +222,10 @@ def res():
     if billet < 2:
 
         # reprocess subjectivity
-        subjectivity_var = subjectivity(sub_sentence, sub_sentence_subjectivity, session['l'])
+        try:
+            subjectivity_var = subjectivity(sub_sentence, sub_sentence_subjectivity, session['l'])
+        except Exception as e:
+            return render_template('erreur.html', e=e)
         session['sub_sentence'] = subjectivity_var[1]
         session['subjective_state'] = subjectivity_var[2]
         session['nbr_sub'] = subjectivity_var[3]
